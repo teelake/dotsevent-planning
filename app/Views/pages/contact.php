@@ -1,16 +1,23 @@
 <?php
 declare(strict_types=1);
+/** @var array<string, mixed> $cms */
+$cms = $cms ?? [];
 $cfg = app_config();
-$contactEmail = (string) ($cfg['email'] ?? 'info@dotseventplanning.com');
-$phoneDisplay = (string) ($cfg['phone_display'] ?? '');
-$phoneTel = (string) ($cfg['phone_tel'] ?? '');
-$addr1 = (string) ($cfg['address_line1'] ?? '');
-$addr2 = (string) ($cfg['address_line2'] ?? '');
+$contactEmail = trim(site_setting('email', (string) ($cfg['email'] ?? 'info@dotseventplanning.com')));
+$phoneDisplay = trim(site_setting('phone_display', (string) ($cfg['phone_display'] ?? '')));
+$phoneTel = trim(site_setting('phone_tel', (string) ($cfg['phone_tel'] ?? '')));
+$addr1 = trim(site_setting('address_line1', (string) ($cfg['address_line1'] ?? '')));
+$addr2 = trim(site_setting('address_line2', (string) ($cfg['address_line2'] ?? '')));
 $mapUrl = site_map_embed_url();
-$page_title = 'Contact us';
-$crumb_current = 'Contact';
+$page_title = (string) ($cms['doc_title'] ?? 'Contact us');
+$crumb_current = $page_title;
 include dirname(__DIR__) . '/partials/page-hero.php';
 ?>
+<?php if (!empty($cms['has_custom_body'])): ?>
+<div class="shell page-pad prose cms-page-body" data-reveal>
+<?= $cms['body_html'] ?>
+</div>
+<?php endif; ?>
 <div class="shell page-pad" data-reveal>
     <div class="section__split contact-page__split">
         <div>

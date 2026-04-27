@@ -10,6 +10,7 @@ final class HomeController extends Controller
 {
     public function index(): void
     {
+        $defaultMeta = 'Weddings, corporate, and kids events in Saint John, NB—plus decor rentals. Featured services: planning, on-site support, and clear budgets from DOTS Event Planning.';
         $slides = [
             [
                 'image' => 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=1920&q=80',
@@ -46,12 +47,15 @@ final class HomeController extends Controller
             ],
         ];
 
+        $cms = cms_public_home($slides, $defaultMeta);
+
         $this->render('home/index', [
             'title' => 'Home',
             'active_nav' => 'home',
             'body_class' => 'page-home',
-            'slides' => $slides,
-            'meta_description' => 'Weddings, corporate, and kids events in Saint John, NB—plus decor rentals. Featured services: planning, on-site support, and clear budgets from DOTS Event Planning.',
+            'slides' => $cms['slides'],
+            'home_intro_html' => $cms['intro_html'],
+            'meta_description' => $cms['meta_description'],
         ]);
     }
 }

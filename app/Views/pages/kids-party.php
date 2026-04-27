@@ -1,10 +1,17 @@
 <?php
 declare(strict_types=1);
+/** @var array<string, mixed> $cms */
+$cms = $cms ?? [];
 $bookKids = e(app_url('book')) . '?package=premium';
-$page_title = 'Kids party packages';
-$crumb_current = 'Kids party';
+$page_title = (string) ($cms['doc_title'] ?? 'Kids party packages');
+$crumb_current = $page_title;
 include dirname(__DIR__) . '/partials/page-hero.php';
 ?>
+<?php if (!empty($cms['has_custom_body'])): ?>
+<div class="shell page-pad prose cms-page-body" data-reveal>
+<?= $cms['body_html'] ?>
+</div>
+<?php else: ?>
 <div class="shell page-pad" data-reveal>
     <p class="section__lead" style="max-width: 52ch; margin-bottom: 2rem;">Themed kids’ parties with setup, activities, and teardown handled for you. Packages are a starting point—we tailor everything to age, venue, and your sanity level. <strong>No online payment</strong> here: we confirm details and pricing after you reach out.</p>
     <ul class="kids-offers" role="list" aria-label="Kids party package tiers">
@@ -41,3 +48,4 @@ include dirname(__DIR__) . '/partials/page-hero.php';
         <p class="text-muted" style="margin: 0.75rem 0 0; font-size: 0.9rem;">We’ll pre-select <strong>Premium</strong> on the booking form; change it there if you prefer another package.</p>
     </div>
 </div>
+<?php endif; ?>

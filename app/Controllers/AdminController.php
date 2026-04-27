@@ -9,6 +9,9 @@ use App\Core\Controller;
 use App\Core\Csrf;
 use App\Core\Flash;
 use App\Core\Database;
+use App\Models\CmsMediaRepository;
+use App\Models\CmsPagesRepository;
+use App\Models\CmsSettingsRepository;
 use App\Models\LeadRepository;
 use App\Models\OrderRepository;
 use App\Models\ProductRepository;
@@ -50,6 +53,51 @@ final class AdminController extends Controller
         if ($method === 'GET' && $second === 'analytics' && $n === 2) {
             $this->requireAuth();
             $this->analytics();
+            return;
+        }
+        if ($method === 'GET' && $second === 'cms' && $n === 2) {
+            $this->requireAuth();
+            $this->cmsHome();
+            return;
+        }
+        if ($method === 'POST' && $second === 'cms' && ($segs[2] ?? '') === 'settings' && $n === 3) {
+            $this->requireAuth();
+            $this->cmsSettingsSave();
+            return;
+        }
+        if ($method === 'GET' && $second === 'cms' && ($segs[2] ?? '') === 'page' && isset($segs[3]) && $n === 4) {
+            $this->requireAuth();
+            $this->cmsPageForm((string) $segs[3]);
+            return;
+        }
+        if ($method === 'POST' && $second === 'cms' && ($segs[2] ?? '') === 'page' && isset($segs[3]) && ($segs[4] ?? '') === 'save' && $n === 5) {
+            $this->requireAuth();
+            $this->cmsPageSave((string) $segs[3]);
+            return;
+        }
+        if ($method === 'POST' && $second === 'media' && ($segs[2] ?? '') === 'upload' && $n === 3) {
+            $this->requireAuth();
+            $this->mediaUpload();
+            return;
+        }
+        if ($method === 'GET' && $second === 'profile' && $n === 2) {
+            $this->requireAuth();
+            $this->profileForm();
+            return;
+        }
+        if ($method === 'POST' && $second === 'profile' && ($segs[2] ?? '') === 'save' && $n === 3) {
+            $this->requireAuth();
+            $this->profileSave();
+            return;
+        }
+        if ($method === 'GET' && $second === 'password' && $n === 2) {
+            $this->requireAuth();
+            $this->passwordForm();
+            return;
+        }
+        if ($method === 'POST' && $second === 'password' && ($segs[2] ?? '') === 'save' && $n === 3) {
+            $this->requireAuth();
+            $this->passwordSave();
             return;
         }
         if ($method === 'GET' && ($second === '' || $second === 'dashboard') && $n <= 2) {
@@ -196,6 +244,187 @@ final class AdminController extends Controller
             'orders_by_day' => $orders->paidOrdersPerDay(7),
             'leads_by_day' => $leads->leadsPerDay(7),
         ]);
+    }
+
+    public function cmsHome(): void
+    {
+        $this->requireAuth();
+        $this->assertDb();
+        $settings = (new CmsSettingsRepository())->all();
+        $media = (new CmsMediaRepository())->listRecent(24);
+        $this->render('admin/cms', [
+            'title' => 'CMS',
+            'active_nav' => '',
+            'active_admin_nav' => 'cms',
+            'body_class' => '',
+            'layout' => 'layouts/admin',
+            'admin_authed' => true,
+            'settings' => $settings,
+            'media' => $media,
+        ]);
+    }
+
+    private function cmsSettingsSave(): void
+    {
+        if (!Csrf::validate($_POST['_csrf'] ?? null)) {
+            Flash::set(Flash::ERROR, 'Invalid session.');
+            $this->redirect('/admin/cms');
+        }
+        $this->assertDb();
+        $pairs = [
+            'logo_path' => trim((string) ($_POST['logo_path'] ?? '')),
+            'favicon_path' => trim((string) ($_POST['favicon_path'] ?? '')),
+            'map_embed_url' => trim((string) ($_POST['map_embed_url'] ?? '')),
+            'social_facebook' => trim((string) ($_POST['social_facebook'] ?? '')),
+            'social_instagram' => trim((string) ($_POST['social_instagram'] ?? '')),
+            'social_youtube' => trim((string) ($_POST['social_youtube'] ?? '')),
+            'email' => trim((string) ($_POST['email'] ?? '')),
+            'phone_display' => trim((string) ($_POST['phone_display'] ?? '')),
+            'phone_tel' => trim((string) ($_POST['phone_tel'] ?? '')),
+            'address_line1' => trim((string) ($_POST['address_line1'] ?? '')),
+            'address_line2' => trim((string) ($_POST['address_line2'] ?? '')),
+        ];
+        // allow empty = fallback; store empty string explicitly
+        (new CmsSettingsRepository())->setMany($pairs);
+        Flash::set(Flash::SUCCESS, 'Settings saved.');
+        $this->redirect('/admin/cms');
+    }
+
+    private function cmsPageForm(string $slug): void
+    {
+        $this->assertDb();
+        $slug = preg_replace('/[^a-z0-9\\-]/', '', strtolower($slug)) ?? '';
+        if ($slug === '') {
+            $this->redirect('/admin/cms');
+        }
+        $repo = new CmsPagesRepository();
+        $row = $repo->findBySlug($slug);
+        $content = $row !== null ? (string) ($row['content_json'] ?? '') : '';
+        $title = $row !== null ? (string) ($row['title'] ?? '') : '';
+        $this->render('admin/cms-page', [
+            'title' => 'Edit: ' . $slug,
+            'active_nav' => '',
+            'active_admin_nav' => 'cms',
+            'body_class' => '',
+            'layout' => 'layouts/admin',
+            'admin_authed' => true,
+            'slug' => $slug,
+            'page_title' => $title,
+            'content_json' => $content,
+        ]);
+    }
+
+    private function cmsPageSave(string $slug): void
+    {
+        if (!Csrf::validate($_POST['_csrf'] ?? null)) {
+            Flash::set(Flash::ERROR, 'Invalid session.');
+            $this->redirect('/admin/cms');
+        }
+        $this->assertDb();
+        $slug = preg_replace('/[^a-z0-9\\-]/', '', strtolower($slug)) ?? '';
+        if ($slug === '') {
+            $this->redirect('/admin/cms');
+        }
+        $title = trim((string) ($_POST['title'] ?? ''));
+        $contentJson = trim((string) ($_POST['content_json'] ?? ''));
+        if ($contentJson === '') {
+            $contentJson = '{}';
+        }
+        $incoming = json_decode($contentJson, true);
+        if (!is_array($incoming)) {
+            Flash::set(Flash::ERROR, 'Content JSON is invalid. Please try again.');
+            $this->redirect('/admin/cms/page/' . $slug);
+        }
+        $repo = new CmsPagesRepository();
+        $oldRow = $repo->findBySlug($slug);
+        $old = [];
+        if ($oldRow !== null) {
+            $decoded = json_decode((string) ($oldRow['content_json'] ?? ''), true);
+            if (is_array($decoded)) {
+                $old = $decoded;
+            }
+        }
+        $merged = array_merge($old, $incoming);
+        $encoded = json_encode($merged, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        if ($encoded === false) {
+            Flash::set(Flash::ERROR, 'Could not save content. Try again.');
+            $this->redirect('/admin/cms/page/' . $slug);
+        }
+        $repo->upsert($slug, $title, $encoded);
+        Flash::set(Flash::SUCCESS, 'Page saved.');
+        $this->redirect('/admin/cms/page/' . $slug);
+    }
+
+    private function mediaUpload(): void
+    {
+        if (!Csrf::validate($_POST['_csrf'] ?? null)) {
+            http_response_code(400);
+            header('Content-Type: application/json');
+            echo json_encode(['ok' => false, 'error' => 'Invalid session']);
+            exit;
+        }
+        $this->assertDb();
+        if (!isset($_FILES['file']) || !is_array($_FILES['file'])) {
+            http_response_code(400);
+            header('Content-Type: application/json');
+            echo json_encode(['ok' => false, 'error' => 'No file uploaded']);
+            exit;
+        }
+        $f = $_FILES['file'];
+        $err = (int) ($f['error'] ?? UPLOAD_ERR_NO_FILE);
+        if ($err !== UPLOAD_ERR_OK) {
+            http_response_code(400);
+            header('Content-Type: application/json');
+            echo json_encode(['ok' => false, 'error' => 'Upload failed']);
+            exit;
+        }
+        $tmp = (string) ($f['tmp_name'] ?? '');
+        $size = (int) ($f['size'] ?? 0);
+        $orig = (string) ($f['name'] ?? '');
+        $mime = '';
+        if ($tmp !== '' && is_file($tmp)) {
+            $fi = new \finfo(FILEINFO_MIME_TYPE);
+            $mime = (string) $fi->file($tmp);
+        }
+        $allowed = [
+            'image/jpeg' => 'jpg',
+            'image/png' => 'png',
+            'image/webp' => 'webp',
+            'image/gif' => 'gif',
+            'video/mp4' => 'mp4',
+            'video/webm' => 'webm',
+        ];
+        if (!isset($allowed[$mime])) {
+            http_response_code(415);
+            header('Content-Type: application/json');
+            echo json_encode(['ok' => false, 'error' => 'Unsupported file type']);
+            exit;
+        }
+        $ext = $allowed[$mime];
+        $uploadDir = dirname(__DIR__, 2) . '/public/uploads';
+        if (!is_dir($uploadDir)) {
+            @mkdir($uploadDir, 0775, true);
+        }
+        $name = 'cms-' . date('Ymd-His') . '-' . bin2hex(random_bytes(4)) . '.' . $ext;
+        $dest = $uploadDir . '/' . $name;
+        if (!move_uploaded_file($tmp, $dest)) {
+            http_response_code(500);
+            header('Content-Type: application/json');
+            echo json_encode(['ok' => false, 'error' => 'Could not save file']);
+            exit;
+        }
+        $publicPath = 'uploads/' . $name;
+        $id = (new CmsMediaRepository())->create($publicPath, $mime, $size, $orig);
+        header('Content-Type: application/json');
+        echo json_encode([
+            'ok' => true,
+            'id' => $id,
+            'url' => app_url($publicPath),
+            'mime' => $mime,
+            'path' => $publicPath,
+            'name' => $orig,
+        ]);
+        exit;
     }
 
     public function products(): void
@@ -400,6 +629,128 @@ final class AdminController extends Controller
             'o' => $data['order'],
             'items' => $data['items'],
         ]);
+    }
+
+    public function profileForm(): void
+    {
+        $this->assertDb();
+        $uid = AdminAuth::id();
+        if ($uid === null) {
+            $this->redirect('/admin/login');
+        }
+        $users = new UserRepository();
+        $u = $users->findById($uid);
+        if ($u === null) {
+            AdminAuth::logout();
+            Flash::set(Flash::ERROR, 'Session expired. Sign in again.');
+            $this->redirect('/admin/login');
+        }
+        $this->render('admin/profile', [
+            'title' => 'Profile',
+            'active_nav' => '',
+            'active_admin_nav' => 'profile',
+            'body_class' => '',
+            'layout' => 'layouts/admin',
+            'admin_authed' => true,
+            'user' => $u,
+        ]);
+    }
+
+    public function profileSave(): void
+    {
+        if (!Csrf::validate($_POST['_csrf'] ?? null)) {
+            Flash::set(Flash::ERROR, 'Invalid session.');
+            $this->redirect('/admin/profile');
+        }
+        $this->assertDb();
+        $uid = AdminAuth::id();
+        if ($uid === null) {
+            $this->redirect('/admin/login');
+        }
+        $users = new UserRepository();
+        if ($users->findById($uid) === null) {
+            AdminAuth::logout();
+            Flash::set(Flash::ERROR, 'Session expired. Sign in again.');
+            $this->redirect('/admin/login');
+        }
+        $email = trim((string) ($_POST['email'] ?? ''));
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            Flash::set(Flash::ERROR, 'Enter a valid email address.');
+            $this->redirect('/admin/profile');
+        }
+        if ($users->emailTakenByOtherUser($email, $uid)) {
+            Flash::set(Flash::ERROR, 'That email is already in use.');
+            $this->redirect('/admin/profile');
+        }
+        if (!$users->updateEmail($uid, $email)) {
+            Flash::set(Flash::ERROR, 'Could not update profile.');
+            $this->redirect('/admin/profile');
+        }
+        Flash::set(Flash::SUCCESS, 'Profile updated.');
+        $this->redirect('/admin/profile');
+    }
+
+    public function passwordForm(): void
+    {
+        $this->assertDb();
+        $uid = AdminAuth::id();
+        if ($uid === null) {
+            $this->redirect('/admin/login');
+        }
+        if ((new UserRepository())->findById($uid) === null) {
+            AdminAuth::logout();
+            Flash::set(Flash::ERROR, 'Session expired. Sign in again.');
+            $this->redirect('/admin/login');
+        }
+        $this->render('admin/password', [
+            'title' => 'Password',
+            'active_nav' => '',
+            'active_admin_nav' => 'password',
+            'body_class' => '',
+            'layout' => 'layouts/admin',
+            'admin_authed' => true,
+        ]);
+    }
+
+    public function passwordSave(): void
+    {
+        if (!Csrf::validate($_POST['_csrf'] ?? null)) {
+            Flash::set(Flash::ERROR, 'Invalid session.');
+            $this->redirect('/admin/password');
+        }
+        $this->assertDb();
+        $uid = AdminAuth::id();
+        if ($uid === null) {
+            $this->redirect('/admin/login');
+        }
+        $users = new UserRepository();
+        if ($users->findById($uid) === null) {
+            AdminAuth::logout();
+            Flash::set(Flash::ERROR, 'Session expired. Sign in again.');
+            $this->redirect('/admin/login');
+        }
+        $current = (string) ($_POST['current_password'] ?? '');
+        $new = (string) ($_POST['new_password'] ?? '');
+        $confirm = (string) ($_POST['confirm_password'] ?? '');
+        $hash = $users->findPasswordHashById($uid);
+        if ($hash === null || !password_verify($current, $hash)) {
+            Flash::set(Flash::ERROR, 'Current password is incorrect.');
+            $this->redirect('/admin/password');
+        }
+        if (strlen($new) < 10) {
+            Flash::set(Flash::ERROR, 'New password must be at least 10 characters.');
+            $this->redirect('/admin/password');
+        }
+        if ($new !== $confirm) {
+            Flash::set(Flash::ERROR, 'New password and confirmation do not match.');
+            $this->redirect('/admin/password');
+        }
+        if (!$users->updatePasswordHash($uid, password_hash($new, PASSWORD_DEFAULT))) {
+            Flash::set(Flash::ERROR, 'Could not update password.');
+            $this->redirect('/admin/password');
+        }
+        Flash::set(Flash::SUCCESS, 'Password changed.');
+        $this->redirect('/admin/password');
     }
 
     private function requireAuth(): void

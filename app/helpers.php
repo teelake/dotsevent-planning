@@ -205,3 +205,33 @@ function allowed_return(string $url): string
     }
     return app_url('rentals');
 }
+
+/**
+ * CMS page content for public routes (sanitized HTML + optional title/meta).
+ *
+ * @return array{
+ *   has_custom_body: bool,
+ *   body_html: string,
+ *   doc_title: string,
+ *   meta_description: string
+ * }
+ */
+function cms_public_page(string $slug, string $defaultTitle, string $defaultMeta): array
+{
+    return \App\Services\CmsPublicPage::page($slug, $defaultTitle, $defaultMeta);
+}
+
+/**
+ * Home hero + intro from CMS (optional slides JSON + HTML intro).
+ *
+ * @param list<array<string, string>> $defaultSlides
+ * @return array{
+ *   slides: list<array<string, string>>,
+ *   intro_html: string,
+ *   meta_description: string
+ * }
+ */
+function cms_public_home(array $defaultSlides, string $defaultMeta): array
+{
+    return \App\Services\CmsPublicPage::home($defaultSlides, $defaultMeta);
+}

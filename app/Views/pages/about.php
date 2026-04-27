@@ -1,9 +1,16 @@
 <?php
 declare(strict_types=1);
-$page_title = 'About us';
-$crumb_current = 'About us';
+/** @var array<string, mixed> $cms */
+$cms = $cms ?? [];
+$page_title = (string) ($cms['doc_title'] ?? 'About us');
+$crumb_current = $page_title;
 include dirname(__DIR__) . '/partials/page-hero.php';
 ?>
+<?php if (!empty($cms['has_custom_body'])): ?>
+<div class="shell page-pad prose cms-page-body" data-reveal>
+<?= $cms['body_html'] ?>
+</div>
+<?php else: ?>
 <div class="shell page-pad" data-reveal>
     <div class="section__split">
         <div class="prose">
@@ -29,3 +36,4 @@ include dirname(__DIR__) . '/partials/page-hero.php';
         </div>
     </div>
 </div>
+<?php endif; ?>

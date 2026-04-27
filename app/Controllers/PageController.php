@@ -20,37 +20,61 @@ final class PageController extends Controller
 
     public function about(): void
     {
+        $cms = cms_public_page(
+            'about',
+            'About us',
+            'About DOTS Event Planning in Saint John, NB—our story, what we value, and how we run weddings, corporate events, and celebrations with on-site hustle.'
+        );
         $this->render('pages/about', [
-            'title' => 'About us',
+            'title' => $cms['doc_title'],
             'active_nav' => 'about',
-            'meta_description' => 'About DOTS Event Planning in Saint John, NB—our story, what we value, and how we run weddings, corporate events, and celebrations with on-site hustle.',
+            'meta_description' => $cms['meta_description'],
+            'cms' => $cms,
         ]);
     }
 
     public function services(): void
     {
+        $cms = cms_public_page(
+            'services',
+            'Services',
+            'Event planning for corporate, weddings, kids parties, and rentals in Saint John and the region—timelines, vendors, and production you can trust.'
+        );
         $this->render('pages/services', [
-            'title' => 'Services',
+            'title' => $cms['doc_title'],
             'active_nav' => 'services',
-            'meta_description' => 'Event planning for corporate, weddings, kids parties, and rentals in Saint John and the region—timelines, vendors, and production you can trust.',
+            'meta_description' => $cms['meta_description'],
+            'cms' => $cms,
         ]);
     }
 
     public function kidsParty(): void
     {
+        $cms = cms_public_page(
+            'kids-party',
+            'Kids party packages',
+            'Kids and family party packages in Saint John—themed decor, games, and teardown. Book by inquiry; we confirm details before you pay for packages.'
+        );
         $this->render('pages/kids-party', [
-            'title' => 'Kids party packages',
+            'title' => $cms['doc_title'],
             'active_nav' => 'kids',
-            'meta_description' => 'Kids and family party packages in Saint John—themed decor, games, and teardown. Book by inquiry; we confirm details before you pay for packages.',
+            'meta_description' => $cms['meta_description'],
+            'cms' => $cms,
         ]);
     }
 
     public function portfolio(): void
     {
+        $cms = cms_public_page(
+            'portfolio',
+            'Portfolio',
+            'Case highlights from DOTS—weddings, corporate nights, and family celebrations we’ve planned in New Brunswick, with a focus on flow and real outcomes.'
+        );
         $this->render('pages/portfolio', [
-            'title' => 'Portfolio',
+            'title' => $cms['doc_title'],
             'active_nav' => 'portfolio',
-            'meta_description' => 'Case highlights from DOTS—weddings, corporate nights, and family celebrations we’ve planned in New Brunswick, with a focus on flow and real outcomes.',
+            'meta_description' => $cms['meta_description'],
+            'cms' => $cms,
         ]);
     }
 
@@ -59,20 +83,32 @@ final class PageController extends Controller
         $raw = (string) ($_GET['package'] ?? '');
         $allowed = ['basic', 'premium', 'vip', 'not_sure'];
         $preselect = in_array($raw, $allowed, true) ? $raw : null;
+        $cms = cms_public_page(
+            'book',
+            'Book',
+            'Request a booking for your event—package tiers from basic to VIP. We follow up to confirm; event packages are not paid on this form.'
+        );
         $this->render('pages/book-your-event', [
-            'title' => 'Book',
+            'title' => $cms['doc_title'],
             'active_nav' => 'book',
             'preselect_package' => $preselect,
-            'meta_description' => 'Request a booking for your event—package tiers from basic to VIP. We follow up to confirm; event packages are not paid on this form.',
+            'meta_description' => $cms['meta_description'],
+            'cms' => $cms,
         ]);
     }
 
     public function contact(): void
     {
+        $cms = cms_public_page(
+            'contact',
+            'Contact us',
+            'Contact DOTS Event Planning in Saint John—email, phone, and map. Send a message for rentals, weddings, or corporate event planning.'
+        );
         $this->render('pages/contact', [
-            'title' => 'Contact',
+            'title' => $cms['doc_title'],
             'active_nav' => 'contact',
-            'meta_description' => 'Contact DOTS Event Planning in Saint John—email, phone, and map. Send a message for rentals, weddings, or corporate event planning.',
+            'meta_description' => $cms['meta_description'],
+            'cms' => $cms,
         ]);
     }
 

@@ -153,11 +153,11 @@ $logoPath = trim(site_setting('logo_path', 'assets/images/logo-dots.svg'));
 <?php
 $social = site_social_urls();
 $hasSocial = ($social['facebook'] ?? '') !== '' || ($social['instagram'] ?? '') !== '' || ($social['youtube'] ?? '') !== '';
-$footerEmail = (string) ($app['email'] ?? 'info@dotseventplanning.com');
-$footerPhoneDisplay = (string) ($app['phone_display'] ?? '');
-$footerPhoneTel = (string) ($app['phone_tel'] ?? '');
-$footerLine1 = (string) ($app['address_line1'] ?? '');
-$footerLine2 = (string) ($app['address_line2'] ?? '');
+$footerEmail = trim(site_setting('email', (string) ($app['email'] ?? 'info@dotseventplanning.com')));
+$footerPhoneDisplay = trim(site_setting('phone_display', (string) ($app['phone_display'] ?? '')));
+$footerPhoneTel = trim(site_setting('phone_tel', (string) ($app['phone_tel'] ?? '')));
+$footerLine1 = trim(site_setting('address_line1', (string) ($app['address_line1'] ?? '')));
+$footerLine2 = trim(site_setting('address_line2', (string) ($app['address_line2'] ?? '')));
 $mapEmbed = site_map_embed_url();
 ?>
 <footer class="site-footer">

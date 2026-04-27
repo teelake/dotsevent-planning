@@ -2,6 +2,7 @@
 declare(strict_types=1);
 /** @var array<int, array<string, string>> $slides */
 $slides = $slides ?? [];
+$home_intro_html = trim((string) ($home_intro_html ?? ''));
 ?>
 <section
     class="hero hero--slider"
@@ -69,6 +70,13 @@ $slides = $slides ?? [];
     </div>
 </section>
 
+<?php if ($home_intro_html !== ''): ?>
+<section class="section section--tight section--surface" data-reveal>
+    <div class="shell prose cms-home-intro">
+        <?= $home_intro_html ?>
+    </div>
+</section>
+<?php else: ?>
 <section class="section section--tight section--surface" aria-labelledby="home-intro-heading" data-reveal>
     <div class="shell section__split">
         <div>
@@ -93,6 +101,7 @@ $slides = $slides ?? [];
         </div>
     </div>
 </section>
+<?php endif; ?>
 
 <section class="section section--catalog" aria-labelledby="home-services-heading">
     <div class="shell">

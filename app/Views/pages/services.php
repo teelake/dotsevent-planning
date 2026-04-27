@@ -1,9 +1,16 @@
 <?php
 declare(strict_types=1);
-$page_title = 'Services';
-$crumb_current = 'Services';
+/** @var array<string, mixed> $cms */
+$cms = $cms ?? [];
+$page_title = (string) ($cms['doc_title'] ?? 'Services');
+$crumb_current = $page_title;
 include dirname(__DIR__) . '/partials/page-hero.php';
 ?>
+<?php if (!empty($cms['has_custom_body'])): ?>
+<div class="shell page-pad prose cms-page-body" data-reveal>
+<?= $cms['body_html'] ?>
+</div>
+<?php else: ?>
 <div class="shell page-pad" data-reveal>
     <p class="section__lead services__lead">Weddings, corporate, social events, kids parties, 360° photo booth, and expert planning—delivered with a single, calm process.</p>
     <div class="card-grid card-grid--bento">
@@ -30,3 +37,4 @@ include dirname(__DIR__) . '/partials/page-hero.php';
         </article>
     </div>
 </div>
+<?php endif; ?>

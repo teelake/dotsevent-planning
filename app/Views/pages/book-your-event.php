@@ -1,8 +1,17 @@
 <?php
 declare(strict_types=1);
-$page_title = 'Book';
-$crumb_current = 'Book';
+/** @var array<string, mixed> $cms */
+$cms = $cms ?? [];
+$page_title = (string) ($cms['doc_title'] ?? 'Book');
+$crumb_current = $page_title;
 include dirname(__DIR__) . '/partials/page-hero.php';
+?>
+<?php if (!empty($cms['has_custom_body'])): ?>
+<div class="shell page-pad prose cms-page-body" data-reveal>
+<?= $cms['body_html'] ?>
+</div>
+<?php endif; ?>
+<?php
 $packages = [
     'basic' => 'Basic',
     'premium' => 'Premium',
