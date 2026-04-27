@@ -7,6 +7,7 @@ $t = $title ?? 'Admin';
 $pageTitle = e($t) . ' | ' . e($siteName) . ' Admin';
 $bodyClass = trim((string) ($bodyClass ?? ''));
 $adminEmail = current_admin_user_email();
+$logoPath = trim(site_setting('logo_path', 'assets/images/logo-dots.svg'));
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,7 +29,7 @@ $adminEmail = current_admin_user_email();
 <main id="admin-main" class="admin-login" tabindex="-1">
     <div class="admin-login__inner">
         <a class="admin-login__logo" href="<?= e(app_url('')) ?>" aria-label="<?= e($siteName) ?> home">
-            <img src="<?= e(asset('images/logo-dots.svg')) ?>" alt="" width="40" height="40" class="admin-login__logo-img">
+            <img src="<?= e(app_url(ltrim($logoPath, '/'))) ?>" alt="" width="40" height="40" class="admin-login__logo-img">
         </a>
         <h1 class="admin-login__heading">Welcome back</h1>
         <p class="admin-login__tagline">Sign in to <?= e($siteName) ?> — staff access only.</p>
