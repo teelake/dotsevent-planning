@@ -69,8 +69,15 @@ $pageTitle = ($t === '' || $t === 'Home') ? e($siteName) : e($t) . ' | ' . e($si
                 $cartCurrent = $activeNav === 'cart';
                 ?>
                 <li>
-                    <a class="site-nav__link site-nav__link--cart<?= $cartCurrent ? ' is-active' : '' ?>" href="<?= e(app_url('cart')) ?>"<?= $cartCurrent ? ' aria-current="page"' : '' ?>>
-                        Cart<?php if ($cn > 0): ?> <span class="cart-badge" aria-label="<?= (int) $cn ?> items"><?= (int) $cn ?></span><?php endif; ?>
+                    <a class="site-nav__link site-nav__link--cart<?= $cartCurrent ? ' is-active' : '' ?>"
+                       href="<?= e(app_url('cart')) ?>"
+                       aria-label="<?= $cn > 0 ? 'Cart, ' . (int) $cn . ' items' : 'Shopping cart' ?>"<?= $cartCurrent ? ' aria-current="page"' : '' ?>>
+                        <svg class="site-nav__cart-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                            <path d="M9 22a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm10 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zM1 2h2l.6 2M5 2h14l-1.5 9.2A2 2 0 0 1 15.5 13H8.4a2 2 0 0 1-1.9-1.4L4.2 6H19" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <?php if ($cn > 0): ?>
+                        <span class="cart-badge" aria-hidden="true"><?= (int) $cn ?></span>
+                        <?php endif; ?>
                     </a>
                 </li>
             </ul>
@@ -96,27 +103,49 @@ $pageTitle = ($t === '' || $t === 'Home') ? e($siteName) : e($t) . ' | ' . e($si
     <?= $content ?>
 </main>
 
+<?php
+$social = site_social_urls();
+$hasSocial = ($social['facebook'] ?? '') !== '' || ($social['instagram'] ?? '') !== '' || ($social['youtube'] ?? '') !== '';
+$footerEmail = (string) ($app['email'] ?? 'info@dotseventplanning.com');
+$footerPhoneDisplay = (string) ($app['phone_display'] ?? '');
+$footerPhoneTel = (string) ($app['phone_tel'] ?? '');
+$footerLine1 = (string) ($app['address_line1'] ?? '');
+$footerLine2 = (string) ($app['address_line2'] ?? '');
+$mapEmbed = site_map_embed_url();
+?>
 <footer class="site-footer">
     <div class="shell site-footer__grid">
         <div class="site-footer__brand">
             <a class="site-footer__logo" href="<?= e(app_url('')) ?>"><?= e($siteName) ?></a>
             <p class="site-footer__tagline">Event planning in Saint John—straight answers, on-site hustle, and decor that still looks good in your uncle’s phone photos.</p>
+            <?php if ($hasSocial): ?>
             <ul class="social" aria-label="Social links">
-                <li><a class="social__link" href="#" aria-label="Facebook">f</a></li>
-                <li><a class="social__link" href="#" aria-label="Instagram">in</a></li>
-                <li><a class="social__link" href="#" aria-label="YouTube">▶</a></li>
+                <?php if ($social['facebook'] !== ''): ?>
+                <li><a class="social__link" href="<?= e($social['facebook']) ?>" rel="noopener noreferrer" target="_blank" aria-label="Facebook">f</a></li>
+                <?php endif; ?>
+                <?php if ($social['instagram'] !== ''): ?>
+                <li><a class="social__link" href="<?= e($social['instagram']) ?>" rel="noopener noreferrer" target="_blank" aria-label="Instagram">in</a></li>
+                <?php endif; ?>
+                <?php if ($social['youtube'] !== ''): ?>
+                <li><a class="social__link" href="<?= e($social['youtube']) ?>" rel="noopener noreferrer" target="_blank" aria-label="YouTube">▶</a></li>
+                <?php endif; ?>
             </ul>
+            <?php endif; ?>
         </div>
         <div class="site-footer__contact">
             <h2 class="site-footer__heading">Contact</h2>
-            <p><a href="mailto:info@dotseventplanning.com">info@dotseventplanning.com</a></p>
-            <p>181 McNamara Drive, Saint John, NB</p>
-            <p><a href="tel:+1">+1 (506) 000-0000</a></p>
+            <p><a href="mailto:<?= e($footerEmail) ?>"><?= e($footerEmail) ?></a></p>
+            <?php if ($footerLine1 !== '' || $footerLine2 !== ''): ?>
+            <p><?= e(trim($footerLine1 . ', ' . $footerLine2, ' ,')) ?></p>
+            <?php endif; ?>
+            <?php if ($footerPhoneTel !== '' && $footerPhoneDisplay !== ''): ?>
+            <p><a href="tel:<?= e(preg_replace('/\s+/', '', $footerPhoneTel)) ?>"><?= e($footerPhoneDisplay) ?></a></p>
+            <?php endif; ?>
         </div>
         <div class="site-footer__map">
             <h2 class="site-footer__heading">Location</h2>
-            <div class="site-footer__map-embed" role="img" aria-label="Map area placeholder">
-                <span class="visually-hidden">Map embed to be added</span>
+            <div class="site-footer__map-embed map-embed">
+                <iframe class="map-embed__frame" title="Map: <?= e($siteName) ?> area" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="<?= e($mapEmbed) ?>"></iframe>
             </div>
         </div>
     </div>

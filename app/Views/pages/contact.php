@@ -1,5 +1,12 @@
 <?php
 declare(strict_types=1);
+$cfg = app_config();
+$contactEmail = (string) ($cfg['email'] ?? 'info@dotseventplanning.com');
+$phoneDisplay = (string) ($cfg['phone_display'] ?? '');
+$phoneTel = (string) ($cfg['phone_tel'] ?? '');
+$addr1 = (string) ($cfg['address_line1'] ?? '');
+$addr2 = (string) ($cfg['address_line2'] ?? '');
+$mapUrl = site_map_embed_url();
 $page_title = 'Contact us';
 $crumb_current = 'Contact';
 include dirname(__DIR__) . '/partials/page-hero.php';
@@ -23,10 +30,21 @@ include dirname(__DIR__) . '/partials/page-hero.php';
                 <button class="btn btn--primary contact-form__submit" type="submit">Send</button>
             </form>
         </div>
-        <div>
-            <p>181 McNamara Drive, Saint John, NB E2J 3L2</p>
-            <p><a href="mailto:info@dotseventplanning.com">info@dotseventplanning.com</a></p>
-            <p class="map-placeholder" role="img" aria-label="Map area">Map embed</p>
+        <div class="contact-page__aside">
+            <h2 class="section__title" style="font-size: 1.15rem; margin-top: 0;">Visit or call</h2>
+            <?php if ($addr1 !== ''): ?>
+            <p class="contact-page__address"><?= e($addr1) ?></p>
+            <?php endif; ?>
+            <?php if ($addr2 !== ''): ?>
+            <p class="contact-page__address"><?= e($addr2) ?></p>
+            <?php endif; ?>
+            <p class="contact-page__email"><a href="mailto:<?= e($contactEmail) ?>"><?= e($contactEmail) ?></a></p>
+            <?php if ($phoneTel !== '' && $phoneDisplay !== ''): ?>
+            <p class="contact-page__phone"><a href="tel:<?= e(preg_replace('/\s+/', '', $phoneTel)) ?>"><?= e($phoneDisplay) ?></a></p>
+            <?php endif; ?>
+            <div class="map-embed map-embed--contact" style="margin-top: 1rem;">
+                <iframe class="map-embed__frame" title="Map: our location" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="<?= e($mapUrl) ?>"></iframe>
+            </div>
         </div>
     </div>
 </div>

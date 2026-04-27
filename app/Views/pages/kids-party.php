@@ -1,16 +1,43 @@
 <?php
 declare(strict_types=1);
+$bookKids = e(app_url('book-your-event')) . '?package=premium';
 $page_title = 'Kids party packages';
 $crumb_current = 'Kids party';
 include dirname(__DIR__) . '/partials/page-hero.php';
 ?>
 <div class="shell page-pad" data-reveal>
-    <p class="section__lead" style="max-width: 50ch; margin-bottom: 2rem;">Bundle packages and add-ons. Booking is by inquiry—<strong>no online payment</strong> on this page in v1.</p>
-    <div class="placeholder-grid">
-        <div class="placeholder-card">Mini package</div>
-        <div class="placeholder-card">Standard package</div>
-        <div class="placeholder-card">Classic package</div>
+    <p class="section__lead" style="max-width: 52ch; margin-bottom: 2rem;">Themed kids’ parties with setup, activities, and teardown handled for you. Packages are a starting point—we tailor everything to age, venue, and your sanity level. <strong>No online payment</strong> here: we confirm details and pricing after you reach out.</p>
+    <ul class="kids-offers" role="list" aria-label="Kids party package tiers">
+        <li class="kids-offer">
+            <h2 class="kids-offer__name">Mini</h2>
+            <p class="text-muted" style="margin: 0; font-size: 0.9rem;">2–3 hours · smaller guest lists</p>
+            <ul class="kids-offer__list">
+                <li>Theme consult + simple decor plan</li>
+                <li>On-site lead for games & flow</li>
+                <li>Basic clean-up and pack-out</li>
+            </ul>
+        </li>
+        <li class="kids-offer">
+            <h2 class="kids-offer__name">Standard</h2>
+            <p class="text-muted" style="margin: 0; font-size: 0.9rem;">Half-day · most birthdays</p>
+            <ul class="kids-offer__list">
+                <li>Styling, balloon or backdrop focal</li>
+                <li>Activity run-of-show and vendor touchpoints</li>
+                <li>Coordination with your cake & entertainment</li>
+            </ul>
+        </li>
+        <li class="kids-offer">
+            <h2 class="kids-offer__name">Classic</h2>
+            <p class="text-muted" style="margin: 0; font-size: 0.9rem;">Full venue takeover · showpiece parties</p>
+            <ul class="kids-offer__list">
+                <li>Full creative direction and floor plan</li>
+                <li>Photo moments and premium finishing</li>
+                <li>End-to-end run of day through load-out</li>
+            </ul>
+        </li>
+    </ul>
+    <div style="text-align: center; padding: 1.5rem 0 0;">
+        <a class="btn btn--primary" href="<?= $bookKids ?>">Book your event</a>
+        <p class="text-muted" style="margin: 0.75rem 0 0; font-size: 0.9rem;">We’ll pre-select <strong>Premium</strong> on the booking form; change it there if you prefer another package.</p>
     </div>
-    <h2 class="section__title" style="margin-top: 2.5rem; font-size: 1.5rem;">Request a booking</h2>
-    <p>Form fields and submission handling will connect to the PHP backend and database next.</p>
 </div>

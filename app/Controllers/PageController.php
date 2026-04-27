@@ -51,9 +51,13 @@ final class PageController extends Controller
 
     public function bookYourEvent(): void
     {
+        $raw = (string) ($_GET['package'] ?? '');
+        $allowed = ['basic', 'premium', 'vip', 'not_sure'];
+        $preselect = in_array($raw, $allowed, true) ? $raw : null;
         $this->render('pages/book-your-event', [
             'title' => 'Book your event',
             'active_nav' => 'book-your-event',
+            'preselect_package' => $preselect,
         ]);
     }
 

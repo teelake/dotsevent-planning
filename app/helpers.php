@@ -31,6 +31,26 @@ function asset(string $path): string
     return app_url('assets/' . ltrim($path, '/'));
 }
 
+/** Public site map embed URL (Google maps output=embed). */
+function site_map_embed_url(): string
+{
+    $u = (string) (app_config()['map_embed_url'] ?? '');
+    return $u !== '' ? $u : 'https://maps.google.com/maps?q=Saint+John%2C+New+Brunswick%2C+Canada&z=12&output=embed';
+}
+
+/**
+ * @return array{facebook: string, instagram: string, youtube: string}
+ */
+function site_social_urls(): array
+{
+    $c = app_config();
+    return [
+        'facebook' => trim((string) ($c['social_facebook'] ?? '')),
+        'instagram' => trim((string) ($c['social_instagram'] ?? '')),
+        'youtube' => trim((string) ($c['social_youtube'] ?? '')),
+    ];
+}
+
 /**
  * @return array<string, mixed>|null
  */
