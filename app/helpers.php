@@ -51,6 +51,53 @@ function site_social_urls(): array
     ];
 }
 
+/** Scheme + host, no trailing slash, for sharing meta tags. */
+function site_public_origin(): string
+{
+    return rtrim((string) (app_config()['public_origin'] ?? ''), "/ \t");
+}
+
+/**
+ * Absolute URL to a file under /public/ (e.g. assets/og.jpg). Returns '' if public_origin is not set.
+ */
+function absolute_public_url(string $pathUnderPublic): string
+{
+    $origin = site_public_origin();
+    if ($origin === '') {
+        return '';
+    }
+    $p = app_url(ltrim($pathUnderPublic, '/'));
+    return $origin . $p;
+}
+
+/**
+ * Current request as absolute URL (requires public_origin). Query string included if present.
+ */
+function current_canonical_url(): string
+{
+    $origin = site_public_origin();
+    if ($origin === '') {
+        return '';
+    }
+    $uri = (string) ($_SERVER['REQUEST_URI'] ?? '/');
+    $path = parse_url($uri, PHP_URL_PATH);
+    $path = is_string($path) ? $path : '/';
+    $query = parse_url($uri, PHP_URL_QUERY);
+    $base = rtrim((string) (app_config()['base_url'] ?? ''), '/');
+    if ($base !== '' && str_starts_with($path, $base)) {
+        $sub = substr($path, strlen($base)) ?: '/';
+        $path = (string) $sub;
+    }
+    if ($path === '' || $path[0] !== '/') {
+        $path = $path === '' ? '/' : '/' . ltrim($path, '/');
+    }
+    $out = $origin . $path;
+    if (is_string($query) && $query !== '') {
+        $out .= '?' . $query;
+    }
+    return $out;
+}
+
 /**
  * @return array<string, mixed>|null
  */

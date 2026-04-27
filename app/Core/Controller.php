@@ -27,6 +27,8 @@ abstract class Controller
         $extraHeader = $data['extra_header'] ?? '';
         $extraFooter = $data['extra_footer'] ?? '';
         $app = $appConfig;
+        $metaDescription = trim((string) ($data['meta_description'] ?? $appConfig['meta_description'] ?? ''));
+        $metaOgType = (string) ($data['meta_og_type'] ?? 'website');
 
         $layout = $data['layout'] ?? 'layouts/main';
         $layoutFile = dirname(__DIR__) . '/Views/' . $layout . '.php';

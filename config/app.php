@@ -32,4 +32,20 @@ return [
     'social_facebook' => '',
     'social_instagram' => '',
     'social_youtube' => '',
+
+    /**
+     * Public site URL (no trailing slash) for canonical links, Open Graph, and Twitter.
+     * Example: https://dotseventplanning.com — leave empty to skip absolute og:url and canonical.
+     */
+    'public_origin' => '',
+
+    /**
+     * Default meta description; pages may override per-route in controllers.
+     */
+    'meta_description' => 'DOTS Event Planning: weddings, corporate events, kids parties, and decor rentals in Saint John, NB. Honest budgets, on-site coordination, and inventory you can add to cart.',
+
+    /**
+     * Optional: path under /public/ for og:image, e.g. "assets/og/og-1200x630.png". Empty = no og:image.
+     */
+    'og_image' => '',
 ];
