@@ -21,7 +21,17 @@
     });
   }
 
-  // Hero slider
+  // Inner pages: header gains depth after scroll (home keeps transparent hero)
+  var headerScroll = document.querySelector("[data-header-scroll]");
+  if (headerScroll && !document.body.classList.contains("page-home")) {
+    function onHeaderScroll() {
+      headerScroll.classList.toggle("site-header--scrolled", window.scrollY > 4);
+    }
+    onHeaderScroll();
+    window.addEventListener("scroll", onHeaderScroll, { passive: true });
+  }
+
+  // Hero slider (home only)
   var root = document.querySelector("[data-hero-slider]");
   if (!root) return;
 
