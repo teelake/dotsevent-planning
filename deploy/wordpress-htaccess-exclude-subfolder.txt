@@ -1,0 +1,26 @@
+# =============================================================================
+# If https://yoursite.com/new/ STILL shows a WordPress 404, the main site is
+# sending unknown URLs to wp index.php. Edit the main WordPress .htaccess
+# (usually public_html/.htaccess) and add the CONDITION below to the rule that
+# sends traffic to /index.php (the same block as "# BEGIN WordPress").
+#
+# Find the two lines (before "RewriteRule . /index.php" or "RewriteRule . index.php"):
+#   RewriteCond %{REQUEST_FILENAME} !-f
+#   RewriteCond %{REQUEST_FILENAME} !-d
+# Immediately BEFORE "RewriteRule . ... index.php" add this NEW line:
+# =============================================================================
+
+    RewriteCond %{REQUEST_URI} !^/new($|/)
+
+
+# So the block should look like (example):
+#
+#   RewriteEngine On
+#   RewriteBase /
+#   RewriteRule ^index\.php$ - [L]
+#   RewriteCond %{REQUEST_FILENAME} !-f
+#   RewriteCond %{REQUEST_FILENAME} !-d
+#   RewriteCond %{REQUEST_URI} !^/new($|/)
+#   RewriteRule . /index.php [L]
+#
+# Use /dots($|/) if your folder URL is /dots/ instead of /new/.

@@ -1,0 +1,24 @@
+# =============================================================================
+# Install: copy to the app FOLDER (next to /public) and rename to  .htaccess
+# Path example:  public_html/new/.htaccess
+# Public URL:     https://yoursite.com/new/
+# If the folder is NOT named "new", change  RewriteBase  and config  base_url
+# to match (e.g.  RewriteBase /dots/  and  'base_url' => '/dots'  in app.php).
+# =============================================================================
+
+<IfModule mod_rewrite.c>
+    Options -Indexes
+    RewriteEngine On
+    RewriteBase /new/
+
+    # Do not re-handle our front controller
+    RewriteRule ^index\.php$ - [L]
+
+    # /new/assets/...  →  filesystem public/assets/...
+    RewriteRule ^assets/(.*)$ public/assets/$1 [L]
+
+    # App routes: send everything else to project-root index.php (bridge to public)
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule . index.php [L,QSA]
+</IfModule>
