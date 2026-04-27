@@ -29,10 +29,10 @@
     rgba(1, 1, 1, 0.45) 42%,
     rgba(10, 10, 10, 0.28) 100%
   );
-  /* Body: clean sans. Headlines: Fraunces — editorial, event / hospitality presence */
+  /* Sans-only system */
   --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-ui: "Outfit", "Plus Jakarta Sans", system-ui, sans-serif;
-  --font-display: "Fraunces", "Georgia", "Times New Roman", serif;
+  --font-display: "Outfit", "Plus Jakarta Sans", system-ui, sans-serif;
   --text-body: clamp(1rem, 0.2vw + 0.98rem, 1.07rem);
   --leading-tight: 1.15;
   --leading-body: 1.65;
@@ -130,7 +130,6 @@ h3 {
   font-family: var(--font-display);
   font-weight: 600;
   letter-spacing: -0.02em;
-  font-optical-sizing: auto;
 }
 
 h4 {
@@ -248,7 +247,6 @@ img {
   font-weight: 600;
   letter-spacing: -0.028em;
   line-height: 1.1;
-  font-variation-settings: "SOFT" 0, "WONK" 18;
 }
 
 .section__lead {
@@ -309,7 +307,6 @@ img {
   letter-spacing: -0.03em;
   line-height: 1.08;
   text-shadow: 0 2px 28px rgba(0, 0, 0, 0.35), 0 0 40px rgba(248, 195, 19, 0.08);
-  font-variation-settings: "SOFT" 0, "WONK" 20;
 }
 
 .page-hero__crumb {

@@ -610,7 +610,6 @@
   color: var(--color-brand-black);
   letter-spacing: -0.02em;
   line-height: 1.2;
-  font-variation-settings: "SOFT" 0, "WONK" 15;
 }
 
 .newsletter__text {
