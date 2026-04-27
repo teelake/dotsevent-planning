@@ -98,7 +98,7 @@ $pageTitle = ($t === '' || $t === 'Home') ? e($siteName) : e($t) . ' | ' . e($si
     <div class="shell site-footer__grid">
         <div class="site-footer__brand">
             <a class="site-footer__logo" href="<?= e(app_url('')) ?>"><?= e($siteName) ?></a>
-            <p class="site-footer__tagline">Exceptional events, crafted with clarity—from first idea to the last detail.</p>
+            <p class="site-footer__tagline">Event planning in Saint John—straight answers, on-site hustle, and decor that still looks good in your uncle’s phone photos.</p>
             <ul class="social" aria-label="Social links">
                 <li><a class="social__link" href="#" aria-label="Facebook">f</a></li>
                 <li><a class="social__link" href="#" aria-label="Instagram">in</a></li>

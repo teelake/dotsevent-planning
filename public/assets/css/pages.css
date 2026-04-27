@@ -130,7 +130,7 @@
   align-items: center;
   gap: 0.5rem;
   pointer-events: none;
-  max-width: var(--max-w);
+  max-width: var(--max-w-wide);
   margin: 0 auto;
   padding: 0 var(--space-lg);
 }
@@ -170,7 +170,7 @@
   display: flex;
   gap: 0.4rem;
   align-items: center;
-  max-width: var(--max-w);
+  max-width: var(--max-w-wide);
   margin: 0 auto;
   padding: 0 var(--space-lg);
   pointer-events: none;
@@ -276,6 +276,11 @@
   flex-direction: column;
   box-shadow: var(--shadow-subtle);
   transition: box-shadow 0.25s, border-color 0.2s;
+}
+
+.product-card:hover {
+  border-color: var(--color-line-strong);
+  box-shadow: var(--shadow-floating);
 }
 
 .product-card__media {
@@ -473,7 +478,6 @@
   font-size: 0.9rem;
   margin: 0.5rem 0 0;
 }
-.text-muted { color: var(--color-ink-soft); }
 
 .contact-form {
   display: flex;

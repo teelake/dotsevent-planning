@@ -31,7 +31,7 @@ $slides = $slides ?? [];
                 >
                 <div class="hero__scrim" aria-hidden="true"></div>
             </div>
-            <div class="shell hero__content">
+            <div class="shell shell--wide hero__content">
                 <p class="hero__eyebrow"><?= e($slide['eyebrow']) ?></p>
                 <h1 class="hero__title"><?= e($slide['title']) ?></h1>
                 <p class="hero__subtitle"><?= e($slide['subtitle']) ?></p>
@@ -70,10 +70,10 @@ $slides = $slides ?? [];
 <section class="section section--tight section--surface" aria-labelledby="home-intro-heading">
     <div class="shell section__split">
         <div>
-            <p class="eyebrow">Your partner</p>
-            <h2 id="home-intro-heading" class="section__title">Planning that feels calm, confident, and considered</h2>
-            <p class="section__lead">We combine creative direction with meticulous execution—so you can enjoy the moment while we handle the complexity.</p>
-            <a class="text-link" href="<?= e(app_url('about')) ?>">Our story</a>
+            <p class="eyebrow">Saint John &amp; region</p>
+            <h2 id="home-intro-heading" class="section__title">Events are loud—planning shouldn’t be</h2>
+            <p class="section__lead">We sweat the brief, the budget, and the backup plan so you’re not doing it the night before. Honest timelines, clear costs, and a crew that shows up like they mean it.</p>
+            <a class="text-link" href="<?= e(app_url('about')) ?>">How we work</a>
         </div>
         <div class="stat-row" role="list">
             <div class="stat" role="listitem">
@@ -95,29 +95,29 @@ $slides = $slides ?? [];
 <section class="section" aria-labelledby="home-services-heading">
     <div class="shell">
         <div class="section__head">
-            <p class="eyebrow">What we do</p>
-            <h2 id="home-services-heading" class="section__title">Services designed around your occasion</h2>
+            <p class="eyebrow">Where we help</p>
+            <h2 id="home-services-heading" class="section__title">A few things we get asked for a lot</h2>
         </div>
-        <div class="card-grid">
+        <div class="card-grid card-grid--home">
             <article class="card">
-                <h3 class="card__title">Corporate</h3>
-                <p class="card__text">Brand moments, launches, and galas with seamless production.</p>
+                <h3 class="card__title">Corporate &amp; brand</h3>
+                <p class="card__text">Launches, staff nights, and client events—tight run-of-show, AV that works, and signage that actually matches the deck.</p>
             </article>
             <article class="card">
                 <h3 class="card__title">Weddings &amp; social</h3>
-                <p class="card__text">Emotional design and calm coordination from start to finish.</p>
+                <p class="card__text">Mood, flow, and those small touches guests remember. We coordinate vendors so you’re not passing notes on the dance floor.</p>
             </article>
             <article class="card">
                 <h3 class="card__title">Kids parties</h3>
-                <p class="card__text">Packages and add-ons so parents can enjoy the celebration too.</p>
+                <p class="card__text">Packages, play, and add-ons for real families (not just Pinterest). Less chaos, more “they actually enjoyed it.”</p>
             </article>
             <article class="card">
                 <h3 class="card__title">Rentals</h3>
-                <p class="card__text">Chairs, backdrops, and decor—available with secure online checkout.</p>
+                <p class="card__text">Chairs, backdrops, and finishing pieces—see what’s in stock and check out when you’re ready.</p>
             </article>
         </div>
         <p class="section__cta-row">
-            <a class="btn btn--secondary" href="<?= e(app_url('services')) ?>">Explore services</a>
+            <a class="btn btn--secondary" href="<?= e(app_url('services')) ?>">View all services</a>
         </p>
     </div>
 </section>
@@ -125,8 +125,8 @@ $slides = $slides ?? [];
 <section class="section section--newsletter" aria-labelledby="newsletter-heading">
     <div class="shell newsletter">
         <div>
-            <h2 id="newsletter-heading" class="newsletter__title">Exclusive planning insights</h2>
-            <p class="newsletter__text">Occasional notes on design, logistics, and celebration—no spam.</p>
+            <h2 id="newsletter-heading" class="newsletter__title">Short notes, zero fluff</h2>
+            <p class="newsletter__text">A few times a year: one useful idea, one photo worth stealing, and where we’re booking next. Unsubscribe any time.</p>
         </div>
         <form class="newsletter__form" method="post" action="<?= e(app_url('newsletter')) ?>" novalidate>
             <?= csrf_field() ?>
