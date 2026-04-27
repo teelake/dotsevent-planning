@@ -9,6 +9,8 @@ use PDO;
 
 final class CmsSettingsRepository
 {
+    use CmsRepositorySafety;
+
     private ?PDO $pdo;
 
     public function __construct()
@@ -24,22 +26,26 @@ final class CmsSettingsRepository
         if ($this->pdo === null) {
             return [];
         }
-        $st = $this->pdo->query('SELECT `key`, `value` FROM cms_settings');
-        if ($st === false) {
-            return [];
-        }
-        $rows = $st->fetchAll(PDO::FETCH_ASSOC);
-        $out = [];
-        if (is_array($rows)) {
-            foreach ($rows as $r) {
-                $k = (string) ($r['key'] ?? '');
-                if ($k === '') {
-                    continue;
-                }
-                $out[$k] = (string) ($r['value'] ?? '');
+
+        return $this->runCmsOrMissingTable(function (): array {
+            $st = $this->pdo->query('SELECT `key`, `value` FROM cms_settings');
+            if ($st === false) {
+                return [];
             }
-        }
-        return $out;
+            $rows = $st->fetchAll(PDO::FETCH_ASSOC);
+            $out = [];
+            if (is_array($rows)) {
+                foreach ($rows as $r) {
+                    $k = (string) ($r['key'] ?? '');
+                    if ($k === '') {
+                        continue;
+                    }
+                    $out[$k] = (string) ($r['value'] ?? '');
+                }
+            }
+
+            return $out;
+        }, []);
     }
 
     public function get(string $key): ?string
@@ -47,13 +53,17 @@ final class CmsSettingsRepository
         if ($this->pdo === null) {
             return null;
         }
-        $st = $this->pdo->prepare('SELECT `value` FROM cms_settings WHERE `key` = :k LIMIT 1');
-        $st->execute(['k' => $key]);
-        $v = $st->fetchColumn();
-        if ($v === false) {
-            return null;
-        }
-        return (string) $v;
+
+        return $this->runCmsOrMissingTable(function () use ($key): ?string {
+            $st = $this->pdo->prepare('SELECT `value` FROM cms_settings WHERE `key` = :k LIMIT 1');
+            $st->execute(['k' => $key]);
+            $v = $st->fetchColumn();
+            if ($v === false) {
+                return null;
+            }
+
+            return (string) $v;
+        }, null);
     }
 
     public function set(string $key, ?string $value): bool
@@ -61,11 +71,15 @@ final class CmsSettingsRepository
         if ($this->pdo === null) {
             return false;
         }
-        $st = $this->pdo->prepare(
-            'INSERT INTO cms_settings (`key`, `value`) VALUES (:k, :v)
-             ON DUPLICATE KEY UPDATE `value` = VALUES(`value`)'
-        );
-        return $st->execute(['k' => $key, 'v' => $value]);
+
+        return $this->runCmsOrMissingTable(function () use ($key, $value): bool {
+            $st = $this->pdo->prepare(
+                'INSERT INTO cms_settings (`key`, `value`) VALUES (:k, :v)
+                 ON DUPLICATE KEY UPDATE `value` = VALUES(`value`)'
+            );
+
+            return $st->execute(['k' => $key, 'v' => $value]);
+        }, false);
     }
 
     /**
@@ -76,17 +90,26 @@ final class CmsSettingsRepository
         if ($this->pdo === null) {
             return false;
         }
-        $this->pdo->beginTransaction();
-        try {
-            foreach ($pairs as $k => $v) {
-                $this->set((string) $k, $v);
+
+        return $this->runCmsOrMissingTable(function () use ($pairs): bool {
+            $this->pdo->beginTransaction();
+            try {
+                $st = $this->pdo->prepare(
+                    'INSERT INTO cms_settings (`key`, `value`) VALUES (:k, :v)
+                     ON DUPLICATE KEY UPDATE `value` = VALUES(`value`)'
+                );
+                foreach ($pairs as $k => $v) {
+                    $st->execute(['k' => (string) $k, 'v' => $v]);
+                }
+                $this->pdo->commit();
+
+                return true;
+            } catch (\Throwable) {
+                $this->pdo->rollBack();
+
+                return false;
             }
-            $this->pdo->commit();
-            return true;
-        } catch (\Throwable) {
-            $this->pdo->rollBack();
-            return false;
-        }
+        }, false);
     }
 }
 
