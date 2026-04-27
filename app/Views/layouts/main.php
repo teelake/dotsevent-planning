@@ -21,6 +21,8 @@ $metaOgType = $metaOgType ?? 'website';
 $canonicalUrl = current_canonical_url();
 $ogImagePath = trim((string) ($app['og_image'] ?? ''));
 $ogImageAbsolute = $ogImagePath !== '' ? absolute_public_url($ogImagePath) : '';
+$faviconPath = trim(site_setting('favicon_path', ''));
+$logoPath = trim(site_setting('logo_path', 'assets/images/logo-dots.svg'));
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,6 +32,9 @@ $ogImageAbsolute = $ogImagePath !== '' ? absolute_public_url($ogImagePath) : '';
     <meta name="theme-color" content="#e8e2d9" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#0c0b09" media="(prefers-color-scheme: dark)">
     <title><?= $pageTitle ?></title>
+    <?php if ($faviconPath !== ''): ?>
+    <link rel="icon" href="<?= e(app_url(ltrim($faviconPath, '/'))) ?>">
+    <?php endif; ?>
     <?php if ($metaDescription !== ''): ?>
     <meta name="description" content="<?= e($metaDescription) ?>">
     <meta property="og:type" content="<?= e($metaOgType) ?>">
@@ -63,7 +68,7 @@ $ogImageAbsolute = $ogImagePath !== '' ? absolute_public_url($ogImagePath) : '';
 <header class="site-header" data-header data-header-scroll>
     <div class="site-header__inner shell">
         <a class="site-logo" href="<?= e(app_url('')) ?>" aria-label="<?= e($siteName) ?> home">
-            <img class="site-logo__mark" src="<?= e(asset('images/logo-dots.svg')) ?>" alt="" width="44" height="44">
+            <img class="site-logo__mark" src="<?= e(app_url(ltrim($logoPath, '/'))) ?>" alt="" width="44" height="44">
             <span class="site-logo__text">DOTS <span>Event</span></span>
         </a>
         <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>

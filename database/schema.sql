@@ -72,4 +72,35 @@ CREATE TABLE IF NOT EXISTS users (
   UNIQUE KEY uq_users_email (email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- CMS settings (logo, favicon, map embed, social, etc.)
+CREATE TABLE IF NOT EXISTS cms_settings (
+  `key` VARCHAR(120) NOT NULL,
+  `value` TEXT NULL,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- CMS page content by slug (home/about/services/etc.) stored as JSON
+CREATE TABLE IF NOT EXISTS cms_pages (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  slug VARCHAR(80) NOT NULL,
+  title VARCHAR(255) NOT NULL DEFAULT '',
+  content_json JSON NULL,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_cms_pages_slug (slug)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Uploaded media for CMS (images/videos). Stored under /public/uploads/
+CREATE TABLE IF NOT EXISTS cms_media (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  file_path VARCHAR(512) NOT NULL,
+  mime VARCHAR(120) NOT NULL,
+  size_bytes INT UNSIGNED NOT NULL DEFAULT 0,
+  original_name VARCHAR(255) NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_cms_media_created (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 SET FOREIGN_KEY_CHECKS = 1;

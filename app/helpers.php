@@ -31,10 +31,36 @@ function asset(string $path): string
     return app_url('assets/' . ltrim($path, '/'));
 }
 
+/**
+ * CMS setting, falling back to config/app.php. Returns string (possibly empty).
+ * Requires DB configured; otherwise always falls back.
+ */
+function site_setting(string $key, string $fallback = ''): string
+{
+    static $cache = null;
+    if ($cache === null) {
+        $cache = [];
+        try {
+            $repo = new \App\Models\CmsSettingsRepository();
+            $cache = $repo->all();
+        } catch (\Throwable) {
+            $cache = [];
+        }
+    }
+    if (array_key_exists($key, $cache)) {
+        return (string) ($cache[$key] ?? '');
+    }
+    $cfg = app_config();
+    if (array_key_exists($key, $cfg)) {
+        return (string) ($cfg[$key] ?? '');
+    }
+    return $fallback;
+}
+
 /** Public site map embed URL (Google maps output=embed). */
 function site_map_embed_url(): string
 {
-    $u = (string) (app_config()['map_embed_url'] ?? '');
+    $u = trim(site_setting('map_embed_url', ''));
     return $u !== '' ? $u : 'https://maps.google.com/maps?q=Saint+John%2C+New+Brunswick%2C+Canada&z=12&output=embed';
 }
 
@@ -45,9 +71,9 @@ function site_social_urls(): array
 {
     $c = app_config();
     return [
-        'facebook' => trim((string) ($c['social_facebook'] ?? '')),
-        'instagram' => trim((string) ($c['social_instagram'] ?? '')),
-        'youtube' => trim((string) ($c['social_youtube'] ?? '')),
+        'facebook' => trim(site_setting('social_facebook', (string) ($c['social_facebook'] ?? ''))),
+        'instagram' => trim(site_setting('social_instagram', (string) ($c['social_instagram'] ?? ''))),
+        'youtube' => trim(site_setting('social_youtube', (string) ($c['social_youtube'] ?? ''))),
     ];
 }
 
