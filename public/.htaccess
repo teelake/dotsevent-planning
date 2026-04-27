@@ -1,4 +1,6 @@
 <IfModule mod_rewrite.c>
+    # Staging at https://dotseventplanning.com/new: if the site lives in a subfolder
+    # and routes 404, try: RewriteBase /new/
     RewriteEngine On
     RewriteBase /
     RewriteCond %{REQUEST_FILENAME} !-f

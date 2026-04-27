@@ -5,6 +5,11 @@ declare(strict_types=1);
 /**
  * Copy to config/square.php. Never commit the real file.
  * Square Developer Dashboard: Applications → Credentials.
+ *
+ * Canada: use a Square location that settles in CAD (matches app currency).
+ * Staging: https://dotseventplanning.com/new — add HTTPS and allowed host in
+ * Square for Web Payments. Live account: use production app id, location id,
+ * access token and set environment to 'production'.
  */
 
 return [

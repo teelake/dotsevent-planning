@@ -66,21 +66,23 @@ function csrf_field(): string
 }
 
 /**
- * @param list<string> $safePrefixes
+ * Safe redirect targets after add-to-cart (must stay under base_url, e.g. /new).
  */
-function allowed_return(string $url, array $safePrefixes = ['/rentals', '/product/']): string
+function allowed_return(string $url): string
 {
-    $u = $url;
-    if ($u === '' || str_contains($u, '://') || str_starts_with($u, '//')) {
-        return '/rentals';
+    if ($url === '' || str_contains($url, '://') || str_starts_with($url, '//')) {
+        return app_url('rentals');
     }
-    if (!str_starts_with($u, '/')) {
-        $u = '/' . $u;
+    if (!str_starts_with($url, '/')) {
+        $url = '/' . $url;
     }
-    foreach ($safePrefixes as $p) {
-        if (str_starts_with($u, $p)) {
-            return $u;
-        }
+    $rentals = app_url('rentals');
+    if ($url === $rentals || str_starts_with($url, $rentals . '/')) {
+        return $url;
     }
-    return '/rentals';
+    $productPrefix = app_url('product/');
+    if (str_starts_with($url, $productPrefix)) {
+        return $url;
+    }
+    return app_url('rentals');
 }
