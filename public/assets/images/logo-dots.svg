@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" aria-hidden="true">
+  <rect width="64" height="64" fill="#0a0a0a" rx="4"/>
+  <text x="32" y="30" text-anchor="middle" fill="#E5B84A" font-family="Instrument Serif, Georgia, serif" font-size="20" font-weight="400">DOTS</text>
+  <text x="32" y="50" text-anchor="middle" fill="#fafafa" font-family="system-ui,sans-serif" font-size="6.5" letter-spacing="0.2em" font-weight="600">EVENT</text>
+</svg>

@@ -1,0 +1,233 @@
+/* Home hero slider */
+.page-home {
+  --color-ink: #0a0a0a;
+}
+
+.hero--slider {
+  position: relative;
+  min-height: min(100vh, 900px);
+  color: #f5f0e8;
+  background: #080808;
+}
+
+.hero__viewport {
+  position: relative;
+  min-height: min(100vh, 900px);
+  overflow: hidden;
+}
+
+.hero__slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 5.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.7s ease, visibility 0.7s;
+  z-index: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__slide {
+    transition: none;
+  }
+}
+
+.hero__slide.is-active {
+  opacity: 1;
+  visibility: visible;
+  z-index: 1;
+}
+
+.hero__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--color-scrim);
+}
+
+.hero__content {
+  position: relative;
+  z-index: 2;
+  max-width: var(--max-w);
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--space-lg) 2rem;
+}
+
+.hero__eyebrow {
+  font-size: 0.78rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-gold-light);
+  margin: 0 0 var(--space-sm);
+  font-weight: 600;
+}
+
+.hero__title {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 var(--space-md);
+  max-width: 18ch;
+  color: #fff;
+}
+
+.hero__subtitle {
+  font-size: 1.05rem;
+  line-height: 1.55;
+  max-width: 40ch;
+  color: rgba(255, 255, 255, 0.86);
+  margin: 0 0 var(--space-lg);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  align-items: center;
+}
+
+.hero__controls {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 0;
+  left: 0;
+  z-index: 4;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+  pointer-events: none;
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+
+.hero__arrow {
+  pointer-events: auto;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.hero__arrow:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: #fff;
+}
+
+.hero__arrow:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+.hero__dots {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 0;
+  z-index: 4;
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+  pointer-events: none;
+}
+
+.hero__dot {
+  pointer-events: auto;
+  width: 0.5rem;
+  height: 0.5rem;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.hero__dot.is-active {
+  background: var(--color-gold);
+  transform: scale(1.15);
+}
+
+.hero__dot:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+@media (max-width: 640px) {
+  .hero--slider {
+    min-height: 100svh;
+  }
+
+  .hero__viewport {
+    min-height: 100svh;
+  }
+
+  .hero__slide {
+    padding-bottom: 6rem;
+    align-items: center;
+  }
+
+  .hero__content {
+    padding-bottom: 5rem;
+  }
+}
+
+/* Inner pages */
+.prose {
+  max-width: 70ch;
+}
+
+.prose p {
+  margin-bottom: 1rem;
+}
+
+.placeholder-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.placeholder-card {
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  padding: 1.5rem 1rem;
+  background: var(--color-surface);
+  text-align: center;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-ink-soft);
+  font-size: 0.9rem;
+}

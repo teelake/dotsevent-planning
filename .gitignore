@@ -1,0 +1,5 @@
+/config/database.php
+/vendor/
+.idea/
+*.log
+.DS_Store
