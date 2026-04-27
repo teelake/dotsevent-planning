@@ -35,9 +35,10 @@ include dirname(__DIR__) . '/partials/page-hero.php';
                 <?php endif; ?>
             </a>
             <div class="product-card__body">
+                <span class="product-card__eyebrow">Rental</span>
                 <h2 class="product-card__title"><a href="<?= e(app_url('product/' . $id)) ?>"><?= e($name) ?></a></h2>
                 <p class="product-card__price"><?= e(money_format_cents($cents, $cur)) ?></p>
-                <a class="btn btn--secondary" href="<?= e(app_url('product/' . $id)) ?>">View</a>
+                <a class="btn btn--secondary product-card__cta" href="<?= e(app_url('product/' . $id)) ?>">View details</a>
             </div>
         </li>
         <?php endforeach; ?>

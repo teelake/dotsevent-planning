@@ -1,3 +1,8 @@
+/**
+ * In Chromium, cross-page navigations use View Transitions when @view-transition
+ * { navigation: auto; } is set in CSS (see base.css). Other browsers get the same
+ * HTML/CSS; transitions simply instant-load as usual.
+ */
 (function () {
   "use strict";
 

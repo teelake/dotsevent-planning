@@ -19,6 +19,8 @@ $pageTitle = ($t === '' || $t === 'Home') ? e($siteName) : e($t) . ' | ' . e($si
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ebe6dc" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0c0b09" media="(prefers-color-scheme: dark)">
     <title><?= $pageTitle ?></title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

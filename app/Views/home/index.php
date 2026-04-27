@@ -75,7 +75,7 @@ $slides = $slides ?? [];
             <p class="section__lead">We sweat the brief, the budget, and the backup plan so you’re not doing it the night before. Honest timelines, clear costs, and a crew that shows up like they mean it.</p>
             <a class="text-link" href="<?= e(app_url('about')) ?>">How we work</a>
         </div>
-        <div class="stat-row" role="list">
+        <div class="stat-row stat-row--lux" role="list">
             <div class="stat" role="listitem">
                 <span class="stat__value">300+</span>
                 <span class="stat__label">Happy clients</span>
@@ -92,26 +92,31 @@ $slides = $slides ?? [];
     </div>
 </section>
 
-<section class="section" aria-labelledby="home-services-heading">
+<section class="section section--catalog" aria-labelledby="home-services-heading">
     <div class="shell">
         <div class="section__head" data-reveal>
             <p class="eyebrow">Where we help</p>
             <h2 id="home-services-heading" class="section__title">A few things we get asked for a lot</h2>
         </div>
-        <div class="card-grid card-grid--home reveal-stagger" data-reveal>
-            <article class="card">
+        <div class="card-grid card-grid--home card-grid--bento reveal-stagger" data-reveal>
+            <article class="card card--noir">
+                <span class="card__glyph" aria-hidden="true">◆</span>
+                <span class="card__index" aria-hidden="true">01</span>
                 <h3 class="card__title">Corporate &amp; brand</h3>
                 <p class="card__text">Launches, staff nights, and client events—tight run-of-show, AV that works, and signage that actually matches the deck.</p>
             </article>
-            <article class="card">
+            <article class="card card--folio">
+                <span class="card__index" aria-hidden="true">02</span>
                 <h3 class="card__title">Weddings &amp; social</h3>
                 <p class="card__text">Mood, flow, and those small touches guests remember. We coordinate vendors so you’re not passing notes on the dance floor.</p>
             </article>
-            <article class="card">
+            <article class="card card--frame">
+                <span class="card__index" aria-hidden="true">03</span>
                 <h3 class="card__title">Kids parties</h3>
                 <p class="card__text">Packages, play, and add-ons for real families (not just Pinterest). Less chaos, more “they actually enjoyed it.”</p>
             </article>
-            <article class="card">
+            <article class="card card--ribbon">
+                <span class="card__index" aria-hidden="true">04</span>
                 <h3 class="card__title">Rentals</h3>
                 <p class="card__text">Chairs, backdrops, and finishing pieces—see what’s in stock and check out when you’re ready.</p>
             </article>
