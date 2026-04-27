@@ -1,0 +1,19 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * Copy to config/square.php. Never commit the real file.
+ * Square Developer Dashboard: Applications → Credentials.
+ */
+
+return [
+    // Public — safe to expose in browser for Web Payments SDK
+    'application_id' => 'sandbox-sq0idb-...',
+    'location_id' => '...',
+    // Secret — server only
+    'access_token' => 'EAAA...',
+    // 'sandbox' | 'production'
+    'environment' => 'sandbox',
+    'api_version' => '2025-01-23',
+];

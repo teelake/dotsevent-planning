@@ -1,0 +1,12 @@
+{
+  "name": "dots/dotseventplanning",
+  "description": "DOTS Event Planning — PHP MVC",
+  "type": "project",
+  "require": {
+    "php": ">=8.1",
+    "square/square": "*"
+  },
+  "config": {
+    "sort-packages": true
+  }
+}
