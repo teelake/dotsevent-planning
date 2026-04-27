@@ -61,7 +61,7 @@ $ogImageAbsolute = $ogImagePath !== '' ? absolute_public_url($ogImagePath) : '';
 <a class="skip-link" href="#main">Skip to main content</a>
 
 <header class="site-header" data-header data-header-scroll>
-    <div class="shell site-header__inner">
+    <div class="site-header__inner shell">
         <a class="site-logo" href="<?= e(app_url('')) ?>" aria-label="<?= e($siteName) ?> home">
             <img class="site-logo__mark" src="<?= e(asset('images/logo-dots.svg')) ?>" alt="" width="44" height="44">
             <span class="site-logo__text">DOTS <span>Event</span></span>
