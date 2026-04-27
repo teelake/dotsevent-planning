@@ -12,7 +12,7 @@ $slides = $slides ?? [];
     <div class="hero__viewport" data-hero-viewport>
         <?php foreach ($slides as $i => $slide): ?>
         <article
-            class="hero__slide<?= $i === 0 ? ' is-active' : '' ?>"
+            class="hero__slide<?= $i === 0 ? ' is-active' : '' ?><?= ($i % 2 === 0) ? ' hero__slide--align-left' : ' hero__slide--align-right' ?>"
             data-hero-slide
             role="group"
             aria-roledescription="slide"
