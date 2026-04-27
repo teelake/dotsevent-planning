@@ -201,7 +201,7 @@ final class CmsSlidesRepository
         if ($this->pdo === null || $orderedIds === []) {
             return;
         }
-        $this->runCmsOrMissingTable(function () use ($orderedIds): true {
+        $this->runCmsOrMissingTable(function () use ($orderedIds): bool {
             foreach ($orderedIds as $i => $slideId) {
                 $st = $this->pdo->prepare('UPDATE cms_slides SET sort_order = :s WHERE id = :id LIMIT 1');
                 $st->execute(['s' => $i, 'id' => (int) $slideId]);
