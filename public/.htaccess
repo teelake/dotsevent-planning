@@ -1,8 +1,7 @@
 <IfModule mod_rewrite.c>
-    # Site at domain root: RewriteBase /
-    # Subfolder install (e.g. /new/): set RewriteBase /new/ and config base_url to match.
+    # Must match config base_url. Subfolder /new/ (default):
     RewriteEngine On
-    RewriteBase /
+    RewriteBase /new/
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^ index.php [L,QSA]

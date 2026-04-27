@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 return [
     'name' => 'DOTS Event Planning',
-    // '' = site at domain root (clean URLs: /book, /contact). Subfolder install: e.g. '/new' and match Apache RewriteBase.
-    'base_url' => '',
+    // Staging / subfolder: site lives at https://yoursite.com/new/ — must match project .htaccess RewriteBase.
+    'base_url' => '/new',
     'debug' => true,
     // Canada: Square location + payments should use CAD.
     'currency' => 'CAD',
