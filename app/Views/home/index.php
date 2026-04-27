@@ -23,6 +23,23 @@ $home_intro_html = trim((string) ($home_intro_html ?? ''));
             <?= $i === 0 ? '' : 'aria-hidden="true"' ?>
         >
             <div class="hero__media">
+                <?php
+                $mobImg = trim((string) ($slide['image_mobile'] ?? ''));
+                ?>
+                <?php if ($mobImg !== ''): ?>
+                <picture>
+                    <source media="(max-width: 767px)" srcset="<?= e($mobImg) ?>">
+                    <img
+                        class="hero__img"
+                        src="<?= e($slide['image']) ?>"
+                        alt="<?= e($slide['alt']) ?>"
+                        width="1920"
+                        height="1080"
+                        loading="<?= $i === 0 ? 'eager' : 'lazy' ?>"
+                        decoding="async"
+                    >
+                </picture>
+                <?php else: ?>
                 <img
                     class="hero__img"
                     src="<?= e($slide['image']) ?>"
@@ -32,16 +49,33 @@ $home_intro_html = trim((string) ($home_intro_html ?? ''));
                     loading="<?= $i === 0 ? 'eager' : 'lazy' ?>"
                     decoding="async"
                 >
+                <?php endif; ?>
                 <div class="hero__scrim" aria-hidden="true"></div>
             </div>
             <div class="shell shell--wide hero__content">
+                <?php if (trim((string) ($slide['eyebrow'] ?? '')) !== ''): ?>
                 <p class="hero__eyebrow"><?= e($slide['eyebrow']) ?></p>
+                <?php endif; ?>
                 <h1 class="hero__title"><?= e($slide['title']) ?></h1>
+                <?php if (trim((string) ($slide['subtitle'] ?? '')) !== ''): ?>
                 <p class="hero__subtitle"><?= e($slide['subtitle']) ?></p>
+                <?php endif; ?>
+                <?php
+                $ctaLabel = trim((string) ($slide['cta_label'] ?? ''));
+                $ctaHref = trim((string) ($slide['cta_href'] ?? ''));
+                $secLabel = trim((string) ($slide['secondary_label'] ?? ''));
+                $secHref = trim((string) ($slide['secondary_href'] ?? ''));
+                ?>
+                <?php if ($ctaLabel !== '' && $ctaHref !== '' || $secLabel !== '' && $secHref !== ''): ?>
                 <div class="hero__actions">
-                    <a class="btn btn--primary" href="<?= e($slide['cta_href']) ?>"><?= e($slide['cta_label']) ?></a>
-                    <a class="btn btn--ghost" href="<?= e($slide['secondary_href']) ?>"><?= e($slide['secondary_label']) ?></a>
+                    <?php if ($ctaLabel !== '' && $ctaHref !== ''): ?>
+                    <a class="btn btn--primary" href="<?= e($ctaHref) ?>"><?= e($ctaLabel) ?></a>
+                    <?php endif; ?>
+                    <?php if ($secLabel !== '' && $secHref !== ''): ?>
+                    <a class="btn btn--ghost" href="<?= e($secHref) ?>"><?= e($secLabel) ?></a>
+                    <?php endif; ?>
                 </div>
+                <?php endif; ?>
             </div>
         </article>
         <?php endforeach; ?>

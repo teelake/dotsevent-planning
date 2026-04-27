@@ -12,6 +12,18 @@ $cfg = app_config();
 ?>
 
 <section class="section--tight" style="padding-top: 0;">
+    <div class="card card--folio" style="margin-bottom: 1.25rem; padding: 1.25rem 1.35rem; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:1rem;">
+        <div>
+            <p class="text-muted" style="margin:0 0 0.35rem; font-size:0.7rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;">Homepage experience</p>
+            <h2 class="card__title" style="margin:0; font-size:1.15rem;">Hero carousel</h2>
+            <p class="card__text" style="margin:0.35rem 0 0; max-width:42rem;">Manage homepage slides, imagery, buttons, and scheduling—separate from page copy.</p>
+        </div>
+        <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
+            <a class="btn btn--secondary" href="<?= e(app_url('')) ?>" target="_blank" rel="noopener noreferrer">View storefront</a>
+            <a class="btn btn--primary" href="<?= e(app_url('admin/cms/slides')) ?>">Open hero carousel</a>
+        </div>
+    </div>
+
     <div class="admin-grid" style="margin-bottom: 1rem;">
         <div class="admin-stat">
             <div class="admin-stat__l">Brand assets</div>

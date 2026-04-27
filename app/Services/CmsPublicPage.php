@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\CmsPagesRepository;
+use App\Models\CmsSlidesRepository;
 
 final class CmsPublicPage
 {
@@ -74,6 +75,11 @@ final class CmsPublicPage
             'meta_description' => $defaultMeta,
         ];
 
+        $dbSlides = self::slidesFromDatabase();
+        if ($dbSlides !== null && $dbSlides !== []) {
+            $out['slides'] = $dbSlides;
+        }
+
         $row = self::findRow('home');
         if ($row === null) {
             return $out;
@@ -92,11 +98,13 @@ final class CmsPublicPage
             }
         }
 
-        $slidesRaw = $data['slides'] ?? null;
-        if (is_array($slidesRaw) && $slidesRaw !== []) {
-            $parsed = self::normalizeSlides($slidesRaw);
-            if ($parsed !== null) {
-                $out['slides'] = $parsed;
+        if ($dbSlides === null || $dbSlides === []) {
+            $slidesRaw = $data['slides'] ?? null;
+            if (is_array($slidesRaw) && $slidesRaw !== []) {
+                $parsed = self::normalizeSlides($slidesRaw);
+                if ($parsed !== null) {
+                    $out['slides'] = $parsed;
+                }
             }
         }
 
@@ -107,6 +115,63 @@ final class CmsPublicPage
         }
 
         return $out;
+    }
+
+    /**
+     * @return list<array<string, string>>|null Null if DB unavailable or no table
+     */
+    private static function slidesFromDatabase(): ?array
+    {
+        try {
+            $rows = (new CmsSlidesRepository())->listLiveForPublic();
+        } catch (\Throwable) {
+            return null;
+        }
+        if ($rows === []) {
+            return null;
+        }
+        $out = [];
+        foreach ($rows as $r) {
+            if (!is_array($r)) {
+                continue;
+            }
+            $slide = self::cmsSlideRowToCarousel($r);
+            if ($slide['image'] !== '' && $slide['title'] !== '') {
+                $out[] = $slide;
+            }
+        }
+
+        return $out === [] ? null : $out;
+    }
+
+    /**
+     * @param array<string, mixed> $r
+     * @return array<string, string>
+     */
+    private static function cmsSlideRowToCarousel(array $r): array
+    {
+        $desk = trim((string) ($r['image_desktop_path'] ?? ''));
+        $mob = trim((string) ($r['image_mobile_path'] ?? ''));
+        $headline = trim((string) ($r['headline'] ?? ''));
+        $alt = trim((string) ($r['image_alt'] ?? ''));
+        if ($alt === '') {
+            $alt = $headline;
+        }
+        $image = $desk !== '' ? app_url(ltrim($desk, '/')) : '';
+        $imageMobile = $mob !== '' ? app_url(ltrim($mob, '/')) : '';
+
+        return [
+            'image' => $image,
+            'image_mobile' => $imageMobile,
+            'alt' => $alt,
+            'eyebrow' => trim((string) ($r['badge'] ?? '')),
+            'title' => $headline,
+            'subtitle' => trim((string) ($r['supporting'] ?? '')),
+            'cta_label' => trim((string) ($r['btn_primary_label'] ?? '')),
+            'cta_href' => trim((string) ($r['btn_primary_href'] ?? '')),
+            'secondary_label' => trim((string) ($r['btn_secondary_label'] ?? '')),
+            'secondary_href' => trim((string) ($r['btn_secondary_href'] ?? '')),
+        ];
     }
 
     /** @return array<string, mixed>|null */

@@ -26,7 +26,7 @@ if (is_array($dataPreview) && isset($dataPreview['meta_description']) && is_stri
     <div class="card card--folio" style="max-width: none;">
         <h2 class="card__title" style="margin: 0 0 1rem;">Edit page</h2>
         <?php if ($slug === 'home'): ?>
-            <p class="text-muted" style="font-size: 0.88rem; margin: 0 0 1rem;">Saving preserves an optional <code>slides</code> array in JSON (for the hero carousel) if it is already in the database.</p>
+            <p class="text-muted" style="font-size: 0.88rem; margin: 0 0 1rem;">Homepage hero slides are managed in <a class="text-link" href="<?= e(app_url('admin/cms/slides')) ?>">Hero carousel</a>. This page edits intro copy below the hero (and meta).</p>
         <?php endif; ?>
 
         <form class="admin-form" method="post" action="<?= e(app_url('admin/cms/page/' . $slug . '/save')) ?>" id="cms-page-form">

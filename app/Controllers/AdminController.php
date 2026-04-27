@@ -12,6 +12,7 @@ use App\Core\Database;
 use App\Models\CmsMediaRepository;
 use App\Models\CmsPagesRepository;
 use App\Models\CmsSettingsRepository;
+use App\Models\CmsSlidesRepository;
 use App\Models\LeadRepository;
 use App\Models\OrderRepository;
 use App\Models\ProductRepository;
@@ -73,6 +74,41 @@ final class AdminController extends Controller
         if ($method === 'POST' && $second === 'cms' && ($segs[2] ?? '') === 'page' && isset($segs[3]) && ($segs[4] ?? '') === 'save' && $n === 5) {
             $this->requireAuth();
             $this->cmsPageSave((string) $segs[3]);
+            return;
+        }
+        if ($method === 'GET' && $second === 'cms' && ($segs[2] ?? '') === 'slides' && $n === 3) {
+            $this->requireAuth();
+            $this->cmsSlidesList();
+            return;
+        }
+        if ($method === 'GET' && $second === 'cms' && ($segs[2] ?? '') === 'slide' && ($segs[3] ?? '') === 'new' && $n === 4) {
+            $this->requireAuth();
+            $this->cmsSlideForm(null);
+            return;
+        }
+        if ($method === 'GET' && $second === 'cms' && ($segs[2] ?? '') === 'slide' && isset($segs[3], $segs[4]) && ctype_digit((string) $segs[3]) && $segs[4] === 'edit' && $n === 5) {
+            $this->requireAuth();
+            $this->cmsSlideForm((int) $segs[3]);
+            return;
+        }
+        if ($method === 'POST' && $second === 'cms' && ($segs[2] ?? '') === 'slide' && ($segs[3] ?? '') === 'save' && $n === 4) {
+            $this->requireAuth();
+            $this->cmsSlideSave();
+            return;
+        }
+        if ($method === 'POST' && $second === 'cms' && ($segs[2] ?? '') === 'slide' && isset($segs[3], $segs[4]) && ctype_digit((string) $segs[3]) && $segs[4] === 'delete' && $n === 5) {
+            $this->requireAuth();
+            $this->cmsSlideDelete((int) $segs[3]);
+            return;
+        }
+        if ($method === 'POST' && $second === 'cms' && ($segs[2] ?? '') === 'slide' && isset($segs[3], $segs[4]) && ctype_digit((string) $segs[3]) && $segs[4] === 'move-up' && $n === 5) {
+            $this->requireAuth();
+            $this->cmsSlideReorder((int) $segs[3], 'up');
+            return;
+        }
+        if ($method === 'POST' && $second === 'cms' && ($segs[2] ?? '') === 'slide' && isset($segs[3], $segs[4]) && ctype_digit((string) $segs[3]) && $segs[4] === 'move-down' && $n === 5) {
+            $this->requireAuth();
+            $this->cmsSlideReorder((int) $segs[3], 'down');
             return;
         }
         if ($method === 'POST' && $second === 'media' && ($segs[2] ?? '') === 'upload' && $n === 3) {
@@ -425,6 +461,248 @@ final class AdminController extends Controller
             'name' => $orig,
         ]);
         exit;
+    }
+
+    public function cmsSlidesList(): void
+    {
+        $this->requireAuth();
+        $this->assertDb();
+        $repo = new CmsSlidesRepository();
+        $slides = $repo->listAllForAdmin();
+        $this->render('admin/cms-slides', [
+            'title' => 'Hero carousel',
+            'active_nav' => '',
+            'active_admin_nav' => 'cms-slides',
+            'body_class' => '',
+            'layout' => 'layouts/admin',
+            'admin_authed' => true,
+            'slides' => $slides,
+            'storefront_url' => app_url(''),
+        ]);
+    }
+
+    public function cmsSlideForm(?int $id): void
+    {
+        $this->requireAuth();
+        $this->assertDb();
+        $repo = new CmsSlidesRepository();
+        $slide = null;
+        if ($id !== null) {
+            $slide = $repo->findById($id);
+            if ($slide === null) {
+                http_response_code(404);
+                (new PageController())->notFound();
+
+                return;
+            }
+        }
+        $this->render('admin/cms-slide-form', [
+            'title' => $slide === null ? 'New slide' : 'Edit slide',
+            'active_nav' => '',
+            'active_admin_nav' => 'cms-slides',
+            'body_class' => 'page-admin-slide-form',
+            'layout' => 'layouts/admin',
+            'admin_authed' => true,
+            'slide' => $slide,
+            'upload_action' => app_url('admin/media/upload'),
+            'csrf_token' => Csrf::token(),
+        ]);
+    }
+
+    public function cmsSlideSave(): void
+    {
+        if (!Csrf::validate($_POST['_csrf'] ?? null)) {
+            Flash::set(Flash::ERROR, 'Invalid session.');
+            $this->redirect('/admin/cms/slides');
+        }
+        $this->assertDb();
+        $repo = new CmsSlidesRepository();
+        $id = (int) ($_POST['id'] ?? 0);
+
+        $badge = $this->clipStr(trim((string) ($_POST['badge'] ?? '')), 24);
+        $headline = trim((string) ($_POST['headline'] ?? ''));
+        $headline = $this->clipStr($headline, 160);
+        $supporting = $this->clipStr(trim((string) ($_POST['supporting'] ?? '')), 200);
+        $imageAlt = $this->clipStr(trim((string) ($_POST['image_alt'] ?? '')), 255);
+        $desk = trim((string) ($_POST['image_desktop_path'] ?? ''));
+        $mob = trim((string) ($_POST['image_mobile_path'] ?? ''));
+        $pLabel = $this->clipStr(trim((string) ($_POST['btn_primary_label'] ?? '')), 24);
+        $pHref = trim((string) ($_POST['btn_primary_href'] ?? ''));
+        $sLabel = $this->clipStr(trim((string) ($_POST['btn_secondary_label'] ?? '')), 24);
+        $sHref = trim((string) ($_POST['btn_secondary_href'] ?? ''));
+        $isLive = isset($_POST['is_live']) ? 1 : 0;
+        if ($pLabel === '') {
+            $pHref = '';
+        }
+        if ($sLabel === '') {
+            $sHref = '';
+        }
+
+        if ($headline === '') {
+            Flash::set(Flash::ERROR, 'Headline is required.');
+            $this->redirect($id > 0 ? '/admin/cms/slide/' . $id . '/edit' : '/admin/cms/slide/new');
+        }
+        if (!$this->slidePublicPathValid($desk)) {
+            Flash::set(Flash::ERROR, 'Desktop image is required. Upload an image or enter a path under uploads/ or assets/.');
+            $this->redirect($id > 0 ? '/admin/cms/slide/' . $id . '/edit' : '/admin/cms/slide/new');
+        }
+        if ($mob !== '' && !$this->slidePublicPathValid($mob)) {
+            Flash::set(Flash::ERROR, 'Mobile image path is invalid.');
+            $this->redirect($id > 0 ? '/admin/cms/slide/' . $id . '/edit' : '/admin/cms/slide/new');
+        }
+        if ($pLabel !== '' && !$this->slideHrefOk($pHref)) {
+            Flash::set(Flash::ERROR, 'Primary button needs a valid link (e.g. /book or https://…).');
+            $this->redirect($id > 0 ? '/admin/cms/slide/' . $id . '/edit' : '/admin/cms/slide/new');
+        }
+        if ($pLabel !== '' && trim($pHref) === '') {
+            Flash::set(Flash::ERROR, 'Primary button label needs a link.');
+            $this->redirect($id > 0 ? '/admin/cms/slide/' . $id . '/edit' : '/admin/cms/slide/new');
+        }
+        if ($sLabel !== '' && !$this->slideHrefOk($sHref)) {
+            Flash::set(Flash::ERROR, 'Secondary button needs a valid link.');
+            $this->redirect($id > 0 ? '/admin/cms/slide/' . $id . '/edit' : '/admin/cms/slide/new');
+        }
+        if ($sLabel !== '' && trim($sHref) === '') {
+            Flash::set(Flash::ERROR, 'Secondary button label needs a link.');
+            $this->redirect($id > 0 ? '/admin/cms/slide/' . $id . '/edit' : '/admin/cms/slide/new');
+        }
+
+        $startsAt = $this->parseSlideDatetime($_POST['starts_at'] ?? null);
+        $endsAt = $this->parseSlideDatetime($_POST['ends_at'] ?? null);
+        if ($startsAt !== null && $endsAt !== null && strtotime($endsAt) < strtotime($startsAt)) {
+            Flash::set(Flash::ERROR, 'End date must be on or after the start date.');
+            $this->redirect($id > 0 ? '/admin/cms/slide/' . $id . '/edit' : '/admin/cms/slide/new');
+        }
+
+        $payload = [
+            'is_live' => $isLive,
+            'badge' => $badge,
+            'headline' => $headline,
+            'supporting' => $supporting,
+            'btn_primary_label' => $pLabel,
+            'btn_primary_href' => $pHref,
+            'btn_secondary_label' => $sLabel,
+            'btn_secondary_href' => $sHref,
+            'image_desktop_path' => $desk,
+            'image_mobile_path' => $mob !== '' ? $mob : null,
+            'image_alt' => $imageAlt,
+            'starts_at' => $startsAt,
+            'ends_at' => $endsAt,
+        ];
+
+        if ($id > 0) {
+            $existing = $repo->findById($id);
+            if ($existing === null) {
+                Flash::set(Flash::ERROR, 'Slide not found.');
+                $this->redirect('/admin/cms/slides');
+            }
+            $repo->update($id, $payload);
+            Flash::set(Flash::SUCCESS, 'Slide saved.');
+            $this->redirect('/admin/cms/slide/' . $id . '/edit');
+        }
+
+        $newId = $repo->create($payload);
+        if ($newId <= 0) {
+            Flash::set(Flash::ERROR, 'Could not create slide.');
+            $this->redirect('/admin/cms/slide/new');
+        }
+        Flash::set(Flash::SUCCESS, 'Slide created.');
+        $this->redirect('/admin/cms/slide/' . $newId . '/edit');
+    }
+
+    public function cmsSlideDelete(int $id): void
+    {
+        if (!Csrf::validate($_POST['_csrf'] ?? null)) {
+            Flash::set(Flash::ERROR, 'Invalid session.');
+            $this->redirect('/admin/cms/slides');
+        }
+        $this->assertDb();
+        $repo = new CmsSlidesRepository();
+        if ($repo->findById($id) === null) {
+            Flash::set(Flash::ERROR, 'Slide not found.');
+            $this->redirect('/admin/cms/slides');
+        }
+        $repo->delete($id);
+        Flash::set(Flash::SUCCESS, 'Slide deleted.');
+        $this->redirect('/admin/cms/slides');
+    }
+
+    public function cmsSlideReorder(int $id, string $direction): void
+    {
+        if (!Csrf::validate($_POST['_csrf'] ?? null)) {
+            Flash::set(Flash::ERROR, 'Invalid session.');
+            $this->redirect('/admin/cms/slides');
+        }
+        $this->assertDb();
+        $repo = new CmsSlidesRepository();
+        $all = $repo->listAllForAdmin();
+        $ids = array_map(static fn (array $r): int => (int) ($r['id'] ?? 0), $all);
+        $ids = array_values(array_filter($ids, static fn (int $i): bool => $i > 0));
+        $idx = array_search($id, $ids, true);
+        if ($idx === false) {
+            $this->redirect('/admin/cms/slides');
+        }
+        if ($direction === 'up' && $idx > 0) {
+            $tmp = $ids[$idx - 1];
+            $ids[$idx - 1] = $ids[$idx];
+            $ids[$idx] = $tmp;
+        } elseif ($direction === 'down' && $idx < count($ids) - 1) {
+            $tmp = $ids[$idx + 1];
+            $ids[$idx + 1] = $ids[$idx];
+            $ids[$idx] = $tmp;
+        }
+        $repo->applyOrder($ids);
+        $this->redirect('/admin/cms/slides');
+    }
+
+    private function clipStr(string $s, int $max): string
+    {
+        if (function_exists('mb_substr')) {
+            return mb_strlen($s) > $max ? mb_substr($s, 0, $max) : $s;
+        }
+
+        return strlen($s) > $max ? substr($s, 0, $max) : $s;
+    }
+
+    private function slidePublicPathValid(string $p): bool
+    {
+        $p = trim($p);
+        if ($p === '' || str_contains($p, '..')) {
+            return false;
+        }
+
+        return str_starts_with($p, 'uploads/') || str_starts_with($p, 'assets/');
+    }
+
+    private function slideHrefOk(string $h): bool
+    {
+        $h = trim($h);
+        if ($h === '') {
+            return true;
+        }
+        if (stripos($h, 'javascript:') === 0 || stripos($h, 'data:') === 0) {
+            return false;
+        }
+        if (str_starts_with($h, '/') && !str_starts_with($h, '//')) {
+            return !str_contains($h, '..');
+        }
+
+        return preg_match('#^https?://#i', $h) === 1;
+    }
+
+    private function parseSlideDatetime(mixed $raw): ?string
+    {
+        $raw = trim((string) $raw);
+        if ($raw === '') {
+            return null;
+        }
+        $raw = str_replace('T', ' ', $raw);
+        $t = strtotime($raw);
+        if ($t === false) {
+            return null;
+        }
+
+        return date('Y-m-d H:i:s', $t);
     }
 
     public function products(): void
