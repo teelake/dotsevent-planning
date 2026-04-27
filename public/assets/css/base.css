@@ -111,7 +111,7 @@ body::before {
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.028;
+  opacity: 0.04;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 180px 180px;
 }
@@ -129,7 +129,8 @@ h2,
 h3 {
   font-family: var(--font-display);
   font-weight: 600;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.02em;
+  font-optical-sizing: auto;
 }
 
 h4 {
@@ -219,21 +220,35 @@ img {
 }
 
 .eyebrow {
-  font-family: var(--font-sans);
-  font-size: 0.78rem;
-  letter-spacing: 0.14em;
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #7a5f0a;
+  color: #6b4f0a;
   margin: 0 0 var(--space-md);
-  font-weight: 700;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.eyebrow::before {
+  content: "";
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2px;
+  border-radius: 1px;
+  background: linear-gradient(90deg, var(--color-brand-gold) 0%, rgba(248, 195, 19, 0.25) 100%);
+  box-shadow: 0 0 12px rgba(248, 195, 19, 0.35);
 }
 
 .section__title {
   font-family: var(--font-display);
-  font-size: clamp(1.75rem, 2.6vw, 2.35rem);
+  font-size: clamp(1.85rem, 2.8vw, 2.5rem);
   font-weight: 600;
-  letter-spacing: -0.032em;
-  line-height: 1.12;
+  letter-spacing: -0.028em;
+  line-height: 1.1;
+  font-variation-settings: "SOFT" 0, "WONK" 18;
 }
 
 .section__lead {
@@ -271,7 +286,7 @@ img {
   right: -10%;
   width: min(55vw, 28rem);
   height: min(70vw, 36rem);
-  background: radial-gradient(ellipse, rgba(248, 195, 19, 0.12) 0%, transparent 68%);
+  background: radial-gradient(ellipse, rgba(248, 195, 19, 0.18) 0%, rgba(248, 195, 19, 0.04) 40%, transparent 68%);
   pointer-events: none;
 }
 
@@ -287,13 +302,14 @@ img {
 
 .page-hero__title {
   font-family: var(--font-display);
-  font-size: clamp(1.95rem, 3.8vw, 2.65rem);
+  font-size: clamp(2rem, 3.8vw, 2.8rem);
   font-weight: 600;
   margin: 0 0 var(--space-sm);
   color: #fff;
-  letter-spacing: -0.035em;
-  line-height: 1.1;
-  text-shadow: 0 2px 28px rgba(0, 0, 0, 0.3);
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+  text-shadow: 0 2px 28px rgba(0, 0, 0, 0.35), 0 0 40px rgba(248, 195, 19, 0.08);
+  font-variation-settings: "SOFT" 0, "WONK" 20;
 }
 
 .page-hero__crumb {
