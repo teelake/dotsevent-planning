@@ -91,34 +91,34 @@
 
 .hero__eyebrow {
   font-family: var(--font-sans);
-  font-size: 0.7rem;
-  letter-spacing: 0.22em;
+  font-size: 0.78rem;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #fce567;
+  color: #ffe8a0;
   margin: 0 0 1rem;
-  font-weight: 600;
-  opacity: 0.95;
+  font-weight: 700;
+  opacity: 0.98;
 }
 
 .hero__title {
   font-family: var(--font-display);
-  font-size: clamp(2.1rem, 4.2vw, 3.15rem);
-  font-weight: 500;
+  font-size: clamp(2.2rem, 4.4vw, 3.25rem);
+  font-weight: 600;
   line-height: 1.04;
-  letter-spacing: -0.038em;
+  letter-spacing: -0.04em;
   margin: 0 0 1.1rem;
   max-width: 16ch;
-  color: #fffbf5;
-  text-shadow: 0 2px 28px rgba(0, 0, 0, 0.35);
+  color: #fffdf8;
+  text-shadow: 0 2px 32px rgba(0, 0, 0, 0.4);
 }
 
 .hero__subtitle {
-  font-size: 1.04rem;
-  line-height: 1.6;
-  max-width: 38ch;
-  color: rgba(255, 250, 242, 0.9);
+  font-size: 1.1rem;
+  line-height: 1.65;
+  max-width: 40ch;
+  color: rgba(255, 248, 240, 0.94);
   margin: 0 0 1.5rem;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .hero__actions {
@@ -416,8 +416,8 @@
 
 .product-card__title {
   font-family: var(--font-display);
-  font-size: 1.22rem;
-  font-weight: 500;
+  font-size: 1.24rem;
+  font-weight: 600;
   margin: 0;
   line-height: 1.2;
   letter-spacing: -0.02em;
@@ -479,9 +479,10 @@
 }
 .product-layout__title {
   font-family: var(--font-display);
-  font-size: 2rem;
-  font-weight: 400;
+  font-size: clamp(1.85rem, 3vw, 2.15rem);
+  font-weight: 600;
   margin: 0 0 0.5rem;
+  letter-spacing: -0.03em;
 }
 .product-layout__price {
   color: var(--color-gold-deep);

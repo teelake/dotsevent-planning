@@ -9,7 +9,7 @@
   font-weight: 600;
   letter-spacing: 0.01em;
   line-height: 1.2;
-  border-radius: var(--radius-cta);
+  border-radius: 999px;
   border: 1px solid transparent;
   text-decoration: none;
   cursor: pointer;
@@ -84,7 +84,7 @@
   font: inherit;
   font-size: 0.95rem;
   border: 1px solid var(--color-line-strong);
-  border-radius: var(--radius-cta);
+  border-radius: var(--radius-md);
   background: var(--color-surface);
   box-shadow: inset 0 1px 2px rgba(28, 25, 23, 0.04);
   transition: border-color var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
@@ -119,7 +119,7 @@
 .card__index {
   font-family: var(--font-display);
   font-size: 2.35rem;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 0.9;
   letter-spacing: -0.04em;
   opacity: 0.2;
@@ -285,8 +285,8 @@
 
 .card__title {
   font-family: var(--font-display);
-  font-size: 1.22rem;
-  font-weight: 500;
+  font-size: 1.24rem;
+  font-weight: 600;
   margin: 0 0 0.5rem;
   color: var(--color-ink);
   letter-spacing: -0.03em;
@@ -456,8 +456,8 @@
 
 .stat__value {
   font-family: var(--font-display);
-  font-size: clamp(1.5rem, 2.2vw, 1.85rem);
-  font-weight: 500;
+  font-size: clamp(1.5rem, 2.2vw, 1.9rem);
+  font-weight: 600;
   color: var(--color-ink);
   line-height: 1;
   letter-spacing: -0.03em;
@@ -488,18 +488,20 @@
 }
 
 .section--surface {
-  background: var(--color-surface);
-  border-top: 1px solid var(--color-line);
+  background: linear-gradient(180deg, var(--color-blush) 0%, var(--color-surface) 55%, #f8f3eb 100%);
+  border-top: 1px solid rgba(248, 195, 19, 0.12);
   border-bottom: 1px solid var(--color-line);
   position: relative;
+  box-shadow: 0 24px 48px rgba(1, 1, 1, 0.04);
 }
 
 .section--catalog {
   position: relative;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, transparent 42%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.75) 0%, transparent 45%),
+    linear-gradient(135deg, rgba(255, 220, 200, 0.15) 0%, transparent 40%),
     var(--color-bg-warm);
-  border-top: 1px solid var(--color-line);
+  border-top: 1px solid rgba(248, 195, 19, 0.15);
 }
 
 .section--catalog::after {
@@ -584,11 +586,11 @@
 
 .newsletter__title {
   font-family: var(--font-display);
-  font-size: 1.55rem;
-  font-weight: 500;
+  font-size: 1.6rem;
+  font-weight: 600;
   margin: 0 0 0.35rem;
   color: var(--color-brand-black);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
   line-height: 1.2;
 }
 

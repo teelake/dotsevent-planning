@@ -12,13 +12,16 @@ $pageTitle = e($t) . ' | ' . e($siteName);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $pageTitle ?></title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= e(asset('css/base.css')) ?>">
     <link rel="stylesheet" href="<?= e(asset('css/components.css')) ?>">
     <link rel="stylesheet" href="<?= e(asset('css/layout.css')) ?>">
     <link rel="stylesheet" href="<?= e(asset('css/pages.css')) ?>">
     <style>
         .admin-bar { background: var(--color-brand-black); color: #e7e2db; padding: 0.65rem var(--space-lg); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem; }
-        .admin-bar a { color: var(--color-gold-light); text-decoration: none; font-weight: 600; font-size: 0.85rem; }
+        .admin-bar a { color: var(--color-gold-light); text-decoration: none; font-weight: 600; font-size: 0.95rem; }
         .admin-bar a:hover { text-decoration: underline; color: #fff; }
         .admin-nav { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: center; }
         .admin-main { padding: var(--space-xl) 0 var(--space-2xl); min-height: 50vh; }
@@ -31,7 +34,7 @@ $pageTitle = e($t) . ' | ' . e($siteName);
         .admin-form .input { max-width: 100%; width: 100%; }
         .admin-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-bottom: var(--space-xl); }
         .admin-stat { background: var(--color-surface); border: 1px solid var(--color-line); border-radius: var(--radius-md); padding: 1rem 1.1rem; }
-        .admin-stat__v { font-family: var(--font-display); font-size: 1.75rem; font-weight: 500; color: var(--color-ink); }
+        .admin-stat__v { font-family: var(--font-display); font-size: 1.75rem; font-weight: 600; color: var(--color-ink); }
         .admin-stat__l { font-size: 0.78rem; color: var(--color-ink-soft); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.2rem; }
     </style>
 </head>
