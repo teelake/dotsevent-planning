@@ -1,12 +1,10 @@
 <?php
 declare(strict_types=1);
-/** @var string $user_email */
 /** @var int $lead_count */
 /** @var int $order_count */
 /** @var int $product_count */
 ?>
-<h1 class="section__title" style="margin-bottom: 0.35rem;">Dashboard</h1>
-<p class="section__lead" style="margin-bottom: 1.5rem;">Signed in as <strong><?= e($user_email) ?></strong></p>
+<p class="section__lead" style="margin-bottom: 1.5rem;">Quick stats for your shop and inbox. Use the sidebar to manage catalog, leads, and orders.</p>
 <div class="admin-grid">
     <div class="admin-stat">
         <div class="admin-stat__v"><?= (int) $product_count ?></div>

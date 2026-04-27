@@ -4,7 +4,9 @@ declare(strict_types=1);
 /** @var string $title */
 $siteName = $app['name'] ?? 'DOTS Event Planning';
 $t = $title ?? 'Admin';
-$pageTitle = e($t) . ' | ' . e($siteName);
+$pageTitle = e($t) . ' | ' . e($siteName) . ' Admin';
+$bodyClass = trim((string) ($bodyClass ?? ''));
+$adminEmail = current_admin_user_email();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,61 +16,94 @@ $pageTitle = e($t) . ' | ' . e($siteName);
     <title><?= $pageTitle ?></title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600&family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= e(asset('css/base.css')) ?>">
     <link rel="stylesheet" href="<?= e(asset('css/components.css')) ?>">
-    <link rel="stylesheet" href="<?= e(asset('css/layout.css')) ?>">
-    <link rel="stylesheet" href="<?= e(asset('css/pages.css')) ?>">
-    <style>
-        .admin-bar { background: var(--color-brand-black); color: #e7e2db; padding: 0.65rem var(--space-lg); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem; }
-        .admin-bar a { color: var(--color-gold-light); text-decoration: none; font-weight: 600; font-size: 0.95rem; }
-        .admin-bar a:hover { text-decoration: underline; color: #fff; }
-        .admin-nav { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: center; }
-        .admin-main { padding: var(--space-xl) 0 var(--space-2xl); min-height: 50vh; }
-        .admin-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; background: var(--color-surface); border: 1px solid var(--color-line); border-radius: var(--radius-md); overflow: hidden; }
-        .admin-table th, .admin-table td { padding: 0.6rem 0.75rem; text-align: left; border-bottom: 1px solid var(--color-line); vertical-align: top; }
-        .admin-table th { background: #f3efe8; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-ink-soft); }
-        .admin-table tr:last-child td { border-bottom: 0; }
-        .admin-form .form-row { margin-bottom: 1rem; }
-        .admin-form label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.25rem; }
-        .admin-form .input { max-width: 100%; width: 100%; }
-        .admin-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-bottom: var(--space-xl); }
-        .admin-stat { background: var(--color-surface); border: 1px solid var(--color-line); border-radius: var(--radius-md); padding: 1rem 1.1rem; }
-        .admin-stat__v { font-family: var(--font-display); font-size: 1.75rem; font-weight: 600; color: var(--color-ink); }
-        .admin-stat__l { font-size: 0.78rem; color: var(--color-ink-soft); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.2rem; }
-    </style>
+    <link rel="stylesheet" href="<?= e(asset('css/admin.css')) ?>">
 </head>
-<body class="page-admin">
+<body class="page-admin<?= $adminAuthed ? ' page-admin--authed' : ' page-admin--login' ?><?= $bodyClass !== '' ? ' ' . e($bodyClass) : '' ?>">
 <a class="skip-link" href="#admin-main">Skip to content</a>
-<header class="admin-bar">
-    <span><strong><?= e($siteName) ?></strong> — Admin</span>
-    <nav class="admin-nav" aria-label="Admin">
-        <?php if (!empty($admin_authed)): ?>
-        <a href="<?= e(app_url('admin/dashboard')) ?>">Dashboard</a>
-        <a href="<?= e(app_url('admin/products')) ?>">Products</a>
-        <a href="<?= e(app_url('admin/leads')) ?>">Leads</a>
-        <a href="<?= e(app_url('admin/orders')) ?>">Orders</a>
-        <a href="<?= e(app_url('admin/logout')) ?>">Sign out</a>
-        <?php endif; ?>
-        <a href="<?= e(app_url('')) ?>">View site</a>
-    </nav>
-</header>
-<main id="admin-main" class="shell admin-main" tabindex="-1">
-    <?php
-    $flashErr = \App\Core\Flash::get(\App\Core\Flash::ERROR);
-    $flashOk = \App\Core\Flash::get(\App\Core\Flash::SUCCESS);
-    $flashNote = \App\Core\Flash::get(\App\Core\Flash::NOTICE);
-    ?>
-    <?php if ($flashErr !== null): ?>
-        <div class="flash flash--error" role="alert"><?= e($flashErr) ?></div>
-    <?php endif; ?>
-    <?php if ($flashOk !== null): ?>
-        <div class="flash flash--success" role="status"><?= e($flashOk) ?></div>
-    <?php endif; ?>
-    <?php if ($flashNote !== null): ?>
-        <div class="flash flash--notice" role="status"><?= e($flashNote) ?></div>
-    <?php endif; ?>
-    <?= $content ?>
+
+<?php if (!$adminAuthed): ?>
+<main id="admin-main" class="admin-login" tabindex="-1">
+    <div class="admin-login__card">
+        <a class="admin-login__brand" href="<?= e(app_url('')) ?>"><?= e($siteName) ?></a>
+        <?php
+        $flashErr = \App\Core\Flash::get(\App\Core\Flash::ERROR);
+        $flashOk = \App\Core\Flash::get(\App\Core\Flash::SUCCESS);
+        $flashNote = \App\Core\Flash::get(\App\Core\Flash::NOTICE);
+        ?>
+        <?php if ($flashErr !== null): ?><div class="flash flash--error" role="alert" style="margin-bottom:1rem;"><?= e($flashErr) ?></div><?php endif; ?>
+        <?php if ($flashOk !== null): ?><div class="flash flash--success" role="status" style="margin-bottom:1rem;"><?= e($flashOk) ?></div><?php endif; ?>
+        <?php if ($flashNote !== null): ?><div class="flash flash--notice" role="status" style="margin-bottom:1rem;"><?= e($flashNote) ?></div><?php endif; ?>
+        <?= $content ?>
+    </div>
+    <p style="text-align:center;margin-top:1.5rem;">
+        <a class="text-link" href="<?= e(app_url('')) ?>">← View website</a>
+    </p>
 </main>
+<?php else: ?>
+<div class="admin-app">
+    <aside class="admin-sidebar" id="admin-sidebar" data-admin-sidebar aria-label="Admin navigation">
+        <div class="admin-sidebar__brand">
+            <p class="admin-sidebar__brand-name"><?= e($siteName) ?></p>
+            <p class="admin-sidebar__brand-sub">Control panel</p>
+        </div>
+        <nav class="admin-sidebar__nav" aria-label="Main">
+            <a class="admin-sidebar__link<?= $activeAdminNav === 'dashboard' ? ' is-active' : '' ?>" href="<?= e(app_url('admin/dashboard')) ?>"<?= $activeAdminNav === 'dashboard' ? ' aria-current="page"' : '' ?>>
+                <svg class="admin-sidebar__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M4 10.5L12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1v-9.5z"/></svg>
+                Dashboard
+            </a>
+            <a class="admin-sidebar__link<?= $activeAdminNav === 'analytics' ? ' is-active' : '' ?>" href="<?= e(app_url('admin/analytics')) ?>"<?= $activeAdminNav === 'analytics' ? ' aria-current="page"' : '' ?>>
+                <svg class="admin-sidebar__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-6M22 20V14"/></svg>
+                Analytics
+            </a>
+            <a class="admin-sidebar__link<?= $activeAdminNav === 'products' ? ' is-active' : '' ?>" href="<?= e(app_url('admin/products')) ?>"<?= $activeAdminNav === 'products' ? ' aria-current="page"' : '' ?>>
+                <svg class="admin-sidebar__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M6 8h12l1 3H5l1-3zM6 8V6a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2"/><path d="M5 11h14v8a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-8z"/></svg>
+                Products
+            </a>
+            <a class="admin-sidebar__link<?= $activeAdminNav === 'leads' ? ' is-active' : '' ?>" href="<?= e(app_url('admin/leads')) ?>"<?= $activeAdminNav === 'leads' ? ' aria-current="page"' : '' ?>>
+                <svg class="admin-sidebar__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M16 11a4 4 0 1 0-8 0M4 20a8 8 0 0 1 16 0"/></svg>
+                Leads
+            </a>
+            <a class="admin-sidebar__link<?= $activeAdminNav === 'orders' ? ' is-active' : '' ?>" href="<?= e(app_url('admin/orders')) ?>"<?= $activeAdminNav === 'orders' ? ' aria-current="page"' : '' ?>>
+                <svg class="admin-sidebar__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M9 2h6l1 2H8l1-2zM6 6h12l-1.5 9.2A2 2 0 0 1 15.5 17H8.4A2 2 0 0 1 6.9 15.2L4.2 4H2"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>
+                Orders
+            </a>
+        </nav>
+    </aside>
+    <button type="button" class="admin-backdrop" data-admin-backdrop tabindex="-1" aria-label="Close menu"></button>
+    <div class="admin-app__main">
+        <header class="admin-topbar">
+            <button type="button" class="admin-sidebar-toggle" data-admin-sidebar-toggle aria-controls="admin-sidebar" aria-expanded="false" aria-label="Open navigation">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+            <h1 class="admin-topbar__title"><?= e($t) ?></h1>
+            <div class="admin-user-menu" data-admin-user-menu>
+                <button type="button" class="admin-user-menu__btn" id="admin-user-menu-btn" aria-expanded="false" aria-haspopup="true" aria-controls="admin-user-menu-panel" aria-label="Account menu">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+                </button>
+                <div class="admin-user-menu__panel" id="admin-user-menu-panel" role="menu" hidden>
+                    <p class="admin-user-menu__email"><?= e($adminEmail !== '' ? $adminEmail : 'Signed in') ?></p>
+                    <a class="admin-user-menu__action" role="menuitem" href="<?= e(app_url('')) ?>">View site</a>
+                    <a class="admin-user-menu__action admin-user-menu__action--danger" role="menuitem" href="<?= e(app_url('admin/logout')) ?>">Sign out</a>
+                </div>
+            </div>
+        </header>
+        <main id="admin-main" class="admin-content" tabindex="-1">
+        <?php
+        $flashErr = \App\Core\Flash::get(\App\Core\Flash::ERROR);
+        $flashOk = \App\Core\Flash::get(\App\Core\Flash::SUCCESS);
+        $flashNote = \App\Core\Flash::get(\App\Core\Flash::NOTICE);
+        ?>
+        <?php if ($flashErr !== null): ?><div class="flash flash--error" role="alert" style="margin-bottom:1rem;"><?= e($flashErr) ?></div><?php endif; ?>
+        <?php if ($flashOk !== null): ?><div class="flash flash--success" role="status" style="margin-bottom:1rem;"><?= e($flashOk) ?></div><?php endif; ?>
+        <?php if ($flashNote !== null): ?><div class="flash flash--notice" role="status" style="margin-bottom:1rem;"><?= e($flashNote) ?></div><?php endif; ?>
+        <?= $content ?>
+        </main>
+    </div>
+</div>
+<script src="<?= e(asset('js/admin.js')) ?>" defer></script>
+<?php endif; ?>
 </body>
 </html>

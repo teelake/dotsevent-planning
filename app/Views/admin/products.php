@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /** @var list<array<string, mixed>> $products */
 ?>
-<h1 class="section__title" style="margin-bottom: 1rem;">Products</h1>
+<p class="section__lead" style="margin-bottom: 1rem;">Edit rental inventory shown on the public site.</p>
 <p style="margin-bottom: 1rem;"><a class="btn btn--primary" href="<?= e(app_url('admin/product/new')) ?>">New product</a></p>
 <div style="overflow-x: auto;">
 <table class="admin-table">

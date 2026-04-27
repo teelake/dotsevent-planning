@@ -452,50 +452,55 @@ body.admin-sidebar-open .admin-backdrop {
   margin: 0 0 0.9rem;
 }
 
-.admin-chart__bars {
+.admin-chart__row {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
   gap: 0.35rem;
   min-height: 7.5rem;
-  padding: 0 0.1rem 1.1rem;
-  border-bottom: 1px solid var(--color-line);
+  padding: 0.25rem 0 0;
 }
 
-.admin-chart__bar-wrap {
+.admin-chart__col {
   flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 7rem;
   justify-content: flex-end;
+  gap: 0.4rem;
+}
+
+.admin-chart__bar-track {
+  width: 100%;
+  max-width: 2.5rem;
+  height: 6.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: rgba(1, 1, 1, 0.04);
+  border-radius: 6px 6px 0 0;
+  overflow: hidden;
 }
 
 .admin-chart__bar {
   width: 100%;
-  max-width: 2.5rem;
   min-height: 2px;
   background: linear-gradient(180deg, #fce567, var(--color-brand-gold) 50%, #c9a00e);
-  border-radius: 4px 4px 0 0;
-  transition: height 0.4s var(--ease-out);
+  border-radius: 0 0 0 0;
+  transition: flex-basis 0.4s var(--ease-out);
 }
 
-.admin-chart__label {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  text-align: center;
-  font-size: 0.65rem;
-  color: var(--color-ink-soft);
+.admin-chart__day {
+  font-size: 0.62rem;
   font-weight: 600;
-  margin-top: 0.4rem;
-}
-
-.admin-chart__bars-wrap {
-  position: relative;
-  padding-bottom: 1.5rem;
+  color: var(--color-ink-soft);
+  text-align: center;
+  line-height: 1.2;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 @media (prefers-reduced-motion: reduce) {

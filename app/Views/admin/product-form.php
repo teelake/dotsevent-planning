@@ -5,7 +5,7 @@ $isNew = $p === null;
 $cur = (string) ($p['currency'] ?? 'CAD');
 $priceDollars = $p ? number_format((int) $p['price_cents'] / 100, 2, '.', '') : '';
 ?>
-<h1 class="section__title" style="margin-bottom: 1rem;"><?= $isNew ? 'New product' : 'Edit product' ?></h1>
+<p class="section__lead" style="margin-bottom: 1rem;"><?= $isNew ? 'Add a rental product to the catalog.' : 'Update details and visibility.' ?></p>
 <p style="margin-bottom: 1rem;"><a class="text-link" href="<?= e(app_url('admin/products')) ?>">← Back to products</a></p>
 <form class="admin-form" method="post" action="<?= e(app_url('admin/product/save')) ?>" style="max-width: 36rem;">
     <?= csrf_field() ?>

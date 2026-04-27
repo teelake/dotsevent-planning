@@ -6,7 +6,7 @@ declare(strict_types=1);
 /** @var int $total */
 /** @var int $per_page */
 ?>
-<h1 class="section__title" style="margin-bottom: 1rem;">Leads</h1>
+<p class="section__lead" style="margin-bottom: 1rem;">Form submissions and newsletter signups from the site.</p>
 <p class="text-muted" style="margin-bottom:1rem;">Total: <?= (int) $total ?> · Page <?= (int) $page ?> of <?= (int) $pages ?></p>
 <div style="overflow-x:auto;">
 <table class="admin-table">

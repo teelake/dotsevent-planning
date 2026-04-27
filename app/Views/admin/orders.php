@@ -5,7 +5,7 @@ declare(strict_types=1);
 /** @var int $pages */
 /** @var int $total */
 ?>
-<h1 class="section__title" style="margin-bottom: 1rem;">Orders</h1>
+<p class="section__lead" style="margin-bottom: 1rem;">Checkout history (Square).</p>
 <p class="text-muted" style="margin-bottom:1rem;">Total: <?= (int) $total ?> · Page <?= (int) $page ?> of <?= (int) $pages ?></p>
 <div style="overflow-x:auto;">
 <table class="admin-table">

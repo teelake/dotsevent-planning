@@ -149,7 +149,7 @@ function slugify(string $s): string
 }
 
 /**
- * Email of the currently signed-in admin, or empty string. Cached for the request.
+ * Email of the currently signed-in admin, or empty string.
  */
 function current_admin_user_email(): string
 {
@@ -157,13 +157,8 @@ function current_admin_user_email(): string
     if ($id === null) {
         return '';
     }
-    static $cache;
-    if ($cache !== null) {
-        return $cache;
-    }
     $u = (new \App\Models\UserRepository())->findById($id);
-    $cache = $u !== null ? trim((string) ($u['email'] ?? '')) : '';
-    return $cache;
+    return $u !== null ? trim((string) ($u['email'] ?? '')) : '';
 }
 
 function allowed_return(string $url): string

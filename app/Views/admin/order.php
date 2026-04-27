@@ -4,8 +4,7 @@ declare(strict_types=1);
 /** @var list<array<string, mixed>> $items */
 $cur = (string) ($o['currency'] ?? 'CAD');
 ?>
-<h1 class="section__title" style="margin-bottom: 0.5rem;">Order #<?= (int) $o['id'] ?></h1>
-<p style="margin-bottom: 1.5rem;"><a class="text-link" href="<?= e(app_url('admin/orders')) ?>">← All orders</a></p>
+<p style="margin-bottom: 1.25rem;"><a class="text-link" href="<?= e(app_url('admin/orders')) ?>">← All orders</a></p>
 <dl style="display:grid; gap:0.5rem; margin-bottom:1.5rem; max-width: 32rem;">
     <div><strong>Status</strong> <code><?= e((string) ($o['status'] ?? '')) ?></code></div>
     <div><strong>Email</strong> <?= e((string) ($o['customer_email'] ?? '')) ?></div>
