@@ -1,31 +1,43 @@
-/* Design tokens — DOTS Event Planning */
+/* DOTS — editorial design tokens (warm paper, restrained gold) */
 :root {
-  --color-bg: #faf8f5;
-  --color-surface: #ffffff;
-  --color-ink: #0a0a0a;
-  --color-ink-muted: #3d3a36;
-  --color-ink-soft: #6b6560;
-  --color-gold: #c9a227;
-  --color-gold-light: #e5c76a;
-  --color-gold-deep: #9a7b1a;
-  --color-line: rgba(10, 10, 10, 0.08);
-  --color-scrim: linear-gradient(105deg, rgba(8, 8, 8, 0.82) 0%, rgba(8, 8, 8, 0.35) 48%, rgba(8, 8, 8, 0.2) 100%);
-  --font-sans: "DM Sans", system-ui, sans-serif;
-  --font-display: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --color-bg: #efebe3;
+  --color-bg-warm: #f6f2ea;
+  --color-surface: #fdfaf5;
+  --color-ink: #1c1917;
+  --color-ink-muted: #44403c;
+  --color-ink-soft: #78716c;
+  --color-gold: #c4a035;
+  --color-gold-mid: #b8952e;
+  --color-gold-light: #dcc77a;
+  --color-gold-deep: #7a5c10;
+  --color-line: rgba(28, 25, 23, 0.08);
+  --color-line-strong: rgba(28, 25, 23, 0.14);
+  --color-scrim: linear-gradient(
+    115deg,
+    rgba(12, 10, 8, 0.78) 0%,
+    rgba(12, 10, 8, 0.45) 42%,
+    rgba(20, 18, 14, 0.25) 100%
+  );
+  --font-sans: "Figtree", system-ui, -apple-system, sans-serif;
+  --font-display: "Fraunces", "Palatino Linotype", Palatino, Georgia, serif;
+  --text-body: 1.04rem;
+  --leading-tight: 1.2;
+  --leading-body: 1.65;
   --space-xs: 0.35rem;
   --space-sm: 0.75rem;
   --space-md: 1.25rem;
-  --space-lg: 2rem;
-  --space-xl: 3.5rem;
-  --space-2xl: 5rem;
-  --radius-sm: 6px;
-  --radius-md: 12px;
-  --radius-lg: 20px;
-  --radius-pill: 999px;
-  --shadow-sm: 0 1px 2px rgba(10, 10, 10, 0.06);
-  --shadow-md: 0 12px 40px rgba(10, 10, 10, 0.12);
-  --max-w: 1160px;
-  --header-h: 4.25rem;
+  --space-lg: 1.75rem;
+  --space-xl: 3rem;
+  --space-2xl: 4.5rem;
+  --radius-sm: 4px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-cta: 6px;
+  --shadow-floating: 0 18px 48px rgba(28, 25, 23, 0.09);
+  --shadow-subtle: 0 1px 0 rgba(28, 25, 23, 0.06);
+  --max-w: 1120px;
+  --max-w-wide: 1240px;
+  --header-h: 4.5rem;
 }
 
 *,
@@ -36,6 +48,7 @@
 
 html {
   scroll-behavior: smooth;
+  text-rendering: optimizeLegibility;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -44,20 +57,39 @@ html {
   }
 }
 
+::selection {
+  background: rgba(201, 162, 39, 0.25);
+  color: var(--color-ink);
+}
+
 body {
   margin: 0;
   font-family: var(--font-sans);
-  font-size: 1rem;
-  line-height: 1.6;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  font-weight: 400;
   color: var(--color-ink-muted);
-  background: var(--color-bg);
+  background-color: var(--color-bg);
+  background-image: linear-gradient(180deg, #f7f3ec 0%, var(--color-bg) 28%, #ebe6dc 100%);
   -webkit-font-smoothing: antialiased;
+}
+
+/* Very subtle paper grain — not a flat AI grey */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
 }
 
 h1, h2, h3, h4 {
   color: var(--color-ink);
   font-weight: 600;
-  line-height: 1.2;
+  line-height: var(--leading-tight);
   margin: 0 0 var(--space-sm);
 }
 
@@ -68,7 +100,8 @@ p {
 a {
   color: var(--color-gold-deep);
   text-decoration-thickness: 1px;
-  text-underline-offset: 0.2em;
+  text-underline-offset: 0.18em;
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
 }
 
 a:hover {
@@ -109,54 +142,66 @@ img {
 
 .skip-link:focus {
   transform: translateY(0);
-  outline: 2px solid var(--color-gold);
+  outline: 2px solid var(--color-gold-mid);
   outline-offset: 2px;
 }
 
 .shell {
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: var(--max-w);
   margin: 0 auto;
   padding: 0 var(--space-lg);
 }
 
+.shell--wide {
+  max-width: var(--max-w-wide);
+}
+
 .text-link {
   font-weight: 600;
   color: var(--color-ink);
   text-decoration: none;
-  border-bottom: 1px solid var(--color-gold);
-  padding-bottom: 2px;
+  border-bottom: 1px solid var(--color-gold-mid);
+  padding-bottom: 0.1em;
+  transition: border-color 0.15s, color 0.15s;
 }
 
 .text-link:hover {
   color: var(--color-gold-deep);
+  border-color: var(--color-gold-deep);
 }
 
 .eyebrow {
-  font-size: 0.8rem;
-  letter-spacing: 0.16em;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--color-gold-deep);
-  margin: 0 0 var(--space-sm);
+  margin: 0 0 var(--space-md);
   font-weight: 600;
 }
 
 .section__title {
   font-family: var(--font-display);
-  font-size: clamp(1.75rem, 3vw, 2.4rem);
-  font-weight: 400;
-  letter-spacing: -0.02em;
+  font-size: clamp(1.65rem, 2.4vw, 2.15rem);
+  font-weight: 500;
+  font-optical-sizing: auto;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
 }
 
 .section__lead {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
+  line-height: 1.7;
   color: var(--color-ink-muted);
-  max-width: 38ch;
+  max-width: 42ch;
 }
 
 .section__head {
   margin-bottom: var(--space-xl);
-  max-width: 46ch;
+  max-width: 50ch;
 }
 
 .page-pad {
@@ -165,30 +210,46 @@ img {
 }
 
 .page-hero {
-  background: var(--color-ink);
-  color: #f5f2eb;
+  position: relative;
+  background: #141210;
+  color: #f4ede4;
   padding: var(--space-2xl) 0 var(--space-xl);
   margin-bottom: var(--space-xl);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.page-hero::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201, 162, 39, 0.35), transparent);
 }
 
 .page-hero__title {
   font-family: var(--font-display);
-  font-size: clamp(2rem, 4vw, 2.75rem);
-  font-weight: 400;
+  font-size: clamp(1.85rem, 3.5vw, 2.5rem);
+  font-weight: 500;
+  font-optical-sizing: auto;
   margin: 0 0 var(--space-sm);
   color: #fff;
+  letter-spacing: -0.02em;
 }
 
 .page-hero__crumb {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.02em;
 }
 
 .page-hero__crumb a {
-  color: var(--color-gold-light);
+  color: #e8c96b;
   text-decoration: none;
 }
 
 .page-hero__crumb a:hover {
   text-decoration: underline;
+  color: #f0dfa0;
 }

@@ -22,7 +22,7 @@ $pageTitle = ($t === '' || $t === 'Home') ? e($siteName) : e($t) . ' | ' . e($si
     <title><?= $pageTitle ?></title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= e(asset('css/base.css')) ?>">
     <link rel="stylesheet" href="<?= e(asset('css/components.css')) ?>">
     <link rel="stylesheet" href="<?= e(asset('css/layout.css')) ?>">
@@ -32,7 +32,7 @@ $pageTitle = ($t === '' || $t === 'Home') ? e($siteName) : e($t) . ' | ' . e($si
 <body class="<?= e($bodyClass) ?>">
 <a class="skip-link" href="#main">Skip to main content</a>
 
-<header class="site-header" data-header>
+<header class="site-header" data-header data-header-scroll>
     <div class="shell site-header__inner">
         <a class="site-logo" href="<?= e(app_url('')) ?>" aria-label="<?= e($siteName) ?> home">
             <img class="site-logo__mark" src="<?= e(asset('images/logo-dots.svg')) ?>" alt="" width="44" height="44">
