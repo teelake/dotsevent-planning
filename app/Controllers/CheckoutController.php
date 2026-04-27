@@ -52,6 +52,7 @@ final class CheckoutController extends Controller
             'square' => $square,
             'extra_header' => $this->squareScriptTag($square),
             'extra_footer' => $extraFooter,
+            'meta_description' => 'Complete your event rental order with DOTS—secure checkout, contact details, and payment. Serving Saint John and the region.',
         ]);
     }
 
@@ -155,6 +156,7 @@ final class CheckoutController extends Controller
             'body_class' => 'page-success',
             'order_message' => $message,
             'order_id' => $orderId,
+            'meta_description' => 'Thank you—your DOTS Event Planning rental order was received. We will follow up with next steps for pickup or delivery in Saint John, NB.',
         ]);
     }
 

@@ -6,23 +6,51 @@
 (function () {
   "use strict";
 
-  // Mobile nav
+  function inEditableField(el) {
+    if (!el || !el.closest) {
+      return false;
+    }
+    return Boolean(el.closest("input, textarea, select, [contenteditable='true']"));
+  }
+
+  // Mobile nav — toggle, Escape, scroll lock, focus return
   var header = document.querySelector("[data-header]");
   var toggle = document.querySelector("[data-nav-toggle]");
   var nav = document.querySelector("[data-nav]");
 
+  function setNavOpen(open) {
+    if (!nav || !toggle) {
+      return;
+    }
+    nav.classList.toggle("is-open", open);
+    toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    document.body.classList.toggle("is-nav-open", open);
+    if (open) {
+      var first = nav.querySelector("a[href]");
+      if (first) {
+        first.focus({ preventScroll: true });
+      }
+    } else {
+      toggle.focus({ preventScroll: true });
+    }
+  }
+
   if (toggle && nav) {
     toggle.addEventListener("click", function () {
-      var open = nav.classList.toggle("is-open");
-      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      var open = !nav.classList.contains("is-open");
+      setNavOpen(open);
     });
     document.querySelectorAll(".site-nav__link").forEach(function (link) {
       link.addEventListener("click", function () {
         if (window.matchMedia("(max-width: 959px)").matches) {
-          nav.classList.remove("is-open");
-          toggle.setAttribute("aria-expanded", "false");
+          setNavOpen(false);
         }
       });
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && nav.classList.contains("is-open")) {
+        setNavOpen(false);
+      }
     });
   }
 
@@ -44,6 +72,7 @@
     var next = root.querySelector("[data-hero-next]");
     var dotContainer = root.querySelector("[data-hero-dots]");
     var dots = dotContainer ? dotContainer.querySelectorAll("[data-hero-dot]") : [];
+    var live = document.getElementById("hero-aria-live");
     var total = slides.length;
 
     if (total > 0) {
@@ -51,6 +80,15 @@
       var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       var autoplayMs = reduceMotion ? 0 : 8000;
       var timer = null;
+
+      function announceSlide() {
+        if (!live) {
+          return;
+        }
+        var el = slides[i];
+        var label = el.getAttribute("data-hero-label") || "";
+        live.textContent = "Slide " + (i + 1) + " of " + total + ". " + label;
+      }
 
       function go(index) {
         if (index < 0) index = total - 1;
@@ -65,6 +103,7 @@
           d.classList.toggle("is-active", n === i);
           d.setAttribute("aria-selected", n === i ? "true" : "false");
         });
+        announceSlide();
       }
 
       function nextSlide() {
@@ -110,20 +149,36 @@
       });
 
       document.addEventListener("keydown", function (e) {
-        if (e.key === "ArrowRight") {
-          stopAutoplay();
-          nextSlide();
-          startAutoplay();
-        } else if (e.key === "ArrowLeft") {
-          stopAutoplay();
-          prevSlide();
-          startAutoplay();
+        if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") {
+          return;
         }
+        if (inEditableField(e.target)) {
+          return;
+        }
+        e.preventDefault();
+        stopAutoplay();
+        if (e.key === "ArrowRight") {
+          nextSlide();
+        } else {
+          prevSlide();
+        }
+        startAutoplay();
       });
 
+      announceSlide();
       startAutoplay();
     }
   }
+
+  // Dismiss flash banners
+  document.querySelectorAll("[data-flash-dismiss]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var row = btn.closest("[data-flash]");
+      if (row && row.parentNode) {
+        row.parentNode.removeChild(row);
+      }
+    });
+  });
 
   // Scroll-triggered section reveals (respects reduced motion)
   var revealNodes = document.querySelectorAll("[data-reveal]");

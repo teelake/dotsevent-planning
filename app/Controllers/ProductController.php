@@ -18,11 +18,17 @@ final class ProductController extends Controller
             (new PageController())->notFound();
             return;
         }
+        $rawDesc = trim(strip_tags((string) ($product['description'] ?? '')));
+        $metaDescription = $rawDesc !== ''
+            ? (function_exists('mb_substr') ? mb_substr($rawDesc, 0, 160) : substr($rawDesc, 0, 160))
+            : 'Rent ' . (string) $product['name'] . ' from DOTS Event Planning—event decor and inventory in Saint John, NB with online checkout.';
+
         $this->render('product/show', [
             'title' => (string) $product['name'],
             'active_nav' => 'rentals',
             'body_class' => 'page-product',
             'product' => $product,
+            'meta_description' => $metaDescription,
         ]);
     }
 }

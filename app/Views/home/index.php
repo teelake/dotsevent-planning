@@ -9,11 +9,13 @@ $slides = $slides ?? [];
     aria-roledescription="carousel"
     aria-label="Featured events and services"
 >
+    <p id="hero-aria-live" class="visually-hidden" aria-live="polite" aria-atomic="true"></p>
     <div class="hero__viewport" data-hero-viewport>
         <?php foreach ($slides as $i => $slide): ?>
         <article
             class="hero__slide<?= $i === 0 ? ' is-active' : '' ?><?= ($i % 2 === 0) ? ' hero__slide--align-left' : ' hero__slide--align-right' ?>"
             data-hero-slide
+            data-hero-label="<?= e($slide['title']) ?>"
             role="group"
             aria-roledescription="slide"
             aria-label="<?= (int) ($i + 1) ?> of <?= count($slides) ?>"

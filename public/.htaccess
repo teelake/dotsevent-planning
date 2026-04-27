@@ -1,6 +1,6 @@
 <IfModule mod_rewrite.c>
-    # Staging at https://dotseventplanning.com/new: if the site lives in a subfolder
-    # and routes 404, try: RewriteBase /new/
+    # Site at domain root: RewriteBase /
+    # Subfolder install (e.g. /new/): set RewriteBase /new/ and config base_url to match.
     RewriteEngine On
     RewriteBase /
     RewriteCond %{REQUEST_FILENAME} !-f

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 return [
     'name' => 'DOTS Event Planning',
-    // Staging path on live host (review vs current site). Use '' for local dev at site root.
-    'base_url' => '/new',
+    // '' = site at domain root (clean URLs: /book, /contact). Subfolder install: e.g. '/new' and match Apache RewriteBase.
+    'base_url' => '',
     'debug' => true,
     // Canada: Square location + payments should use CAD.
     'currency' => 'CAD',

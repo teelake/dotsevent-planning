@@ -47,7 +47,7 @@ final class Router
                 (new CheckoutController())->pay();
                 return;
             }
-            if ($first === 'book-your-event' && count($segs) === 1) {
+            if (($first === 'book' || $first === 'book-your-event') && count($segs) === 1) {
                 (new FormController())->bookYourEventSubmit();
                 return;
             }
@@ -100,8 +100,10 @@ final class Router
             'home' => [HomeController::class, 'index'],
             'about' => [PageController::class, 'about'],
             'services' => [PageController::class, 'services'],
+            'kids' => [PageController::class, 'kidsParty'],
             'kids-party' => [PageController::class, 'kidsParty'],
             'portfolio' => [PageController::class, 'portfolio'],
+            'book' => [PageController::class, 'bookYourEvent'],
             'book-your-event' => [PageController::class, 'bookYourEvent'],
             'contact' => [PageController::class, 'contact'],
         ];

@@ -18,7 +18,7 @@ final class HomeController extends Controller
                 'title' => 'The kind of night people talk about on Monday',
                 'subtitle' => 'Corporate, weddings, and family celebrations—planned like we’re hosting our own, with clear budgets and a team that’s there when the mic cuts out.',
                 'cta_label' => 'Start with a call',
-                'cta_href' => app_url('book-your-event'),
+                'cta_href' => app_url('book'),
                 'secondary_label' => 'View services',
                 'secondary_href' => app_url('services'),
             ],
@@ -29,7 +29,7 @@ final class HomeController extends Controller
                 'title' => 'Your names on the program—not on the to-do list',
                 'subtitle' => 'Flow, food timing, and who steers the run-of-show—so you can eat dinner and see your people.',
                 'cta_label' => 'Wedding & social',
-                'cta_href' => app_url('book-your-event'),
+                'cta_href' => app_url('book'),
                 'secondary_label' => 'See portfolio',
                 'secondary_href' => app_url('portfolio'),
             ],
@@ -44,28 +44,6 @@ final class HomeController extends Controller
                 'secondary_label' => 'Our services',
                 'secondary_href' => app_url('services'),
             ],
-            [
-                'image' => 'https://images.unsplash.com/photo-1530103862676-de8c9de59e71?auto=format&fit=crop&w=1920&q=80',
-                'alt' => 'Colourful party balloons and decor',
-                'eyebrow' => 'Kids & families',
-                'title' => 'For kids: chaos (the fun kind). For parents: coffee.',
-                'subtitle' => 'Play packages, add-ons, and a setup that’s cleaned up before the driveway’s dark.',
-                'cta_label' => 'Kids packages',
-                'cta_href' => app_url('kids-party'),
-                'secondary_label' => 'Contact us',
-                'secondary_href' => app_url('contact'),
-            ],
-            [
-                'image' => 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1920&q=80',
-                'alt' => 'Elegant place settings and glassware',
-                'eyebrow' => 'Rentals',
-                'title' => 'The chairs match. The backdrop isn’t a bedsheet.',
-                'subtitle' => 'Real inventory, real photos—add to cart and check out when you’re ready.',
-                'cta_label' => 'Browse rentals',
-                'cta_href' => app_url('rentals'),
-                'secondary_label' => 'How it works',
-                'secondary_href' => app_url('contact'),
-            ],
         ];
 
         $this->render('home/index', [
@@ -73,6 +51,7 @@ final class HomeController extends Controller
             'active_nav' => 'home',
             'body_class' => 'page-home',
             'slides' => $slides,
+            'meta_description' => 'Weddings, corporate, and kids events in Saint John, NB—plus decor rentals. Featured services: planning, on-site support, and clear budgets from DOTS Event Planning.',
         ]);
     }
 }

@@ -72,6 +72,7 @@ function absolute_public_url(string $pathUnderPublic): string
 
 /**
  * Current request as absolute URL (requires public_origin). Query string included if present.
+ * Uses the same path the browser requested (including base_url prefix, e.g. /new/…).
  */
 function current_canonical_url(): string
 {
@@ -80,16 +81,10 @@ function current_canonical_url(): string
         return '';
     }
     $uri = (string) ($_SERVER['REQUEST_URI'] ?? '/');
-    $path = parse_url($uri, PHP_URL_PATH);
-    $path = is_string($path) ? $path : '/';
+    $path = (string) (parse_url($uri, PHP_URL_PATH) ?? '/');
     $query = parse_url($uri, PHP_URL_QUERY);
-    $base = rtrim((string) (app_config()['base_url'] ?? ''), '/');
-    if ($base !== '' && str_starts_with($path, $base)) {
-        $sub = substr($path, strlen($base)) ?: '/';
-        $path = (string) $sub;
-    }
     if ($path === '' || $path[0] !== '/') {
-        $path = $path === '' ? '/' : '/' . ltrim($path, '/');
+        $path = '/' . ltrim($path, '/');
     }
     $out = $origin . $path;
     if (is_string($query) && $query !== '') {

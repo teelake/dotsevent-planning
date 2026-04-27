@@ -27,10 +27,10 @@
 }
 
 .btn--primary {
-  background: linear-gradient(180deg, #fce36b 0%, var(--color-brand-gold) 100%);
+  background: linear-gradient(180deg, #fce567 0%, var(--color-brand-gold) 100%);
   color: var(--color-brand-black);
-  border-color: rgba(1, 1, 1, 0.12);
-  box-shadow: var(--shadow-subtle), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  border-color: rgba(1, 1, 1, 0.08);
+  box-shadow: 0 1px 2px rgba(1, 1, 1, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
 .btn--primary:hover {
@@ -79,7 +79,7 @@
 
 .input {
   width: 100%;
-  max-width: 280px;
+  max-width: 100%;
   padding: 0.65rem 1rem;
   font: inherit;
   font-size: 0.95rem;
@@ -660,12 +660,47 @@
 .flash {
   max-width: var(--max-w);
   margin: 0 auto;
-  padding: 0.7rem var(--space-lg);
+  padding: 0.65rem var(--shell-pad-x);
   font-size: 0.9rem;
   font-weight: 600;
   position: relative;
   z-index: 2;
   animation: flash-in 0.45s var(--ease-out) both;
+}
+
+.flash__inner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  max-width: 100%;
+}
+
+.flash__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.flash__dismiss {
+  flex-shrink: 0;
+  margin: -0.2rem 0 0 0;
+  padding: 0.15rem 0.5rem;
+  font: inherit;
+  font-size: 1.35rem;
+  line-height: 1;
+  font-weight: 400;
+  color: inherit;
+  opacity: 0.65;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: opacity 0.15s var(--ease-out), background 0.15s var(--ease-out);
+}
+
+.flash__dismiss:hover {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.05);
 }
 
 @media (prefers-reduced-motion: reduce) {

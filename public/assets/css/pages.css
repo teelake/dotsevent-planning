@@ -93,7 +93,7 @@
   max-width: var(--max-w-wide);
   width: 100%;
   margin: 0 auto;
-  padding: 0 var(--space-lg) 2rem;
+  padding: 0 var(--shell-pad-x) 2rem;
   padding-top: 2rem;
 }
 
@@ -175,7 +175,7 @@
   pointer-events: none;
   max-width: var(--max-w-wide);
   margin: 0 auto;
-  padding: 0 var(--space-lg);
+  padding: 0 var(--shell-pad-x);
   width: 100%;
   box-sizing: border-box;
 }
@@ -228,7 +228,7 @@
   align-items: center;
   gap: 0.5rem;
   margin: 0 auto;
-  padding: 0 var(--space-lg);
+  padding: 0 var(--shell-pad-x);
   width: 100%;
   max-width: none;
   box-sizing: border-box;
@@ -237,17 +237,33 @@
 
 .hero__dot {
   pointer-events: auto;
-  width: 0.5rem;
-  height: 0.5rem;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
   padding: 0;
   border: none;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.35);
+  background: transparent;
   cursor: pointer;
-  transition: background 0.25s var(--ease-out), transform 0.3s var(--ease-bounce);
+  transition: transform 0.3s var(--ease-bounce);
 }
 
-.hero__dot.is-active {
+.hero__dot::before {
+  content: "";
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  transition:
+    background 0.25s var(--ease-out),
+    transform 0.3s var(--ease-bounce),
+    box-shadow 0.25s var(--ease-out);
+}
+
+.hero__dot.is-active::before {
   background: var(--color-brand-gold);
   transform: scale(1.2);
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4);
@@ -323,6 +339,42 @@
   text-align: center;
   max-width: 42rem;
   margin: 0 auto;
+}
+
+.error-page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  justify-content: center;
+  align-items: center;
+  margin-bottom: var(--space-xl);
+}
+
+.error-page__nav {
+  text-align: center;
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-line);
+  max-width: 28rem;
+  margin: 0 auto;
+}
+
+.error-page__nav-heading {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-ink-soft);
+  margin: 0 0 var(--space-md);
+  font-weight: 600;
+}
+
+.error-page__links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1.25rem;
+  justify-content: center;
 }
 
 .error-page .section__title {
@@ -697,6 +749,10 @@
 
 .contact-form__submit {
   align-self: flex-start;
+}
+
+.contact-form--book {
+  max-width: 32rem;
 }
 
 .contact-page__split {

@@ -20,6 +20,7 @@ final class RentalController extends Controller
             'body_class' => 'page-rentals',
             'products' => $products,
             'db_ready' => Database::getInstance() !== null,
+            'meta_description' => 'Browse decor and event rentals from DOTS in Saint John—chairs, backdrops, and finishing pieces. Real inventory, add to cart, and check out online.',
         ]);
     }
 }

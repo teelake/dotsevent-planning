@@ -22,6 +22,7 @@ final class CartController extends Controller
             'lines' => $lines['lines'],
             'subtotal_cents' => $lines['subtotal_cents'],
             'currency' => $lines['currency'] ?? app_config()['currency'] ?? 'CAD',
+            'meta_description' => 'Your rental cart at DOTS Event Planning. Review quantities, then go to secure checkout for event decor in Saint John, NB.',
         ]);
     }
 

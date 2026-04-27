@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
-$page_title = 'Book your event';
-$crumb_current = 'Book your event';
+$page_title = 'Book';
+$crumb_current = 'Book';
 include dirname(__DIR__) . '/partials/page-hero.php';
 $packages = [
     'basic' => 'Basic',
@@ -31,7 +31,7 @@ $defaultPackage = is_string($preselect_package) && $preselect_package !== '' && 
         </li>
     </ul>
     <h2 class="section__title" style="margin-top: 0; margin-bottom: 1rem; font-size: 1.45rem;">Request a booking</h2>
-    <form class="contact-form" method="post" action="<?= e(app_url('book-your-event')) ?>" style="max-width: 32rem;">
+    <form class="contact-form contact-form--book" method="post" action="<?= e(app_url('book')) ?>">
         <?= csrf_field() ?>
         <label class="visually-hidden" for="b-name">Name</label>
         <input id="b-name" class="input" name="name" type="text" placeholder="Your name" autocomplete="name" required>

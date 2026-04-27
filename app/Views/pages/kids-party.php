@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-$bookKids = e(app_url('book-your-event')) . '?package=premium';
+$bookKids = e(app_url('book')) . '?package=premium';
 $page_title = 'Kids party packages';
 $crumb_current = 'Kids party';
 include dirname(__DIR__) . '/partials/page-hero.php';

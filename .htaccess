@@ -1,11 +1,12 @@
-# Serves the app at https://yoursite.com/new/ when this folder is public_html/new/
-# (project root: index.php, app/, config/, public/…). If the URL path is not /new/,
-# change  RewriteBase  and  config/app.php  base_url  to match.
+# Apache must point the site root here, or to /public/ with equivalent rules.
+#
+# A) Site at domain root (https://yoursite.com/…): set RewriteBase / and config base_url to ''.
+# B) Staging in a subfolder (https://yoursite.com/new/…): set RewriteBase /new/ and config base_url to '/new'.
 
 <IfModule mod_rewrite.c>
     Options -Indexes
     RewriteEngine On
-    RewriteBase /new/
+    RewriteBase /
 
     RewriteRule ^index\.php$ - [L]
     RewriteRule ^assets/(.*)$ public/assets/$1 [L]

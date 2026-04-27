@@ -60,7 +60,7 @@ final class FormController extends Controller
     {
         if (!$this->isPost() || !Csrf::validate($_POST['_csrf'] ?? null)) {
             Flash::set(Flash::ERROR, 'Invalid session. Please reload the page.');
-            $this->redirect('/book-your-event');
+            $this->redirect('book');
         }
         $name = trim((string) ($_POST['name'] ?? ''));
         $email = trim((string) ($_POST['email'] ?? ''));
@@ -72,7 +72,7 @@ final class FormController extends Controller
         $message = trim((string) ($_POST['message'] ?? ''));
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             Flash::set(Flash::ERROR, 'Please enter a valid email.');
-            $this->redirect('/book-your-event');
+            $this->redirect('book');
         }
         $allowedP = ['basic', 'premium', 'vip', 'not_sure'];
         if (!in_array($package, $allowedP, true)) {
@@ -97,7 +97,7 @@ final class FormController extends Controller
         } else {
             Flash::set(Flash::ERROR, 'Could not save your request. Please try again or email us.');
         }
-        $this->redirect('/book-your-event');
+        $this->redirect('book');
     }
 
     private function isPost(): bool

@@ -10,19 +10,19 @@
 
   --color-brand-gold: #f8c313;
   --color-brand-black: #010101;
-  --color-bg: #f3ece4;
-  --color-bg-warm: #faf4ec;
-  --color-surface: #fffdf9;
-  --color-blush: #fff5ee;
-  --color-ink: #010101;
-  --color-ink-muted: #3d3a36;
-  --color-ink-soft: #6f6a63;
+  --color-bg: #f5f2ed;
+  --color-bg-warm: #f9f6f1;
+  --color-surface: #fffcf8;
+  --color-blush: #fff7f0;
+  --color-ink: #0a0908;
+  --color-ink-muted: #45423e;
+  --color-ink-soft: #6b6560;
   --color-gold: #f8c313;
   --color-gold-mid: #e2b010;
   --color-gold-light: #fce567;
   --color-gold-deep: #8a7200;
-  --color-line: rgba(1, 1, 1, 0.08);
-  --color-line-strong: rgba(1, 1, 1, 0.14);
+  --color-line: rgba(1, 1, 1, 0.06);
+  --color-line-strong: rgba(1, 1, 1, 0.1);
   --color-scrim: linear-gradient(
     115deg,
     rgba(1, 1, 1, 0.78) 0%,
@@ -32,9 +32,9 @@
   /* Modern sans only — warm, event-brand energy (no display serif) */
   --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-display: "Outfit", "Plus Jakarta Sans", system-ui, sans-serif;
-  --text-body: clamp(1.02rem, 0.25vw + 0.97rem, 1.08rem);
-  --leading-tight: 1.18;
-  --leading-body: 1.72;
+  --text-body: clamp(1rem, 0.2vw + 0.98rem, 1.07rem);
+  --leading-tight: 1.15;
+  --leading-body: 1.65;
   --prose-narrow: 65ch;
   --space-xs: 0.35rem;
   --space-sm: 0.75rem;
@@ -42,18 +42,19 @@
   --space-lg: 1.75rem;
   --space-xl: 3rem;
   --space-2xl: 4.5rem;
-  --radius-sm: 6px;
-  --radius-md: 14px;
-  --radius-lg: 22px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
   --radius-cta: 999px;
   --shadow-floating: 0 18px 48px rgba(1, 1, 1, 0.1);
   --shadow-lux: 0 24px 64px rgba(1, 1, 1, 0.12), 0 1px 0 rgba(255, 255, 255, 0.7) inset;
   --shadow-subtle: 0 1px 0 rgba(1, 1, 1, 0.06);
   --surface-ivory: #faf7f1;
   --surface-noir: #0c0b09;
-  --max-w: 1120px;
-  --max-w-wide: 1240px;
-  --header-h: 4.85rem;
+  --max-w: 1160px;
+  --max-w-wide: 1280px;
+  --header-h: 4.25rem;
+  --shell-pad-x: clamp(1.25rem, 4vw, 2.5rem);
 }
 
 *,
@@ -88,11 +89,7 @@ body {
   font-weight: 400;
   color: var(--color-ink-muted);
   background-color: var(--color-bg);
-  background-image:
-    radial-gradient(ellipse 100% 80% at 85% -10%, rgba(248, 195, 19, 0.11) 0%, transparent 45%),
-    radial-gradient(ellipse 70% 50% at 10% 100%, rgba(255, 200, 180, 0.12) 0%, transparent 50%),
-    radial-gradient(90% 60% at 0% 100%, rgba(1, 1, 1, 0.03) 0%, transparent 48%),
-    linear-gradient(180deg, #fff9f2 0%, var(--color-bg) 42%, #ebe2d6 100%);
+  background-image: linear-gradient(180deg, #fbf9f5 0%, var(--color-bg) 38%, #ebe6dd 100%);
   -webkit-font-smoothing: antialiased;
   font-feature-settings: "rlig" 1, "liga" 1, "kern" 1;
   text-wrap: pretty;
@@ -105,7 +102,7 @@ body::before {
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.055;
+  opacity: 0.028;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 180px 180px;
 }
@@ -191,7 +188,7 @@ img {
   width: 100%;
   max-width: var(--max-w);
   margin: 0 auto;
-  padding: 0 var(--space-lg);
+  padding: 0 var(--shell-pad-x);
 }
 
 .shell--wide {
@@ -231,10 +228,10 @@ img {
 }
 
 .section__lead {
-  font-size: 1.08rem;
-  line-height: 1.75;
-  color: #4a4540;
-  max-width: 46ch;
+  font-size: 1.04rem;
+  line-height: 1.7;
+  color: var(--color-ink-muted);
+  max-width: 48ch;
 }
 
 .section__head {
@@ -249,11 +246,11 @@ img {
 
 .page-hero {
   position: relative;
-  background: #010101;
-  color: #f4ede4;
-  padding: var(--space-2xl) 0 var(--space-xl);
-  margin-bottom: var(--space-xl);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: #0a0a0a;
+  color: #f2ebe4;
+  padding: var(--space-xl) 0 var(--space-lg);
+  margin-bottom: var(--space-lg);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   overflow: hidden;
 }
 

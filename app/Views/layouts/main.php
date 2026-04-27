@@ -14,7 +14,8 @@ $extraFooter = $extraFooter ?? '';
 $activeNav = $activeNav ?? '';
 $siteName = $app['name'] ?? 'DOTS Event Planning';
 $t = $title ?? 'Home';
-$pageTitle = ($t === '' || $t === 'Home') ? e($siteName) : e($t) . ' | ' . e($siteName);
+$pageTitlePlain = ($t === '' || $t === 'Home') ? $siteName : $t . ' | ' . $siteName;
+$pageTitle = e($pageTitlePlain);
 $metaDescription = $metaDescription ?? (string) ($app['meta_description'] ?? '');
 $metaOgType = $metaOgType ?? 'website';
 $canonicalUrl = current_canonical_url();
@@ -32,11 +33,11 @@ $ogImageAbsolute = $ogImagePath !== '' ? absolute_public_url($ogImagePath) : '';
     <?php if ($metaDescription !== ''): ?>
     <meta name="description" content="<?= e($metaDescription) ?>">
     <meta property="og:type" content="<?= e($metaOgType) ?>">
-    <meta property="og:title" content="<?= $pageTitle ?>">
+    <meta property="og:title" content="<?= e($pageTitlePlain) ?>">
     <meta property="og:description" content="<?= e($metaDescription) ?>">
     <meta property="og:site_name" content="<?= e($siteName) ?>">
     <meta name="twitter:card" content="<?= $ogImageAbsolute !== '' ? 'summary_large_image' : 'summary' ?>">
-    <meta name="twitter:title" content="<?= $pageTitle ?>">
+    <meta name="twitter:title" content="<?= e($pageTitlePlain) ?>">
     <meta name="twitter:description" content="<?= e($metaDescription) ?>">
     <?php if ($canonicalUrl !== ''): ?>
     <meta property="og:url" content="<?= e($canonicalUrl) ?>">
@@ -56,7 +57,7 @@ $ogImageAbsolute = $ogImagePath !== '' ? absolute_public_url($ogImagePath) : '';
     <link rel="stylesheet" href="<?= e(asset('css/pages.css')) ?>">
     <?= $extraHeader ?>
 </head>
-<body class="<?= e($bodyClass) ?>" data-site-header>
+<body class="<?= e($bodyClass) ?>">
 <a class="skip-link" href="#main">Skip to main content</a>
 
 <header class="site-header" data-header data-header-scroll>
@@ -76,10 +77,10 @@ $ogImageAbsolute = $ogImagePath !== '' ? absolute_public_url($ogImagePath) : '';
                     'home' => ['Home', app_url('')],
                     'about' => ['About us', app_url('about')],
                     'services' => ['Services', app_url('services')],
-                    'kids-party' => ['Kids party', app_url('kids-party')],
+                    'kids' => ['Kids party', app_url('kids')],
                     'rentals' => ['Rentals', app_url('rentals')],
                     'portfolio' => ['Portfolio', app_url('portfolio')],
-                    'book-your-event' => ['Book your event', app_url('book-your-event')],
+                    'book' => ['Book', app_url('book')],
                     'contact' => ['Contact', app_url('contact')],
                 ];
                 foreach ($items as $key => $item):
@@ -171,14 +172,14 @@ $mapEmbed = site_map_embed_url();
                 <?php if ($social['instagram'] !== ''): ?>
                 <li>
                     <a class="social__link social__link--icon" href="<?= e($social['instagram']) ?>" rel="noopener noreferrer" target="_blank" aria-label="Instagram">
-                        <svg class="social__svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4h-9zm4.5 2.5a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm5.25-3.25a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5z"/></svg>
+                        <svg class="social__svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                     </a>
                 </li>
                 <?php endif; ?>
                 <?php if ($social['youtube'] !== ''): ?>
                 <li>
                     <a class="social__link social__link--icon" href="<?= e($social['youtube']) ?>" rel="noopener noreferrer" target="_blank" aria-label="YouTube">
-                        <svg class="social__svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M10 15.5l6-3.5-6-3.5v7zm12.2-5.2c.2 1.1.2 3.2.2 3.2s0 2.1-.2 3.2c-.1.7-.4 1.2-.8 1.6-.5.4-1.1.5-1.5.5-1.1.1-4.7.1-4.7.1h-.1s-3.6 0-4.7-.1c-.4 0-1.1-.1-1.5-.5-.4-.4-.7-.9-.8-1.6C4 19.1 4 17 4 17s0-2.1.2-3.2c.1-.7.3-1.2.7-1.6.4-.3 1-.5 1.5-.5C7.3 12 12 12 12 12h.1s4.6 0 4.7.1c.4 0 1.1.2 1.5.5.4.4.6.9.7 1.6z"/></svg>
+                        <svg class="social__svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
                     </a>
                 </li>
                 <?php endif; ?>
