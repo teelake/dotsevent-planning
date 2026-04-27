@@ -393,6 +393,14 @@
   .flash {
     animation: none;
   }
+
+  .card:hover {
+    transform: none;
+  }
+
+  .social__link:hover {
+    transform: none;
+  }
 }
 
 .flash--error {

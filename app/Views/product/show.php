@@ -12,7 +12,7 @@ $page_title = $name;
 $crumb_current = $name;
 include dirname(__DIR__) . '/partials/page-hero.php';
 ?>
-<div class="shell page-pad product-layout">
+<div class="shell page-pad product-layout" data-reveal>
     <div class="product-layout__media">
         <?php if ($img): ?>
             <img class="product-layout__img" src="<?= e($img) ?>" alt="" width="800" height="800">

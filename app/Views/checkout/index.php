@@ -15,9 +15,9 @@ $page_title = 'Checkout';
 $crumb_current = 'Checkout';
 include dirname(__DIR__) . '/partials/page-hero.php';
 ?>
-<div class="shell page-pad checkout">
+<div class="shell page-pad checkout" data-reveal>
     <div class="checkout__summary">
-        <h2 class="section__title" style="font-size:1.4rem;">Order summary</h2>
+        <h2 class="section__title checkout__heading">Order summary</h2>
         <ul class="checkout__lines">
             <?php foreach ($lines as $row): ?>
             <li>

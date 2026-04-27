@@ -18,7 +18,7 @@ include dirname(__DIR__) . '/partials/page-hero.php';
         <p class="section__lead" style="margin:0;">Chairs, backdrops, and finishing touches. Secure checkout is powered by <strong>Square</strong>.</p>
         <a class="text-link" href="<?= e(app_url('cart')) ?>">View cart<?php if (cart_count() > 0): ?> (<?= (int) cart_count() ?>)<?php endif; ?></a>
     </div>
-    <ul class="product-grid reveal-stagger">
+    <ul class="product-grid reveal-stagger" data-reveal>
         <?php foreach ($products as $p):
             $id = (int) $p['id'];
             $name = (string) $p['name'];

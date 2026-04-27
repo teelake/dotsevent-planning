@@ -10,7 +10,7 @@ $page_title = 'Cart';
 $crumb_current = 'Cart';
 include dirname(__DIR__) . '/partials/page-hero.php';
 ?>
-<div class="shell page-pad">
+<div class="shell page-pad" data-reveal>
     <?php if ($lines === []): ?>
         <p class="section__lead">Your cart is empty.</p>
         <a class="btn btn--primary" href="<?= e(app_url('rentals')) ?>">Browse rentals</a>
