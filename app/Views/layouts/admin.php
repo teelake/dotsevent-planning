@@ -26,21 +26,30 @@ $adminEmail = current_admin_user_email();
 
 <?php if (!$adminAuthed): ?>
 <main id="admin-main" class="admin-login" tabindex="-1">
-    <div class="admin-login__card">
-        <a class="admin-login__brand" href="<?= e(app_url('')) ?>"><?= e($siteName) ?></a>
+    <div class="admin-login__inner">
+        <a class="admin-login__logo" href="<?= e(app_url('')) ?>" aria-label="<?= e($siteName) ?> home">
+            <img src="<?= e(asset('images/logo-dots.svg')) ?>" alt="" width="40" height="40" class="admin-login__logo-img">
+        </a>
+        <h1 class="admin-login__heading">Welcome back</h1>
+        <p class="admin-login__tagline">Sign in to <?= e($siteName) ?> — staff access only.</p>
+
+        <div class="admin-login__card">
         <?php
         $flashErr = \App\Core\Flash::get(\App\Core\Flash::ERROR);
         $flashOk = \App\Core\Flash::get(\App\Core\Flash::SUCCESS);
         $flashNote = \App\Core\Flash::get(\App\Core\Flash::NOTICE);
         ?>
-        <?php if ($flashErr !== null): ?><div class="flash flash--error" role="alert" style="margin-bottom:1rem;"><?= e($flashErr) ?></div><?php endif; ?>
-        <?php if ($flashOk !== null): ?><div class="flash flash--success" role="status" style="margin-bottom:1rem;"><?= e($flashOk) ?></div><?php endif; ?>
-        <?php if ($flashNote !== null): ?><div class="flash flash--notice" role="status" style="margin-bottom:1rem;"><?= e($flashNote) ?></div><?php endif; ?>
+        <?php if ($flashErr !== null): ?><div class="admin-login__flash admin-login__flash--error" role="alert"><?= e($flashErr) ?></div><?php endif; ?>
+        <?php if ($flashOk !== null): ?><div class="admin-login__flash admin-login__flash--success" role="status"><?= e($flashOk) ?></div><?php endif; ?>
+        <?php if ($flashNote !== null): ?><div class="admin-login__flash admin-login__flash--notice" role="status"><?= e($flashNote) ?></div><?php endif; ?>
         <?= $content ?>
+        </div>
+
+        <p class="admin-login__hint">Need an account? Contact your <strong>site administrator</strong>.</p>
+        <p class="admin-login__public">
+            <a class="admin-login__public-link" href="<?= e(app_url('')) ?>">View public website</a>
+        </p>
     </div>
-    <p style="text-align:center;margin-top:1.5rem;">
-        <a class="text-link" href="<?= e(app_url('')) ?>">← View website</a>
-    </p>
 </main>
 <?php else: ?>
 <div class="admin-app">
