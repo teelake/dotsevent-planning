@@ -10,4 +10,6 @@ return [
     // Canada: Square location + payments should use CAD.
     'currency' => 'CAD',
     'currency_label' => 'CA$',
+    // Absolute path (written by app/bootstrap). Server must allow writing to logs/.
+    'error_log' => dirname(__DIR__) . '/logs/php-error.log',
 ];
