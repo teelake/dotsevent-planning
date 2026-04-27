@@ -82,4 +82,48 @@ final class LeadRepository
         $rows = $st->fetchAll(PDO::FETCH_ASSOC);
         return is_array($rows) ? $rows : [];
     }
+
+    public function countSince(\DateTimeInterface $since): int
+    {
+        if ($this->pdo === null) {
+            return 0;
+        }
+        $st = $this->pdo->prepare('SELECT COUNT(*) FROM leads WHERE created_at >= :t');
+        $st->execute(['t' => $since->format('Y-m-d H:i:s')]);
+        return (int) $st->fetchColumn();
+    }
+
+    /**
+     * @return list<array{date: string, count: int}>
+     */
+    public function leadsPerDay(int $days): array
+    {
+        if ($this->pdo === null) {
+            return [];
+        }
+        $days = max(1, min(90, $days));
+        $start = (new \DateTimeImmutable('today'))->modify('-' . ($days - 1) . ' days');
+        $st = $this->pdo->prepare(
+            'SELECT DATE(created_at) AS d, COUNT(*) AS c FROM leads
+             WHERE created_at >= :t
+             GROUP BY DATE(created_at) ORDER BY d ASC'
+        );
+        $st->execute(['t' => $start->format('Y-m-d 00:00:00')]);
+        $rows = $st->fetchAll(PDO::FETCH_ASSOC);
+        $byDay = [];
+        if (is_array($rows)) {
+            foreach ($rows as $row) {
+                $d = (string) ($row['d'] ?? '');
+                if ($d !== '') {
+                    $byDay[$d] = (int) ($row['c'] ?? 0);
+                }
+            }
+        }
+        $out = [];
+        for ($i = 0; $i < $days; $i++) {
+            $d = $start->modify('+' . $i . ' days')->format('Y-m-d');
+            $out[] = ['date' => $d, 'count' => $byDay[$d] ?? 0];
+        }
+        return $out;
+    }
 }

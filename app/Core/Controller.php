@@ -23,6 +23,8 @@ abstract class Controller
 
         $title = $data['title'] ?? ($appConfig['name'] ?? 'DOTS');
         $activeNav = $data['active_nav'] ?? '';
+        $adminAuthed = (bool) ($data['admin_authed'] ?? false);
+        $activeAdminNav = (string) ($data['active_admin_nav'] ?? '');
         $bodyClass = $data['body_class'] ?? '';
         $extraHeader = $data['extra_header'] ?? '';
         $extraFooter = $data['extra_footer'] ?? '';

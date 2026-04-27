@@ -47,6 +47,11 @@ final class AdminController extends Controller
             $this->loginForm();
             return;
         }
+        if ($method === 'GET' && $second === 'analytics' && $n === 2) {
+            $this->requireAuth();
+            $this->analytics();
+            return;
+        }
         if ($method === 'GET' && ($second === '' || $second === 'dashboard') && $n <= 2) {
             $this->requireAuth();
             $this->dashboard();
@@ -98,6 +103,7 @@ final class AdminController extends Controller
         $this->render('admin/login', [
             'title' => 'Admin sign in',
             'active_nav' => '',
+            'active_admin_nav' => '',
             'body_class' => 'page-admin',
             'layout' => 'layouts/admin',
             'admin_authed' => false,
@@ -152,15 +158,43 @@ final class AdminController extends Controller
             $this->redirect('/admin/login');
         }
         $this->render('admin/dashboard', [
-            'title' => 'Admin',
+            'title' => 'Dashboard',
             'active_nav' => '',
+            'active_admin_nav' => 'dashboard',
             'body_class' => 'page-admin',
             'layout' => 'layouts/admin',
             'admin_authed' => true,
-            'user_email' => (string) ($u['email'] ?? ''),
             'lead_count' => $leads->countAll(),
             'order_count' => $orders->countAll(),
             'product_count' => count($products->allForAdmin()),
+        ]);
+    }
+
+    public function analytics(): void
+    {
+        $this->requireAuth();
+        $orders = new OrderRepository();
+        $leads = new LeadRepository();
+        $now = new \DateTimeImmutable('now');
+        $d30 = $now->modify('-30 days');
+        $d7 = $now->modify('-7 days');
+        $this->render('admin/analytics', [
+            'title' => 'Analytics',
+            'active_nav' => '',
+            'active_admin_nav' => 'analytics',
+            'body_class' => 'page-admin',
+            'layout' => 'layouts/admin',
+            'admin_authed' => true,
+            'revenue_cents_30d' => $orders->sumPaidRevenueCentsSince($d30),
+            'revenue_cents_all' => $orders->sumPaidRevenueCents(),
+            'orders_paid_30d' => $orders->countPaidSince($d30),
+            'orders_paid_7d' => $orders->countPaidSince($d7),
+            'orders_paid_all' => $orders->countPaid(),
+            'leads_30d' => $leads->countSince($d30),
+            'leads_7d' => $leads->countSince($d7),
+            'leads_all' => $leads->countAll(),
+            'orders_by_day' => $orders->paidOrdersPerDay(7),
+            'leads_by_day' => $leads->leadsPerDay(7),
         ]);
     }
 
@@ -171,6 +205,7 @@ final class AdminController extends Controller
         $this->render('admin/products', [
             'title' => 'Products',
             'active_nav' => '',
+            'active_admin_nav' => 'products',
             'body_class' => 'page-admin',
             'layout' => 'layouts/admin',
             'admin_authed' => true,
@@ -191,6 +226,7 @@ final class AdminController extends Controller
         $this->render('admin/product-form', [
             'title' => $p === null ? 'New product' : 'Edit product',
             'active_nav' => '',
+            'active_admin_nav' => 'products',
             'body_class' => 'page-admin',
             'layout' => 'layouts/admin',
             'admin_authed' => true,
@@ -308,6 +344,7 @@ final class AdminController extends Controller
         $this->render('admin/leads', [
             'title' => 'Leads',
             'active_nav' => '',
+            'active_admin_nav' => 'leads',
             'body_class' => 'page-admin',
             'layout' => 'layouts/admin',
             'admin_authed' => true,
@@ -331,6 +368,7 @@ final class AdminController extends Controller
         $this->render('admin/orders', [
             'title' => 'Orders',
             'active_nav' => '',
+            'active_admin_nav' => 'orders',
             'body_class' => 'page-admin',
             'layout' => 'layouts/admin',
             'admin_authed' => true,
@@ -355,6 +393,7 @@ final class AdminController extends Controller
         $this->render('admin/order', [
             'title' => 'Order #' . $id,
             'active_nav' => '',
+            'active_admin_nav' => 'orders',
             'body_class' => 'page-admin',
             'layout' => 'layouts/admin',
             'admin_authed' => true,

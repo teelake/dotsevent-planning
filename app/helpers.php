@@ -148,6 +148,24 @@ function slugify(string $s): string
     return $s;
 }
 
+/**
+ * Email of the currently signed-in admin, or empty string. Cached for the request.
+ */
+function current_admin_user_email(): string
+{
+    $id = \App\Core\AdminAuth::id();
+    if ($id === null) {
+        return '';
+    }
+    static $cache;
+    if ($cache !== null) {
+        return $cache;
+    }
+    $u = (new \App\Models\UserRepository())->findById($id);
+    $cache = $u !== null ? trim((string) ($u['email'] ?? '')) : '';
+    return $cache;
+}
+
 function allowed_return(string $url): string
 {
     if ($url === '' || str_contains($url, '://') || str_starts_with($url, '//')) {
