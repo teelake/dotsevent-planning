@@ -67,7 +67,7 @@ $slides = $slides ?? [];
     </div>
 </section>
 
-<section class="section section--tight section--surface" aria-labelledby="home-intro-heading">
+<section class="section section--tight section--surface" aria-labelledby="home-intro-heading" data-reveal>
     <div class="shell section__split">
         <div>
             <p class="eyebrow">Saint John &amp; region</p>
@@ -94,11 +94,11 @@ $slides = $slides ?? [];
 
 <section class="section" aria-labelledby="home-services-heading">
     <div class="shell">
-        <div class="section__head">
+        <div class="section__head" data-reveal>
             <p class="eyebrow">Where we help</p>
             <h2 id="home-services-heading" class="section__title">A few things we get asked for a lot</h2>
         </div>
-        <div class="card-grid card-grid--home">
+        <div class="card-grid card-grid--home reveal-stagger" data-reveal>
             <article class="card">
                 <h3 class="card__title">Corporate &amp; brand</h3>
                 <p class="card__text">Launches, staff nights, and client events—tight run-of-show, AV that works, and signage that actually matches the deck.</p>
@@ -122,7 +122,7 @@ $slides = $slides ?? [];
     </div>
 </section>
 
-<section class="section section--newsletter" aria-labelledby="newsletter-heading">
+<section class="section section--newsletter" aria-labelledby="newsletter-heading" data-reveal>
     <div class="shell newsletter">
         <div>
             <h2 id="newsletter-heading" class="newsletter__title">Short notes, zero fluff</h2>

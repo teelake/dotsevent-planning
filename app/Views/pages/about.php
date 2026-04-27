@@ -4,7 +4,7 @@ $page_title = 'About us';
 $crumb_current = 'About us';
 include dirname(__DIR__) . '/partials/page-hero.php';
 ?>
-<div class="shell page-pad">
+<div class="shell page-pad" data-reveal>
     <div class="section__split">
         <div class="prose">
             <p class="eyebrow">Since 2017</p>

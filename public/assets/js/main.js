@@ -33,89 +33,120 @@
 
   // Hero slider (home only)
   var root = document.querySelector("[data-hero-slider]");
-  if (!root) return;
+  if (root) {
+    var slides = root.querySelectorAll("[data-hero-slide]");
+    var prev = root.querySelector("[data-hero-prev]");
+    var next = root.querySelector("[data-hero-next]");
+    var dotContainer = root.querySelector("[data-hero-dots]");
+    var dots = dotContainer ? dotContainer.querySelectorAll("[data-hero-dot]") : [];
+    var total = slides.length;
 
-  var slides = root.querySelectorAll("[data-hero-slide]");
-  var prev = root.querySelector("[data-hero-prev]");
-  var next = root.querySelector("[data-hero-next]");
-  var dotContainer = root.querySelector("[data-hero-dots]");
-  var dots = dotContainer ? dotContainer.querySelectorAll("[data-hero-dot]") : [];
-  var total = slides.length;
-  if (total < 1) return;
+    if (total > 0) {
+      var i = 0;
+      var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      var autoplayMs = reduceMotion ? 0 : 8000;
+      var timer = null;
 
-  var i = 0;
-  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var autoplayMs = reduceMotion ? 0 : 8000;
-  var timer = null;
-
-  function go(index) {
-    if (index < 0) index = total - 1;
-    if (index >= total) index = 0;
-    i = index;
-    slides.forEach(function (el, n) {
-      var active = n === i;
-      el.classList.toggle("is-active", active);
-      el.setAttribute("aria-hidden", active ? "false" : "true");
-    });
-    dots.forEach(function (d, n) {
-      d.classList.toggle("is-active", n === i);
-      d.setAttribute("aria-selected", n === i ? "true" : "false");
-    });
-  }
-
-  function nextSlide() {
-    go(i + 1);
-  }
-
-  function prevSlide() {
-    go(i - 1);
-  }
-
-  function startAutoplay() {
-    if (autoplayMs < 1) return;
-    stopAutoplay();
-    timer = window.setInterval(nextSlide, autoplayMs);
-  }
-
-  function stopAutoplay() {
-    if (timer) {
-      clearInterval(timer);
-      timer = null;
-    }
-  }
-
-  if (next) next.addEventListener("click", function () { stopAutoplay(); nextSlide(); startAutoplay(); });
-  if (prev) prev.addEventListener("click", function () { stopAutoplay(); prevSlide(); startAutoplay(); });
-
-  dots.forEach(function (d) {
-    d.addEventListener("click", function () {
-      var n = parseInt(d.getAttribute("data-hero-dot") || "0", 10);
-      if (!isNaN(n)) {
-        stopAutoplay();
-        go(n);
-        startAutoplay();
+      function go(index) {
+        if (index < 0) index = total - 1;
+        if (index >= total) index = 0;
+        i = index;
+        slides.forEach(function (el, n) {
+          var active = n === i;
+          el.classList.toggle("is-active", active);
+          el.setAttribute("aria-hidden", active ? "false" : "true");
+        });
+        dots.forEach(function (d, n) {
+          d.classList.toggle("is-active", n === i);
+          d.setAttribute("aria-selected", n === i ? "true" : "false");
+        });
       }
-    });
-  });
 
-  root.addEventListener("mouseenter", stopAutoplay);
-  root.addEventListener("mouseleave", startAutoplay);
-  root.addEventListener("focusin", stopAutoplay);
-  root.addEventListener("focusout", function (e) {
-    if (!root.contains(e.relatedTarget)) startAutoplay();
-  });
+      function nextSlide() {
+        go(i + 1);
+      }
 
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "ArrowRight") {
-      stopAutoplay();
-      nextSlide();
-      startAutoplay();
-    } else if (e.key === "ArrowLeft") {
-      stopAutoplay();
-      prevSlide();
+      function prevSlide() {
+        go(i - 1);
+      }
+
+      function startAutoplay() {
+        if (autoplayMs < 1) return;
+        stopAutoplay();
+        timer = window.setInterval(nextSlide, autoplayMs);
+      }
+
+      function stopAutoplay() {
+        if (timer) {
+          clearInterval(timer);
+          timer = null;
+        }
+      }
+
+      if (next) next.addEventListener("click", function () { stopAutoplay(); nextSlide(); startAutoplay(); });
+      if (prev) prev.addEventListener("click", function () { stopAutoplay(); prevSlide(); startAutoplay(); });
+
+      dots.forEach(function (d) {
+        d.addEventListener("click", function () {
+          var n = parseInt(d.getAttribute("data-hero-dot") || "0", 10);
+          if (!isNaN(n)) {
+            stopAutoplay();
+            go(n);
+            startAutoplay();
+          }
+        });
+      });
+
+      root.addEventListener("mouseenter", stopAutoplay);
+      root.addEventListener("mouseleave", startAutoplay);
+      root.addEventListener("focusin", stopAutoplay);
+      root.addEventListener("focusout", function (e) {
+        if (!root.contains(e.relatedTarget)) startAutoplay();
+      });
+
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "ArrowRight") {
+          stopAutoplay();
+          nextSlide();
+          startAutoplay();
+        } else if (e.key === "ArrowLeft") {
+          stopAutoplay();
+          prevSlide();
+          startAutoplay();
+        }
+      });
+
       startAutoplay();
     }
-  });
+  }
 
-  startAutoplay();
+  // Scroll-triggered section reveals (respects reduced motion)
+  var revealNodes = document.querySelectorAll("[data-reveal]");
+  function markRevealInview() {
+    revealNodes.forEach(function (el) {
+      el.classList.add("is-inview");
+    });
+  }
+  if (revealNodes.length) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      markRevealInview();
+    } else if ("IntersectionObserver" in window) {
+      var revealIo = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-inview");
+              revealIo.unobserve(entry.target);
+            }
+          });
+        },
+        { root: null, rootMargin: "0px 0px -6% 0px", threshold: 0.06 }
+      );
+      revealNodes.forEach(function (el) {
+        revealIo.observe(el);
+      });
+    } else {
+      markRevealInview();
+    }
+  }
 })();

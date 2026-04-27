@@ -4,7 +4,7 @@ $page_title = 'Kids party packages';
 $crumb_current = 'Kids party';
 include dirname(__DIR__) . '/partials/page-hero.php';
 ?>
-<div class="shell page-pad">
+<div class="shell page-pad" data-reveal>
     <p class="section__lead" style="max-width: 50ch; margin-bottom: 2rem;">Bundle packages and add-ons. Booking is by inquiry—<strong>no online payment</strong> on this page in v1.</p>
     <div class="placeholder-grid">
         <div class="placeholder-card">Mini package</div>

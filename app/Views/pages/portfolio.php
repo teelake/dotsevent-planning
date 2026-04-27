@@ -4,7 +4,7 @@ $page_title = 'Portfolio';
 $crumb_current = 'Portfolio';
 include dirname(__DIR__) . '/partials/page-hero.php';
 ?>
-<div class="shell page-pad">
+<div class="shell page-pad" data-reveal>
     <p class="eyebrow">Our work</p>
     <h2 class="section__title">Immerse yourself in memories</h2>
     <p class="section__lead">Masonry gallery and project stories will be populated from the admin.</p>

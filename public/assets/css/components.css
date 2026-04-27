@@ -13,7 +13,12 @@
   border: 1px solid transparent;
   text-decoration: none;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out),
+    transform 0.2s var(--ease-out);
 }
 
 .btn:focus-visible {
@@ -22,31 +27,31 @@
 }
 
 .btn--primary {
-  background: linear-gradient(180deg, #d4b24a 0%, var(--color-gold) 100%);
-  color: #1a1508;
-  border-color: rgba(90, 70, 20, 0.2);
-  box-shadow: var(--shadow-subtle), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  background: linear-gradient(180deg, #fce36b 0%, var(--color-brand-gold) 100%);
+  color: var(--color-brand-black);
+  border-color: rgba(1, 1, 1, 0.12);
+  box-shadow: var(--shadow-subtle), inset 0 1px 0 rgba(255, 255, 255, 0.45);
 }
 
 .btn--primary:hover {
-  background: linear-gradient(180deg, #dfc66a 0%, #d4b24a 100%);
-  color: #0f0d06;
+  background: linear-gradient(180deg, #ffee88 0%, #eac010 100%);
+  color: var(--color-brand-black);
 }
 
 .btn--primary:active {
-  transform: translateY(1px);
+  transform: translateY(1px) scale(0.99);
 }
 
 .btn--secondary {
-  background: var(--color-ink);
+  background: var(--color-brand-black);
   color: #f5f0e8;
-  border-color: var(--color-ink);
-  box-shadow: 0 8px 24px rgba(28, 25, 23, 0.12);
+  border-color: var(--color-brand-black);
+  box-shadow: 0 8px 24px rgba(1, 1, 1, 0.15);
 }
 
 .btn--secondary:hover {
-  background: #2a2622;
-  border-color: #2a2622;
+  background: #1a1a1a;
+  border-color: #1a1a1a;
 }
 
 .btn--ghost {
@@ -63,13 +68,13 @@
 }
 
 .btn--dark {
-  background: var(--color-ink);
+  background: var(--color-brand-black);
   color: #fff;
-  border-color: var(--color-ink);
+  border-color: var(--color-brand-black);
 }
 
 .btn--dark:hover {
-  background: #292524;
+  background: #1a1a1a;
 }
 
 .input {
@@ -82,7 +87,7 @@
   border-radius: var(--radius-cta);
   background: var(--color-surface);
   box-shadow: inset 0 1px 2px rgba(28, 25, 23, 0.04);
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition: border-color var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
 }
 
 .input::placeholder {
@@ -91,8 +96,8 @@
 
 .input:focus {
   outline: none;
-  border-color: var(--color-gold-mid);
-  box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.2);
+  border-color: var(--color-brand-gold);
+  box-shadow: 0 0 0 3px rgba(248, 195, 19, 0.25);
 }
 
 .card {
@@ -103,7 +108,10 @@
   border-left: 3px solid var(--color-gold-mid);
   padding: 1.35rem 1.4rem 1.45rem 1.5rem;
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset;
-  transition: border-color 0.2s, box-shadow 0.25s;
+  transition:
+    border-color 0.25s var(--ease-out),
+    box-shadow 0.35s var(--ease-out),
+    transform 0.35s var(--ease-out);
 }
 
 .card::before {
@@ -113,7 +121,7 @@
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, rgba(201, 162, 39, 0.25), transparent 55%);
+  background: linear-gradient(90deg, rgba(248, 195, 19, 0.22), transparent 55%);
   opacity: 0.8;
   border-radius: var(--radius-md) var(--radius-md) 0 0;
   pointer-events: none;
@@ -122,6 +130,7 @@
 .card:hover {
   border-color: var(--color-line-strong);
   box-shadow: var(--shadow-floating);
+  transform: translateY(-3px);
 }
 
 .card__title {
@@ -165,6 +174,12 @@
   border: 1px solid var(--color-line);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-subtle);
+  transition: box-shadow 0.35s var(--ease-out), border-color 0.25s var(--ease-out);
+}
+
+.stat-row:hover {
+  box-shadow: 0 8px 32px rgba(1, 1, 1, 0.07);
+  border-color: var(--color-line-strong);
 }
 
 @media (min-width: 640px) {
@@ -184,11 +199,12 @@
 
 .stat__value {
   font-family: var(--font-display);
-  font-size: 1.75rem;
+  font-size: clamp(1.5rem, 2.2vw, 1.85rem);
   font-weight: 500;
   color: var(--color-ink);
   line-height: 1;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
+  font-feature-settings: "tnum" 1;
 }
 
 .stat__label {
@@ -236,10 +252,10 @@
 
 .section--newsletter {
   position: relative;
-  background: linear-gradient(160deg, #e8d9b0 0%, #d9c27a 48%, #c9a84a 100%);
+  background: linear-gradient(160deg, #fce567 0%, #f8c313 45%, #e2b010 100%);
   padding: var(--space-xl) 0;
-  color: var(--color-ink);
-  border-top: 1px solid rgba(40, 35, 20, 0.12);
+  color: var(--color-brand-black);
+  border-top: 1px solid rgba(1, 1, 1, 0.1);
   overflow: hidden;
 }
 
@@ -294,14 +310,14 @@
   font-size: 1.55rem;
   font-weight: 500;
   margin: 0 0 0.35rem;
-  color: #1a1612;
+  color: var(--color-brand-black);
   letter-spacing: -0.02em;
   line-height: 1.2;
 }
 
 .newsletter__text {
   margin: 0;
-  color: #3d3428;
+  color: #2a2620;
   max-width: 40ch;
   font-size: 0.95rem;
   line-height: 1.55;
@@ -337,13 +353,29 @@
   text-decoration: none;
   font-size: 0.7rem;
   font-weight: 700;
-  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  transition:
+    background 0.2s var(--ease-out),
+    border-color 0.2s var(--ease-out),
+    color 0.2s var(--ease-out),
+    transform 0.2s var(--ease-out);
 }
 
 .social__link:hover {
   background: var(--color-ink);
   color: #f5f0e8;
   border-color: var(--color-ink);
+  transform: translateY(-2px);
+}
+
+@keyframes flash-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -0.4rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
 }
 
 .flash {
@@ -354,6 +386,13 @@
   font-weight: 600;
   position: relative;
   z-index: 2;
+  animation: flash-in 0.45s var(--ease-out) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flash {
+    animation: none;
+  }
 }
 
 .flash--error {
@@ -390,3 +429,31 @@
 }
 
 .text-muted { color: var(--color-ink-soft); }
+
+/* Form — large text areas */
+.input--textarea,
+textarea.input {
+  max-width: 100%;
+  min-height: 7.5rem;
+  resize: vertical;
+  line-height: 1.55;
+  border-radius: var(--radius-md);
+}
+
+.contact-form__heading {
+  font-size: clamp(1.2rem, 1.6vw, 1.45rem);
+  margin-bottom: 1.15rem;
+}
+
+.map-placeholder {
+  margin-top: 1rem;
+  min-height: 12rem;
+  border-radius: var(--radius-md);
+  background: linear-gradient(145deg, #ece8e0, #f5f0e8);
+  border: 1px solid var(--color-line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-ink-soft);
+  font-size: 0.9rem;
+}

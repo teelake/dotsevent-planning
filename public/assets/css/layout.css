@@ -23,25 +23,25 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent 0%, var(--color-gold-mid) 20%, #d4b85c 50%, var(--color-gold-mid) 80%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, var(--color-brand-gold) 22%, #fce567 50%, var(--color-brand-gold) 78%, transparent 100%);
   opacity: 0.85;
   pointer-events: none;
 }
 
 .site-header--scrolled {
   background: rgba(253, 250, 245, 0.96);
-  box-shadow: 0 6px 24px rgba(28, 25, 23, 0.06);
+  box-shadow: 0 6px 24px rgba(1, 1, 1, 0.07);
   border-bottom-color: var(--color-line-strong);
 }
 
 .page-home .site-header {
-  background: linear-gradient(180deg, rgba(10, 8, 6, 0.55) 0%, rgba(10, 8, 6, 0.2) 100%);
+  background: linear-gradient(180deg, rgba(1, 1, 1, 0.6) 0%, rgba(1, 1, 1, 0.2) 100%);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .page-home .site-header::before {
-  opacity: 0.65;
-  background: linear-gradient(90deg, transparent, rgba(220, 190, 100, 0.5), transparent);
+  opacity: 0.75;
+  background: linear-gradient(90deg, transparent, rgba(248, 195, 19, 0.6), transparent);
   height: 1px;
 }
 
@@ -294,7 +294,7 @@
 }
 
 .site-footer {
-  background: var(--color-ink);
+  background: var(--color-brand-black);
   color: #d4cfc7;
   padding: var(--space-2xl) 0 var(--space-md);
   margin-top: 0;
@@ -361,7 +361,7 @@
   aspect-ratio: 4/3;
   border-radius: var(--radius-md);
   background: #1a1a1a
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='%23c9a227' stroke-width='1.5' opacity='0.4'%3E%3Cpath d='M12 11c.83 0 1.5-.67 1.5-1.5S12.83 8 12 8s-1.5.67-1.5 1.5S11.17 11 12 11z'/%3E%3Cpath d='M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z'/%3E%3C/svg%3E")
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='%23f8c313' stroke-width='1.5' opacity='0.4'%3E%3Cpath d='M12 11c.83 0 1.5-.67 1.5-1.5S12.83 8 12 8s-1.5.67-1.5 1.5S11.17 11 12 11z'/%3E%3Cpath d='M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z'/%3E%3C/svg%3E")
     no-repeat center 45%;
   border: 1px solid #333;
 }

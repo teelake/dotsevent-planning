@@ -8,7 +8,7 @@ $page_title = 'Rentals';
 $crumb_current = 'Rentals';
 include dirname(__DIR__) . '/partials/page-hero.php';
 ?>
-<div class="shell page-pad">
+<div class="shell page-pad" data-reveal>
     <?php if (!$db_ready): ?>
         <p class="banner banner--warn" role="status">Database is not connected. Add <code>config/database.php</code> and import <code>database/schema.sql</code> to show products.</p>
     <?php elseif ($products === []): ?>
@@ -18,7 +18,7 @@ include dirname(__DIR__) . '/partials/page-hero.php';
         <p class="section__lead" style="margin:0;">Chairs, backdrops, and finishing touches. Secure checkout is powered by <strong>Square</strong>.</p>
         <a class="text-link" href="<?= e(app_url('cart')) ?>">View cart<?php if (cart_count() > 0): ?> (<?= (int) cart_count() ?>)<?php endif; ?></a>
     </div>
-    <ul class="product-grid">
+    <ul class="product-grid reveal-stagger">
         <?php foreach ($products as $p):
             $id = (int) $p['id'];
             $name = (string) $p['name'];

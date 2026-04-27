@@ -4,7 +4,7 @@ $page_title = 'Book your event';
 $crumb_current = 'Book your event';
 include dirname(__DIR__) . '/partials/page-hero.php';
 ?>
-<div class="shell page-pad">
+<div class="shell page-pad" data-reveal>
     <p class="section__lead" style="max-width: 50ch; margin-bottom: 2rem;">Compare Basic, Premium, and VIP—then send a request. <strong>Payment is not</strong> integrated for event packages; confirmation by your team off-platform.</p>
     <div class="placeholder-grid">
         <div class="placeholder-card">Basic</div>
