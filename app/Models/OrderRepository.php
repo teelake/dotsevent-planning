@@ -68,4 +68,72 @@ final class OrderRepository
             throw new RuntimeException('Could not save order.', 0, $e);
         }
     }
+
+    /**
+     * @return list<array<string, mixed>>
+     */
+    public function listAll(int $limit, int $offset): array
+    {
+        if ($this->pdo === null) {
+            return [];
+        }
+        $limit = max(1, min(100, $limit));
+        $offset = max(0, $offset);
+        $st = $this->pdo->prepare(
+            'SELECT o.id, o.customer_email, o.customer_name, o.phone, o.total_cents, o.currency, o.status,
+                    o.square_payment_id, o.created_at
+             FROM orders o
+             ORDER BY o.id DESC
+             LIMIT :lim OFFSET :off'
+        );
+        $st->bindValue('lim', $limit, PDO::PARAM_INT);
+        $st->bindValue('off', $offset, PDO::PARAM_INT);
+        $st->execute();
+        $rows = $st->fetchAll(PDO::FETCH_ASSOC);
+        return is_array($rows) ? $rows : [];
+    }
+
+    public function countAll(): int
+    {
+        if ($this->pdo === null) {
+            return 0;
+        }
+        $st = $this->pdo->query('SELECT COUNT(*) FROM orders');
+        if ($st === false) {
+            return 0;
+        }
+        return (int) $st->fetchColumn();
+    }
+
+    /**
+     * @return array{order: array<string, mixed>, items: list<array<string, mixed>>}|null
+     */
+    public function findWithItems(int $id): ?array
+    {
+        if ($this->pdo === null) {
+            return null;
+        }
+        $st = $this->pdo->prepare(
+            'SELECT id, customer_email, customer_name, phone, total_cents, currency, status, square_payment_id, idempotency_key, created_at
+             FROM orders WHERE id = :id LIMIT 1'
+        );
+        $st->execute(['id' => $id]);
+        $order = $st->fetch(PDO::FETCH_ASSOC);
+        if ($order === false) {
+            return null;
+        }
+        $li = $this->pdo->prepare(
+            'SELECT oi.id, oi.product_id, oi.quantity, oi.unit_price_cents, p.name AS product_name
+             FROM order_items oi
+             LEFT JOIN products p ON p.id = oi.product_id
+             WHERE oi.order_id = :oid
+             ORDER BY oi.id ASC'
+        );
+        $li->execute(['oid' => $id]);
+        $items = $li->fetchAll(PDO::FETCH_ASSOC);
+        return [
+            'order' => $order,
+            'items' => is_array($items) ? $items : [],
+        ];
+    }
 }

@@ -68,6 +68,24 @@ function csrf_field(): string
 /**
  * Safe redirect targets after add-to-cart (must stay under base_url, e.g. /new).
  */
+/**
+ * URL-safe slug from a title (a-z0-9 hyphens).
+ */
+function slugify(string $s): string
+{
+    $s = trim($s);
+    $s = function_exists('mb_strtolower') ? mb_strtolower($s, 'UTF-8') : strtolower($s);
+    $s = preg_replace('~[^\pL\pN]+~u', '-', $s) ?? '';
+    $s = trim((string) $s, '-');
+    if ($s === '') {
+        $s = 'item';
+    }
+    if (strlen($s) > 150) {
+        $s = substr($s, 0, 150);
+    }
+    return $s;
+}
+
 function allowed_return(string $url): string
 {
     if ($url === '' || str_contains($url, '://') || str_starts_with($url, '//')) {

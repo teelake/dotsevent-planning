@@ -28,7 +28,12 @@ abstract class Controller
         $extraFooter = $data['extra_footer'] ?? '';
         $app = $appConfig;
 
-        include dirname(__DIR__) . '/Views/layouts/main.php';
+        $layout = $data['layout'] ?? 'layouts/main';
+        $layoutFile = dirname(__DIR__) . '/Views/' . $layout . '.php';
+        if (!is_file($layoutFile)) {
+            $layoutFile = dirname(__DIR__) . '/Views/layouts/main.php';
+        }
+        include $layoutFile;
     }
 
     protected function redirect(string $path): void

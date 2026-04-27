@@ -65,12 +65,4 @@ final class PageController extends Controller
         ]);
     }
 
-    public function adminStub(): void
-    {
-        $this->render('pages/admin-stub', [
-            'title' => 'Admin',
-            'active_nav' => '',
-            'body_class' => 'page-admin',
-        ]);
-    }
 }

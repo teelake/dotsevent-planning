@@ -112,7 +112,7 @@ final class CheckoutController extends Controller
             if ($pid === '') {
                 throw new RuntimeException('No payment id returned.');
             }
-            $orderRepo->createPaid(
+            $orderId = $orderRepo->createPaid(
                 $subtotal,
                 $currency,
                 $pid,
@@ -122,6 +122,7 @@ final class CheckoutController extends Controller
                 $phone !== '' ? $phone : null,
                 $lineRows
             );
+            $_SESSION['last_order_id'] = $orderId;
         } catch (Throwable $e) {
             $msg = app_config()['debug'] ?? false
                 ? 'Payment could not be completed: ' . $e->getMessage()
@@ -140,11 +141,20 @@ final class CheckoutController extends Controller
         if ($message === null) {
             $this->redirect('/rentals');
         }
+        $orderId = null;
+        if (isset($_SESSION['last_order_id'])) {
+            $orderId = (int) $_SESSION['last_order_id'];
+            if ($orderId < 1) {
+                $orderId = null;
+            }
+            unset($_SESSION['last_order_id']);
+        }
         $this->render('checkout/success', [
             'title' => 'Order complete',
             'active_nav' => 'cart',
             'body_class' => 'page-success',
             'order_message' => $message,
+            'order_id' => $orderId,
         ]);
     }
 

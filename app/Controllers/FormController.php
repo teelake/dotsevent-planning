@@ -56,6 +56,50 @@ final class FormController extends Controller
         $this->redirect('/');
     }
 
+    public function bookYourEventSubmit(): void
+    {
+        if (!$this->isPost() || !Csrf::validate($_POST['_csrf'] ?? null)) {
+            Flash::set(Flash::ERROR, 'Invalid session. Please reload the page.');
+            $this->redirect('/book-your-event');
+        }
+        $name = trim((string) ($_POST['name'] ?? ''));
+        $email = trim((string) ($_POST['email'] ?? ''));
+        $phone = trim((string) ($_POST['phone'] ?? ''));
+        $package = trim((string) ($_POST['package'] ?? ''));
+        $eventDate = trim((string) ($_POST['event_date'] ?? ''));
+        $guests = trim((string) ($_POST['guest_count'] ?? ''));
+        $venue = trim((string) ($_POST['venue_city'] ?? ''));
+        $message = trim((string) ($_POST['message'] ?? ''));
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            Flash::set(Flash::ERROR, 'Please enter a valid email.');
+            $this->redirect('/book-your-event');
+        }
+        $allowedP = ['basic', 'premium', 'vip', 'not_sure'];
+        if (!in_array($package, $allowedP, true)) {
+            $package = 'not_sure';
+        }
+        $extra = json_encode(
+            [
+                'package' => $package,
+                'event_date' => $eventDate,
+                'guest_count' => $guests,
+                'venue_city' => $venue,
+            ],
+            JSON_THROW_ON_ERROR
+        );
+        $msg = $message;
+        if ($msg === '' && $eventDate . $venue . $guests !== '') {
+            $msg = 'See structured fields in extra.';
+        }
+        $repo = new LeadRepository();
+        if ($repo->create('booking', $email, $name !== '' ? $name : null, $phone !== '' ? $phone : null, $msg !== '' ? $msg : null, $extra)) {
+            Flash::set(Flash::SUCCESS, 'Thanks — we have your request and will be in touch.');
+        } else {
+            Flash::set(Flash::ERROR, 'Could not save your request. Please try again or email us.');
+        }
+        $this->redirect('/book-your-event');
+    }
+
     private function isPost(): bool
     {
         return strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? '')) === 'POST';

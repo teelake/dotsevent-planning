@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Core;
 
+use App\Controllers\AdminController;
 use App\Controllers\CartController;
 use App\Controllers\CheckoutController;
 use App\Controllers\FormController;
@@ -46,6 +47,10 @@ final class Router
                 (new CheckoutController())->pay();
                 return;
             }
+            if ($first === 'book-your-event' && count($segs) === 1) {
+                (new FormController())->bookYourEventSubmit();
+                return;
+            }
         }
 
         if ($first === 'product' && isset($segs[1]) && ctype_digit((string) $segs[1]) && count($segs) === 2) {
@@ -68,8 +73,8 @@ final class Router
             (new CheckoutController())->success();
             return;
         }
-        if ($first === 'admin' && count($segs) === 1) {
-            (new PageController())->adminStub();
+        if ($first === 'admin') {
+            (new AdminController())->route($method, $segs);
             return;
         }
 
