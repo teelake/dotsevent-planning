@@ -3,8 +3,7 @@
   "description": "DOTS Event Planning — PHP MVC",
   "type": "project",
   "require": {
-    "php": ">=8.1",
-    "square/square": "*"
+    "php": ">=8.1"
   },
   "config": {
     "sort-packages": true

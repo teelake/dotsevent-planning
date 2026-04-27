@@ -41,14 +41,6 @@ final class PageController extends Controller
         ]);
     }
 
-    public function rentals(): void
-    {
-        $this->render('pages/rentals', [
-            'title' => 'Rentals',
-            'active_nav' => 'rentals',
-        ]);
-    }
-
     public function portfolio(): void
     {
         $this->render('pages/portfolio', [
@@ -70,6 +62,15 @@ final class PageController extends Controller
         $this->render('pages/contact', [
             'title' => 'Contact',
             'active_nav' => 'contact',
+        ]);
+    }
+
+    public function adminStub(): void
+    {
+        $this->render('pages/admin-stub', [
+            'title' => 'Admin',
+            'active_nav' => '',
+            'body_class' => 'page-admin',
         ]);
     }
 }

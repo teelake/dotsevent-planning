@@ -1,4 +1,5 @@
 /config/database.php
+/config/square.php
 /vendor/
 .idea/
 *.log

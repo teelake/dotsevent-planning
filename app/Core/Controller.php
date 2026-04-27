@@ -25,8 +25,19 @@ abstract class Controller
         $activeNav = $data['active_nav'] ?? '';
         $bodyClass = $data['body_class'] ?? '';
         $extraHeader = $data['extra_header'] ?? '';
+        $extraFooter = $data['extra_footer'] ?? '';
         $app = $appConfig;
 
         include dirname(__DIR__) . '/Views/layouts/main.php';
+    }
+
+    protected function redirect(string $path): void
+    {
+        $url = $path;
+        if (!str_starts_with($path, 'http://') && !str_starts_with($path, 'https://')) {
+            $url = app_url(ltrim($path, '/'));
+        }
+        header('Location: ' . $url, true, 302);
+        exit;
     }
 }

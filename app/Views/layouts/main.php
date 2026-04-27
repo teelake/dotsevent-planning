@@ -8,6 +8,8 @@ declare(strict_types=1);
 /** @var array $app */
 $bodyClass = $bodyClass ?? '';
 $extraHeader = $extraHeader ?? '';
+$extraFooter = $extraFooter ?? '';
+$activeNav = $activeNav ?? '';
 $siteName = $app['name'] ?? 'DOTS Event Planning';
 $t = $title ?? 'Home';
 $pageTitle = ($t === '' || $t === 'Home') ? e($siteName) : e($t) . ' | ' . e($siteName);
@@ -60,12 +62,35 @@ $pageTitle = ($t === '' || $t === 'Home') ? e($siteName) : e($t) . ' | ' . e($si
                     <a class="site-nav__link<?= $isCurrent ? ' is-active' : '' ?>" href="<?= e($item[1]) ?>"<?= $isCurrent ? ' aria-current="page"' : '' ?>><?= e($item[0]) ?></a>
                 </li>
                 <?php endforeach; ?>
+                <?php
+                $cn = (int) cart_count();
+                $cartCurrent = $activeNav === 'cart';
+                ?>
+                <li>
+                    <a class="site-nav__link site-nav__link--cart<?= $cartCurrent ? ' is-active' : '' ?>" href="<?= e(app_url('cart')) ?>"<?= $cartCurrent ? ' aria-current="page"' : '' ?>>
+                        Cart<?php if ($cn > 0): ?> <span class="cart-badge" aria-label="<?= (int) $cn ?> items"><?= (int) $cn ?></span><?php endif; ?>
+                    </a>
+                </li>
             </ul>
         </nav>
     </div>
 </header>
 
 <main id="main" class="site-main" tabindex="-1">
+    <?php
+    $flashErr = \App\Core\Flash::get(\App\Core\Flash::ERROR);
+    $flashOk = \App\Core\Flash::get(\App\Core\Flash::SUCCESS);
+    $flashNote = \App\Core\Flash::get(\App\Core\Flash::NOTICE);
+    ?>
+    <?php if ($flashErr !== null): ?>
+        <div class="flash flash--error" role="alert"><?= e($flashErr) ?></div>
+    <?php endif; ?>
+    <?php if ($flashOk !== null): ?>
+        <div class="flash flash--success" role="status"><?= e($flashOk) ?></div>
+    <?php endif; ?>
+    <?php if ($flashNote !== null): ?>
+        <div class="flash flash--notice" role="status"><?= e($flashNote) ?></div>
+    <?php endif; ?>
     <?= $content ?>
 </main>
 
@@ -99,5 +124,6 @@ $pageTitle = ($t === '' || $t === 'Home') ? e($siteName) : e($t) . ' | ' . e($si
 </footer>
 
 <script src="<?= e(asset('js/main.js')) ?>" defer></script>
+<?= $extraFooter ?? '' ?>
 </body>
 </html>

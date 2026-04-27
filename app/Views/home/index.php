@@ -128,9 +128,10 @@ $slides = $slides ?? [];
             <h2 id="newsletter-heading" class="newsletter__title">Exclusive planning insights</h2>
             <p class="newsletter__text">Occasional notes on design, logistics, and celebration—no spam.</p>
         </div>
-        <form class="newsletter__form" action="#" method="post" novalidate>
+        <form class="newsletter__form" method="post" action="<?= e(app_url('newsletter')) ?>" novalidate>
+            <?= csrf_field() ?>
             <label class="visually-hidden" for="newsletter-email">Email</label>
-            <input id="newsletter-email" class="input" type="email" name="email" placeholder="Your email" autocomplete="email">
+            <input id="newsletter-email" class="input" type="email" name="email" placeholder="Your email" autocomplete="email" required>
             <button class="btn btn--dark" type="submit">Subscribe</button>
         </form>
     </div>
