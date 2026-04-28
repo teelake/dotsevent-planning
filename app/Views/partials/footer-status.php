@@ -16,7 +16,7 @@ $mapEmbed = site_map_embed_url();
     <div class="shell shell--wide app-footer__grid">
         <div class="app-footer__brand">
             <a class="app-footer__lockup" href="<?= e(app_url('')) ?>">
-                <img class="app-footer__mark" src="<?= e(app_url(ltrim($footerLogoPath, '/'))) ?>" alt="" width="48" height="48">
+                <img class="app-footer__mark" src="<?= e(public_file_url($footerLogoPath)) ?>" alt="" width="48" height="48">
                 <span class="app-footer__name"><?= e($siteName) ?></span>
             </a>
             <p class="app-footer__tagline">Event planning in Saint John—straight answers, on-site hustle, and decor that still looks good in your uncle’s phone photos.</p>

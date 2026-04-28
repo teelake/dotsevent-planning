@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 return [
     'name' => 'DOTS Event Planning',
-    // Staging / subfolder: site lives at https://yoursite.com/new/ — must match project .htaccess RewriteBase.
+    // Staging / subfolder: site lives at https://yoursite.com/new/ — used for every link and asset URL.
+    // Must match public/.htaccess RewriteBase. If left empty, the app infers the prefix from PHP's
+    // SCRIPT_NAME (e.g. /new/index.php → /new). Prefer setting this explicitly on production.
     'base_url' => '/new',
     'debug' => true,
     // Canada: Square location + payments should use CAD.

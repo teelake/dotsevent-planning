@@ -52,7 +52,7 @@ $cfg = app_config();
                         <p class="admin-settings-brand__caption">Logo preview</p>
                         <div class="admin-settings-brand__thumb-wrap">
                             <img class="admin-settings-brand__thumb"
-                                 src="<?= e(app_url(ltrim(s($settings, 'logo_path', 'assets/images/logo-dots.svg'), '/'))) ?>"
+                                 src="<?= e(public_file_url(s($settings, 'logo_path', 'assets/images/logo-dots.svg'))) ?>"
                                  alt=""
                                  width="120"
                                  height="120">
@@ -78,7 +78,7 @@ $cfg = app_config();
                         <div class="admin-settings-brand__thumb-wrap admin-settings-brand__thumb-wrap--small">
                             <?php $fv = trim(s($settings, 'favicon_path', '')); ?>
                             <?php if ($fv !== ''): ?>
-                            <img class="admin-settings-brand__thumb admin-settings-brand__thumb--tiny" src="<?= e(app_url(ltrim($fv, '/'))) ?>" alt="" width="48" height="48">
+                            <img class="admin-settings-brand__thumb admin-settings-brand__thumb--tiny" src="<?= e(public_file_url($fv)) ?>" alt="" width="48" height="48">
                             <?php else: ?>
                             <span class="admin-settings-brand__noop">Default browser icon until you upload one.</span>
                             <?php endif; ?>

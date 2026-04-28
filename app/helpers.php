@@ -11,14 +11,69 @@ function app_config(): array
     return is_array($config) ? $config : [];
 }
 
+/**
+ * When config base_url is empty, infer /new from SCRIPT_NAME (e.g. /new/index.php → /new)
+ * so uploads and assets resolve under a subfolder deployment.
+ */
+function request_base_path(): string
+{
+    if (PHP_SAPI === 'cli' || PHP_SAPI === 'phpdbg') {
+        return '';
+    }
+    $sn = $_SERVER['SCRIPT_NAME'] ?? '';
+    if (! is_string($sn) || $sn === '') {
+        return '';
+    }
+    $sn = str_replace('\\', '/', $sn);
+    if (! preg_match('/\.php$/i', $sn)) {
+        return '';
+    }
+    $dir = dirname($sn);
+    if ($dir === '/' || $dir === '.' || $dir === '') {
+        return '';
+    }
+
+    return rtrim($dir, '/');
+}
+
+/**
+ * Path prefix for all app_url() links (e.g. /new). Uses config base_url, then request_base_path().
+ */
+function app_url_base(): string
+{
+    $configured = rtrim((string) (app_config()['base_url'] ?? ''), '/');
+    if ($configured !== '') {
+        return $configured;
+    }
+
+    return request_base_path();
+}
+
 function app_url(string $path = ''): string
 {
-    $base = rtrim((string) (app_config()['base_url'] ?? ''), '/');
+    $base = app_url_base();
     $p = ltrim($path, '/');
     if ($base === '') {
         return $p === '' ? '/' : '/' . $p;
     }
+
     return $p === '' ? $base . '/' : $base . '/' . $p;
+}
+
+/**
+ * Browser URL for a file under /public. Accepts paths like uploads/x.jpg or already-absolute http(s) URLs.
+ */
+function public_file_url(string $pathOrUrl): string
+{
+    $p = trim($pathOrUrl);
+    if ($p === '') {
+        return '';
+    }
+    if (preg_match('#^https?://#i', $p)) {
+        return $p;
+    }
+
+    return app_url(ltrim($p, '/'));
 }
 
 function e(?string $s): string

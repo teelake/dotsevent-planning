@@ -32,7 +32,7 @@ $faviconPath = trim(site_setting('favicon_path', ''));
     <meta name="theme-color" content="#010101" media="(prefers-color-scheme: dark)">
     <title><?= $pageTitle ?></title>
     <?php if ($faviconPath !== ''): ?>
-    <link rel="icon" href="<?= e(app_url(ltrim($faviconPath, '/'))) ?>">
+    <link rel="icon" href="<?= e(public_file_url($faviconPath)) ?>">
     <?php endif; ?>
     <?php if ($metaDescription !== ''): ?>
     <meta name="description" content="<?= e($metaDescription) ?>">

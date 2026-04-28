@@ -18,7 +18,7 @@ $logoPath = trim(site_setting('logo_path', 'assets/images/logo-dots.svg'));
     $faviconPathAdmin = trim(site_setting('favicon_path', ''));
     ?>
     <?php if ($faviconPathAdmin !== ''): ?>
-    <link rel="icon" href="<?= e(app_url(ltrim($faviconPathAdmin, '/'))) ?>">
+    <link rel="icon" href="<?= e(public_file_url($faviconPathAdmin)) ?>">
     <?php endif; ?>
     <title><?= $pageTitle ?></title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,7 +36,7 @@ $logoPath = trim(site_setting('logo_path', 'assets/images/logo-dots.svg'));
 <main id="admin-main" class="admin-login" tabindex="-1">
     <div class="admin-login__inner">
         <a class="admin-login__logo" href="<?= e(app_url('')) ?>" aria-label="<?= e($siteName) ?> home">
-            <img src="<?= e(app_url(ltrim($logoPath, '/'))) ?>" alt="" width="40" height="40" class="admin-login__logo-img">
+            <img src="<?= e(public_file_url($logoPath)) ?>" alt="" width="40" height="40" class="admin-login__logo-img">
         </a>
         <h1 class="admin-login__heading">Welcome back</h1>
         <p class="admin-login__tagline">Sign in to <?= e($siteName) ?> — staff access only.</p>
@@ -64,7 +64,7 @@ $logoPath = trim(site_setting('logo_path', 'assets/images/logo-dots.svg'));
     <aside class="admin-sidebar" id="admin-sidebar" data-admin-sidebar aria-label="Admin navigation">
         <div class="admin-sidebar__brand">
             <a class="admin-sidebar__lockup" href="<?= e(app_url('admin/dashboard')) ?>">
-                <img class="admin-sidebar__logo-img" src="<?= e(app_url(ltrim($logoPath, '/'))) ?>" alt="" width="36" height="36">
+                <img class="admin-sidebar__logo-img" src="<?= e(public_file_url($logoPath)) ?>" alt="" width="36" height="36">
                 <span class="admin-sidebar__lockup-text">
                     <span class="admin-sidebar__brand-name"><?= e($siteName) ?></span>
                     <span class="admin-sidebar__brand-sub">Control panel</span>
