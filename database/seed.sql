@@ -6,9 +6,16 @@ INSERT INTO products (slug, name, description, price_cents, currency, image_url,
 ('pipe-drape-backdrop', 'Pipe and Drape Backdrop', 'Versatile pipe and drape for stage and photo areas.', 30000, 'CAD', NULL, 3, 0, 1, 40);
 
 -- Admin (ignored if email already exists). Change password in production.
- Password: ChangeMe!Admin2024
+-- Password: ChangeMe!Admin2024
 INSERT IGNORE INTO users (email, password_hash, role) VALUES (
   'admin@dotseventplanning.com',
   '$2y$10$BBXLDf5iaz3b.b.az3fkcu6NfvBlO7VmaKSieSfsO9XAOtQh7NYeO',
   'admin'
 );
+
+-- Map embed URL in DB so it is sourced from cms_settings like other CMS globals (defaults match config/app.php).
+INSERT INTO cms_settings (`key`, `value`) VALUES (
+  'map_embed_url',
+  'https://maps.google.com/maps?q=473+Millidge+Avenue+Suite+E+Saint+John+NB+Canada&hl=en&z=16&output=embed'
+)
+ON DUPLICATE KEY UPDATE `value` = VALUES(`value`);
