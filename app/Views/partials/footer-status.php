@@ -20,6 +20,17 @@ $cartCountFooter = (int) cart_count();
                 <img class="app-footer__mark" src="<?= e(public_file_url($footerLogoPath)) ?>" alt="<?= e($siteName) ?>" width="48" height="48">
             </a>
             <p class="app-footer__tagline">Event planning in Saint John—straight answers, on-site hustle, and decor that still looks good in your uncle’s phone photos.</p>
+            <address class="app-footer__meta">
+                <?php if ($footerEmail !== ''): ?>
+                <p><a href="mailto:<?= e($footerEmail) ?>"><?= e($footerEmail) ?></a></p>
+                <?php endif; ?>
+                <?php if ($footerPhoneTel !== '' && $footerPhoneDisplay !== ''): ?>
+                <p><a href="tel:<?= e(preg_replace('/\s+/', '', $footerPhoneTel)) ?>"><?= e($footerPhoneDisplay) ?></a></p>
+                <?php endif; ?>
+                <?php if ($footerLine1 !== '' || $footerLine2 !== ''): ?>
+                <p class="app-footer__addr"><?= e(trim($footerLine1 . ', ' . $footerLine2, ' ,')) ?></p>
+                <?php endif; ?>
+            </address>
             <?php if ($hasSocial): ?>
             <ul class="app-social" aria-label="Social links">
                 <?php if ($social['facebook'] !== ''): ?>
@@ -60,17 +71,6 @@ $cartCountFooter = (int) cart_count();
             <ul class="app-footer__links" role="list">
                 <li><a href="<?= e(app_url('contact')) ?>">Contact</a></li>
             </ul>
-            <div class="app-footer__meta">
-                <?php if ($footerEmail !== ''): ?>
-                <p><a href="mailto:<?= e($footerEmail) ?>"><?= e($footerEmail) ?></a></p>
-                <?php endif; ?>
-                <?php if ($footerPhoneTel !== '' && $footerPhoneDisplay !== ''): ?>
-                <p><a href="tel:<?= e(preg_replace('/\s+/', '', $footerPhoneTel)) ?>"><?= e($footerPhoneDisplay) ?></a></p>
-                <?php endif; ?>
-                <?php if ($footerLine1 !== '' || $footerLine2 !== ''): ?>
-                <p class="app-footer__addr"><?= e(trim($footerLine1 . ', ' . $footerLine2, ' ,')) ?></p>
-                <?php endif; ?>
-            </div>
             <div class="app-footer__map-embed">
                 <iframe class="app-footer__map-frame" title="Map: <?= e($siteName) ?> area" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="<?= e($mapEmbed) ?>"></iframe>
             </div>
