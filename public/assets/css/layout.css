@@ -371,7 +371,7 @@ body:not(.page-home) .nav-toggle:hover {
 
 .site-nav__link--cart.is-active {
   color: var(--color-ink);
-  background: rgba(248, 195, 19, 0.3);
+  background: rgba(245, 192, 19, 0.3);
 }
 
 .page-home .site-nav__link--cart.is-active {
@@ -510,7 +510,7 @@ body:not(.page-home) .site-main {
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent 0%, rgba(248, 195, 19, 0.35) 20%, #f8c313 50%, rgba(248, 195, 19, 0.35) 80%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(245, 192, 19, 0.35) 20%, #f5c013 50%, rgba(245, 192, 19, 0.35) 80%, transparent 100%);
   pointer-events: none;
 }
 
@@ -521,7 +521,7 @@ body:not(.page-home) .site-main {
   left: 0;
   width: min(50%, 28rem);
   height: 16rem;
-  background: radial-gradient(ellipse 100% 100% at 0% 0%, rgba(248, 195, 19, 0.06) 0%, transparent 70%);
+  background: radial-gradient(ellipse 100% 100% at 0% 0%, rgba(245, 192, 19, 0.06) 0%, transparent 70%);
   pointer-events: none;
 }
 

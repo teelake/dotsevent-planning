@@ -4,7 +4,7 @@
   min-height: 100vh;
   background: #e8e4dc;
   background-image:
-    radial-gradient(ellipse 70% 50% at 0% 0%, rgba(248, 195, 19, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse 70% 50% at 0% 0%, rgba(245, 192, 19, 0.08) 0%, transparent 50%),
     linear-gradient(180deg, #f2efe8 0%, #e8e4dc 40%, #ddd8cf 100%);
 }
 
@@ -266,7 +266,7 @@
   color: #c9c3ba;
   display: flex;
   flex-direction: column;
-  border-right: 1px solid rgba(248, 195, 19, 0.12);
+  border-right: 1px solid rgba(245, 192, 19, 0.12);
   position: relative;
   z-index: 40;
   transition: transform 0.28s var(--ease-out);
@@ -279,7 +279,7 @@
   right: 0;
   width: 1px;
   height: 100%;
-  background: linear-gradient(180deg, rgba(248, 195, 19, 0.2), transparent 40%, rgba(248, 195, 19, 0.08));
+  background: linear-gradient(180deg, rgba(245, 192, 19, 0.2), transparent 40%, rgba(245, 192, 19, 0.08));
   pointer-events: none;
 }
 
@@ -315,10 +315,10 @@
 }
 
 .admin-sidebar__link.is-active {
-  background: rgba(248, 195, 19, 0.14);
+  background: rgba(245, 192, 19, 0.14);
   color: #ffeeb8;
   font-weight: 600;
-  box-shadow: 0 0 0 1px rgba(248, 195, 19, 0.2);
+  box-shadow: 0 0 0 1px rgba(245, 192, 19, 0.2);
 }
 
 .admin-sidebar__icon {
@@ -424,8 +424,8 @@
 .admin-user-menu__btn:hover,
 .admin-user-menu__btn[aria-expanded="true"] {
   background: #fff;
-  border-color: rgba(248, 195, 19, 0.45);
-  box-shadow: 0 0 0 1px rgba(248, 195, 19, 0.15);
+  border-color: rgba(245, 192, 19, 0.45);
+  box-shadow: 0 0 0 1px rgba(245, 192, 19, 0.15);
 }
 
 .admin-user-menu__btn:focus-visible {
@@ -470,7 +470,7 @@
 }
 
 .admin-user-menu__action:hover {
-  background: rgba(248, 195, 19, 0.1);
+  background: rgba(245, 192, 19, 0.1);
   color: var(--color-ink);
 }
 
@@ -1134,7 +1134,7 @@ body.admin-sidebar-open .admin-backdrop {
   object-fit: contain;
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.06);
-  box-shadow: 0 1px 0 rgba(248, 195, 19, 0.12);
+  box-shadow: 0 1px 0 rgba(245, 192, 19, 0.12);
   flex-shrink: 0;
 }
 

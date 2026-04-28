@@ -146,7 +146,7 @@
   height: 2px;
   border-radius: 1px;
   background: linear-gradient(90deg, var(--color-brand-gold) 0%, rgba(255, 240, 180, 0.5) 100%);
-  box-shadow: 0 0 16px rgba(248, 195, 19, 0.55);
+  box-shadow: 0 0 16px rgba(245, 192, 19, 0.55);
 }
 
 .hero__title {
@@ -160,7 +160,7 @@
   color: #fffdf8;
   text-shadow:
     0 2px 40px rgba(0, 0, 0, 0.45),
-    0 0 60px rgba(248, 195, 19, 0.12);
+    0 0 60px rgba(245, 192, 19, 0.12);
 }
 
 .hero__subtitle {
@@ -425,7 +425,7 @@
   color: var(--color-ink-soft);
   font-size: 0.9rem;
   box-shadow: 0 10px 32px rgba(1, 1, 1, 0.05);
-  border-top: 2px solid rgba(248, 195, 19, 0.35);
+  border-top: 2px solid rgba(245, 192, 19, 0.35);
 }
 
 /* Shop */
@@ -479,7 +479,7 @@
 }
 
 .product-card:hover {
-  border-color: rgba(248, 195, 19, 0.35);
+  border-color: rgba(245, 192, 19, 0.35);
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset, 0 24px 64px rgba(1, 1, 1, 0.12);
   transform: translateY(-5px);
 }
@@ -524,7 +524,7 @@
   height: 100%;
   min-height: 200px;
   background:
-    linear-gradient(145deg, rgba(248, 195, 19, 0.06) 0%, transparent 50%),
+    linear-gradient(145deg, rgba(245, 192, 19, 0.06) 0%, transparent 50%),
     linear-gradient(145deg, #e4ddd4, #f7f1e8);
 }
 
@@ -661,7 +661,7 @@
 }
 
 .cart-table tbody tr:hover td {
-  background: rgba(248, 195, 19, 0.04);
+  background: rgba(245, 192, 19, 0.04);
 }
 .inline-form {
   display: flex;
@@ -864,7 +864,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(248, 195, 19, 0.35);
+  color: rgba(245, 192, 19, 0.35);
   font-size: 0.85rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
