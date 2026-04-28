@@ -2,6 +2,7 @@
 declare(strict_types=1);
 /** @var array $app */
 $siteName = $app['name'] ?? 'DOTS Event Planning';
+$footerLogoPath = trim(site_setting('logo_path', 'assets/images/logo-dots.svg'));
 $social = site_social_urls();
 $hasSocial = ($social['facebook'] ?? '') !== '' || ($social['instagram'] ?? '') !== '' || ($social['youtube'] ?? '') !== '';
 $footerEmail = trim(site_setting('email', (string) ($app['email'] ?? 'info@dotseventplanning.com')));
@@ -14,7 +15,10 @@ $mapEmbed = site_map_embed_url();
 <footer class="app-footer">
     <div class="shell shell--wide app-footer__grid">
         <div class="app-footer__brand">
-            <a class="app-footer__logo" href="<?= e(app_url('')) ?>"><?= e($siteName) ?></a>
+            <a class="app-footer__lockup" href="<?= e(app_url('')) ?>">
+                <img class="app-footer__mark" src="<?= e(app_url(ltrim($footerLogoPath, '/'))) ?>" alt="" width="48" height="48">
+                <span class="app-footer__name"><?= e($siteName) ?></span>
+            </a>
             <p class="app-footer__tagline">Event planning in Saint John—straight answers, on-site hustle, and decor that still looks good in your uncle’s phone photos.</p>
             <?php if ($hasSocial): ?>
             <ul class="app-social" aria-label="Social links">

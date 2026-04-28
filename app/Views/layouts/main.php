@@ -65,7 +65,6 @@ $faviconPath = trim(site_setting('favicon_path', ''));
 <body class="<?= e($bodyClass) ?>">
 <a class="skip-link" href="#main">Skip to main content</a>
 <?php include dirname(__DIR__) . '/partials/topbar.php'; ?>
-<?php include dirname(__DIR__) . '/partials/drawer-nav.php'; ?>
 
 <main id="main" class="app-main" tabindex="-1">
     <?php

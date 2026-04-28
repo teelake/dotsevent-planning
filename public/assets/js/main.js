@@ -12,59 +12,6 @@
     return Boolean(el.closest("input, textarea, select, [contenteditable='true']"));
   }
 
-  var drawerToggle = document.querySelector("[data-drawer-toggle]");
-  var drawerRoot = document.querySelector("[data-drawer]");
-  var backdrop = drawerRoot ? drawerRoot.querySelector("[data-drawer-backdrop]") : null;
-  var closeBtn = drawerRoot ? drawerRoot.querySelector("[data-drawer-close]") : null;
-  var drawerPanel = drawerRoot ? drawerRoot.querySelector(".app-drawer__panel") : null;
-
-  function setDrawer(open) {
-    if (!drawerRoot || !drawerToggle) {
-      return;
-    }
-    drawerRoot.classList.toggle("is-open", open);
-    drawerToggle.setAttribute("aria-expanded", open ? "true" : "false");
-    drawerRoot.setAttribute("aria-hidden", open ? "false" : "true");
-    document.body.classList.toggle("is-drawer-open", open);
-    if (open && closeBtn && typeof closeBtn.focus === "function") {
-      window.setTimeout(function () {
-        closeBtn.focus({ preventScroll: true });
-      }, 50);
-    } else if (!open) {
-      drawerToggle.focus({ preventScroll: true });
-    }
-  }
-
-  if (drawerRoot && drawerToggle) {
-    drawerToggle.addEventListener("click", function () {
-      var open = !drawerRoot.classList.contains("is-open");
-      setDrawer(open);
-    });
-    if (backdrop) {
-      backdrop.addEventListener("click", function () {
-        setDrawer(false);
-      });
-    }
-    if (closeBtn) {
-      closeBtn.addEventListener("click", function () {
-        setDrawer(false);
-      });
-    }
-    drawerRoot.querySelectorAll("a.app-drawer__link").forEach(function (link) {
-      link.addEventListener("click", function () {
-        setDrawer(false);
-      });
-    });
-    document.addEventListener("keydown", function (e) {
-      if (e.key !== "Escape") {
-        return;
-      }
-      if (document.body.classList.contains("is-drawer-open")) {
-        setDrawer(false);
-      }
-    });
-  }
-
   var toggle = document.querySelector("[data-nav-toggle]");
   var nav = document.querySelector("[data-nav]");
 
