@@ -18,17 +18,11 @@ $navItems = [
     'cart' => ['Cart', app_url('cart')],
 ];
 $cn = (int) cart_count();
-$nameParts = preg_split('/\s+/', $siteName, 2, PREG_SPLIT_NO_EMPTY);
-$brandPrimary = $nameParts[0] ?? $siteName;
-$brandSecondary = $nameParts[1] ?? '';
 ?>
 <header class="app-topbar" data-topbar>
     <div class="app-topbar__inner shell shell--wide">
-        <a class="app-brand" href="<?= e(app_url('')) ?>" aria-label="<?= e($siteName) ?> home">
-            <img class="app-brand__mark" src="<?= e(public_file_url($logoPath)) ?>" alt="" width="40" height="40">
-            <span class="app-brand__text">
-                <?= e($brandPrimary) ?><?php if ($brandSecondary !== ''): ?> <span><?= e($brandSecondary) ?></span><?php endif; ?>
-            </span>
+        <a class="app-brand" href="<?= e(app_url('')) ?>" aria-label="<?= e($siteName) ?> — home">
+            <img class="app-brand__mark" src="<?= e(public_file_url($logoPath)) ?>" alt="<?= e($siteName) ?>" width="40" height="40">
         </a>
 
         <nav class="app-site-nav" aria-label="Primary">
