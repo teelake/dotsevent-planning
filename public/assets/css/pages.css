@@ -99,13 +99,13 @@
 
 @media (min-width: 641px) {
   .hero--slider .hero__slide--align-left .hero__content {
-    max-width: min(34rem, 48vw);
+    max-width: min(44rem, 58vw);
     margin-left: clamp(var(--space-lg), 5vw, 3.5rem);
     margin-right: auto;
   }
 
   .hero--slider .hero__slide--align-right .hero__content {
-    max-width: min(34rem, 48vw);
+    max-width: min(44rem, 58vw);
     margin-left: auto;
     margin-right: clamp(var(--space-lg), 5vw, 3.5rem);
     text-align: right;
@@ -153,10 +153,10 @@
   font-family: var(--font-display);
   font-size: clamp(2.35rem, 4.8vw, 3.5rem);
   font-weight: 600;
-  line-height: 1.02;
+  line-height: 1.05;
   letter-spacing: -0.03em;
   margin: 0 0 1.1rem;
-  max-width: 18ch;
+  max-width: min(40ch, 100%);
   color: #fffdf8;
   text-shadow:
     0 2px 40px rgba(0, 0, 0, 0.45),
@@ -166,7 +166,7 @@
 .hero__subtitle {
   font-size: 1.1rem;
   line-height: 1.65;
-  max-width: 40ch;
+  max-width: min(52ch, 100%);
   color: rgba(255, 248, 240, 0.94);
   margin: 0 0 1.5rem;
   font-weight: 500;

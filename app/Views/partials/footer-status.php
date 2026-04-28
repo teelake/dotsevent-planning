@@ -77,6 +77,11 @@ $cartCountFooter = (int) cart_count();
         </div>
     </div>
     <div class="app-footer__legal shell">
-        <p>&copy; <?= (int) date('Y') ?> <?= e($siteName) ?>. All rights reserved.</p>
+        <div class="app-footer__legal-inner">
+            <p class="app-footer__copyright">&copy; <?= (int) date('Y') ?> <?= e($siteName) ?>. All rights reserved.</p>
+            <p class="app-footer__credit">
+                Designed by <a class="app-footer__credit-link" href="https://www.webspace.ng/" rel="noopener noreferrer" target="_blank">Webspace</a>
+            </p>
+        </div>
     </div>
 </footer>
