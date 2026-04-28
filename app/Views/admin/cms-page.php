@@ -18,7 +18,7 @@ if (is_array($dataPreview) && isset($dataPreview['meta_description']) && is_stri
 <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet">
 <section class="section--tight" style="padding-top: 0;">
     <p class="text-muted" style="margin: 0 0 1rem; font-size: 0.9rem;">
-        <a class="text-link" href="<?= e(app_url('admin/cms')) ?>">← CMS</a>
+        <a class="text-link" href="<?= e(app_url('admin/cms/pages')) ?>">← Pages &amp; content</a>
         <span aria-hidden="true"> · </span>
         <span>Slug: <code><?= e($slug) ?></code></span>
     </p>

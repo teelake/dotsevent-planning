@@ -56,6 +56,11 @@ final class AdminController extends Controller
             $this->analytics();
             return;
         }
+        if ($method === 'GET' && $second === 'cms' && ($segs[2] ?? '') === 'pages' && $n === 3) {
+            $this->requireAuth();
+            $this->cmsPagesHub();
+            return;
+        }
         if ($method === 'GET' && $second === 'cms' && $n === 2) {
             $this->requireAuth();
             $this->cmsHome();
@@ -287,15 +292,29 @@ final class AdminController extends Controller
         $this->requireAuth();
         $this->assertDb();
         $settings = (new CmsSettingsRepository())->all();
-        $media = (new CmsMediaRepository())->listRecent(24);
         $this->render('admin/cms', [
-            'title' => 'CMS',
+            'title' => 'Site settings',
             'active_nav' => '',
-            'active_admin_nav' => 'cms',
-            'body_class' => '',
+            'active_admin_nav' => 'cms-overview',
+            'body_class' => 'admin-body--cms',
             'layout' => 'layouts/admin',
             'admin_authed' => true,
             'settings' => $settings,
+        ]);
+    }
+
+    public function cmsPagesHub(): void
+    {
+        $this->requireAuth();
+        $this->assertDb();
+        $media = (new CmsMediaRepository())->listRecent(24);
+        $this->render('admin/cms-pages-hub', [
+            'title' => 'Pages & content',
+            'active_nav' => '',
+            'active_admin_nav' => 'cms-pages',
+            'body_class' => 'admin-body--cms',
+            'layout' => 'layouts/admin',
+            'admin_authed' => true,
             'media' => $media,
         ]);
     }
@@ -456,8 +475,8 @@ final class AdminController extends Controller
         $this->render('admin/cms-page', [
             'title' => 'Edit: ' . $slug,
             'active_nav' => '',
-            'active_admin_nav' => 'cms',
-            'body_class' => '',
+            'active_admin_nav' => 'cms-pages',
+            'body_class' => 'admin-body--cms',
             'layout' => 'layouts/admin',
             'admin_authed' => true,
             'slug' => $slug,
@@ -589,7 +608,7 @@ final class AdminController extends Controller
             'title' => 'Hero carousel',
             'active_nav' => '',
             'active_admin_nav' => 'cms-slides',
-            'body_class' => '',
+            'body_class' => 'admin-body--cms',
             'layout' => 'layouts/admin',
             'admin_authed' => true,
             'slides' => $slides,
@@ -616,7 +635,7 @@ final class AdminController extends Controller
             'title' => $slide === null ? 'New slide' : 'Edit slide',
             'active_nav' => '',
             'active_admin_nav' => 'cms-slides',
-            'body_class' => 'page-admin-slide-form',
+            'body_class' => 'page-admin-slide-form admin-body--cms',
             'layout' => 'layouts/admin',
             'admin_authed' => true,
             'slide' => $slide,

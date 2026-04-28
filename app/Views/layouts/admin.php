@@ -80,14 +80,22 @@ $logoPath = trim(site_setting('logo_path', 'assets/images/logo-dots.svg'));
                 <svg class="admin-sidebar__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-6M22 20V14"/></svg>
                 Analytics
             </a>
-            <a class="admin-sidebar__link<?= $activeAdminNav === 'cms' ? ' is-active' : '' ?>" href="<?= e(app_url('admin/cms')) ?>"<?= $activeAdminNav === 'cms' ? ' aria-current="page"' : '' ?>>
-                <svg class="admin-sidebar__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M7 3h10a2 2 0 0 1 2 2v14l-3-2-3 2-3-2-3 2V5a2 2 0 0 1 2-2z"/><path d="M9 7h6M9 11h6"/></svg>
-                CMS
+
+            <p class="admin-sidebar__section-label">Website</p>
+            <a class="admin-sidebar__link admin-sidebar__link--sub<?= $activeAdminNav === 'cms-overview' ? ' is-active' : '' ?>" href="<?= e(app_url('admin/cms')) ?>"<?= $activeAdminNav === 'cms-overview' ? ' aria-current="page"' : '' ?>>
+                <svg class="admin-sidebar__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M12 3l9 4.5v5c0 5-3.5 9.5-9 11.5C6.5 22 3 17.5 3 12.5V7.5L12 3z"/><path d="M12 12l3 1.8M12 12V8"/></svg>
+                Site settings
             </a>
-            <a class="admin-sidebar__link<?= $activeAdminNav === 'cms-slides' ? ' is-active' : '' ?>" href="<?= e(app_url('admin/cms/slides')) ?>"<?= $activeAdminNav === 'cms-slides' ? ' aria-current="page"' : '' ?>>
+            <a class="admin-sidebar__link admin-sidebar__link--sub<?= $activeAdminNav === 'cms-pages' ? ' is-active' : '' ?>" href="<?= e(app_url('admin/cms/pages')) ?>"<?= $activeAdminNav === 'cms-pages' ? ' aria-current="page"' : '' ?>>
+                <svg class="admin-sidebar__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M7 3h10a2 2 0 0 1 2 2v14l-3-2-3 2-3-2-3 2V5a2 2 0 0 1 2-2z"/><path d="M9 7h6M9 11h6"/></svg>
+                Pages &amp; content
+            </a>
+            <a class="admin-sidebar__link admin-sidebar__link--sub<?= $activeAdminNav === 'cms-slides' ? ' is-active' : '' ?>" href="<?= e(app_url('admin/cms/slides')) ?>"<?= $activeAdminNav === 'cms-slides' ? ' aria-current="page"' : '' ?>>
                 <svg class="admin-sidebar__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h6M7 13h4"/></svg>
                 Hero carousel
             </a>
+
+            <p class="admin-sidebar__section-label">Commerce</p>
             <a class="admin-sidebar__link<?= $activeAdminNav === 'products' ? ' is-active' : '' ?>" href="<?= e(app_url('admin/products')) ?>"<?= $activeAdminNav === 'products' ? ' aria-current="page"' : '' ?>>
                 <svg class="admin-sidebar__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M6 8h12l1 3H5l1-3zM6 8V6a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2"/><path d="M5 11h14v8a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-8z"/></svg>
                 Products
@@ -100,7 +108,7 @@ $logoPath = trim(site_setting('logo_path', 'assets/images/logo-dots.svg'));
                 <svg class="admin-sidebar__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M9 2h6l1 2H8l1-2zM6 6h12l-1.5 9.2A2 2 0 0 1 15.5 17H8.4A2 2 0 0 1 6.9 15.2L4.2 4H2"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>
                 Orders
             </a>
-            <p class="admin-sidebar__section-label" style="margin:1.25rem 0 0.35rem;padding:0 0.75rem;font-size:0.7rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--color-ink-soft);">Account</p>
+            <p class="admin-sidebar__section-label">Account</p>
             <a class="admin-sidebar__link<?= $activeAdminNav === 'profile' ? ' is-active' : '' ?>" href="<?= e(app_url('admin/profile')) ?>"<?= $activeAdminNav === 'profile' ? ' aria-current="page"' : '' ?>>
                 <svg class="admin-sidebar__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-4 6.5-5 8-5s6.5 1 8 5"/></svg>
                 Profile
@@ -131,6 +139,19 @@ $logoPath = trim(site_setting('logo_path', 'assets/images/logo-dots.svg'));
                 </div>
             </div>
         </header>
+        <?php
+        $__cmsNav = isset($activeAdminNav) ? (string) $activeAdminNav : '';
+        $__showCmsStrip = $__cmsNav === 'cms-overview' || $__cmsNav === 'cms-pages' || $__cmsNav === 'cms-slides';
+        ?>
+        <?php if ($__showCmsStrip): ?>
+        <nav class="admin-cms-subnav" aria-label="CMS sections">
+            <div class="admin-cms-subnav__inner">
+                <a class="admin-cms-subnav__link<?= $__cmsNav === 'cms-overview' ? ' is-active' : '' ?>" href="<?= e(app_url('admin/cms')) ?>"<?= $__cmsNav === 'cms-overview' ? ' aria-current="page"' : '' ?>>Site settings</a>
+                <a class="admin-cms-subnav__link<?= $__cmsNav === 'cms-pages' ? ' is-active' : '' ?>" href="<?= e(app_url('admin/cms/pages')) ?>"<?= $__cmsNav === 'cms-pages' ? ' aria-current="page"' : '' ?>>Pages &amp; content</a>
+                <a class="admin-cms-subnav__link<?= $__cmsNav === 'cms-slides' ? ' is-active' : '' ?>" href="<?= e(app_url('admin/cms/slides')) ?>"<?= $__cmsNav === 'cms-slides' ? ' aria-current="page"' : '' ?>>Hero carousel</a>
+            </div>
+        </nav>
+        <?php endif; ?>
         <main id="admin-main" class="admin-content" tabindex="-1">
         <?php
         $flashErr = \App\Core\Flash::get(\App\Core\Flash::ERROR);

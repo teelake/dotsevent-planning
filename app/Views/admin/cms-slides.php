@@ -88,5 +88,5 @@ $n = count($slides);
         </div>
     <?php endif; ?>
 
-    <p class="text-muted" style="margin-top: 1.5rem; font-size: 0.88rem;"><a class="text-link" href="<?= e(app_url('admin/cms')) ?>">← Back to CMS</a></p>
+    <p class="text-muted" style="margin-top: 1.5rem; font-size: 0.88rem;"><a class="text-link" href="<?= e(app_url('admin/cms/pages')) ?>">← Pages &amp; content</a> · <a class="text-link" href="<?= e(app_url('admin/cms')) ?>">Site settings</a></p>
 </section>
