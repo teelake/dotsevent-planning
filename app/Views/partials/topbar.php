@@ -9,9 +9,9 @@ $primaryCtaHref = app_url('book');
 $primaryCtaLabel = 'Book';
 $navItems = [
     'home' => ['Home', app_url('')],
-    'about' => ['About us', app_url('about')],
+    'about' => ['About Us', app_url('about')],
     'services' => ['Services', app_url('services')],
-    'kids' => ['Kids party', app_url('kids')],
+    'kids' => ['Kids Party', app_url('kids')],
     'rentals' => ['Rentals', app_url('rentals')],
     'portfolio' => ['Portfolio', app_url('portfolio')],
     'contact' => ['Contact', app_url('contact')],
@@ -20,7 +20,7 @@ $navItems = [
 $cn = (int) cart_count();
 ?>
 <header class="app-topbar" data-topbar>
-    <div class="app-topbar__inner shell shell--wide">
+    <div class="app-topbar__inner shell">
         <a class="app-brand" href="<?= e(app_url('')) ?>" aria-label="<?= e($siteName) ?> — home">
             <img class="app-brand__mark" src="<?= e(public_file_url($logoPath)) ?>" alt="<?= e($siteName) ?>" width="48" height="48">
         </a>
