@@ -92,7 +92,8 @@ $cfg = app_config();
                         </div>
                         <div class="form-row">
                             <label for="cms-favicon">Favicon path override (relative to <code>/public</code>)</label>
-                            <input class="input" id="cms-favicon" name="favicon_path" type="text" placeholder="uploads/favicon.png" value="<?= e(s($settings, 'favicon_path', '')) ?>">
+                            <input class="input" id="cms-favicon" name="favicon_path" type="text" placeholder="assets/image/favicon/brand-favicon-….png" value="<?= e(s($settings, 'favicon_path', '')) ?>">
+                            <span class="text-muted admin-settings-hint">Uploads from here are saved under <code>public/assets/image/favicon/</code>. Or paste from <strong>Recent</strong> uploads.</span>
                         </div>
                     </div>
                 </div>

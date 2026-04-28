@@ -314,7 +314,7 @@ final class AdminController extends Controller
 
             return;
         }
-        $faviconUpload = $this->ingestBrandUpload($_FILES['favicon_upload'] ?? null, 'brand-favicon', 2 * 1024 * 1024, true);
+        $faviconUpload = $this->ingestBrandUpload($_FILES['favicon_upload'] ?? null, 'brand-favicon', 2 * 1024 * 1024, true, 'assets/image/favicon');
         if ($faviconUpload === false) {
             $this->redirect('/admin/cms');
 
@@ -352,7 +352,7 @@ final class AdminController extends Controller
      * Store a brand image under /public/{publicRelativeDir}/. Registers row in cms_media.
      *
      * @param array<string, mixed>|null $file $_FILES[*] slice
-     * @param string $publicRelativeDir path under /public/, e.g. uploads or assets/image/logo
+     * @param string $publicRelativeDir path under /public/, e.g. uploads, assets/image/logo, assets/image/favicon
      * @param string|false|null string = public-relative path, null = skipped, false = error (Flash set)
      */
     private function ingestBrandUpload(?array $file, string $namePrefix, int $maxBytes, bool $allowIco, string $publicRelativeDir = 'uploads'): string|false|null
