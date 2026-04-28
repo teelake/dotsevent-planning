@@ -13,9 +13,9 @@ INSERT IGNORE INTO users (email, password_hash, role) VALUES (
   'admin'
 );
 
--- Map embed URL in DB so it is sourced from cms_settings like other CMS globals (defaults match config/app.php).
-INSERT INTO cms_settings (`key`, `value`) VALUES (
-  'map_embed_url',
-  'https://maps.google.com/maps?q=473+Millidge+Avenue+Suite+E+Saint+John+NB+Canada&hl=en&z=16&output=embed'
-)
+-- Default contact location + map in cms_settings (matches config/app.php; Admin CMS can override).
+INSERT INTO cms_settings (`key`, `value`) VALUES
+  ('map_embed_url', 'https://maps.google.com/maps?q=473+Millidge+Avenue+Suite+E+Saint+John+NB+Canada&hl=en&z=16&output=embed'),
+  ('address_line1', '473 Suite E, Millidge Avenue'),
+  ('address_line2', 'Saint John, NB')
 ON DUPLICATE KEY UPDATE `value` = VALUES(`value`);
