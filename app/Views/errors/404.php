@@ -2,7 +2,6 @@
 declare(strict_types=1);
 ?>
 <div class="app-shell">
-    <?php include dirname(__DIR__) . '/partials/app-rail.php'; ?>
     <div class="app-shell__main">
 <section class="page-pad">
     <div class="shell error-page" data-reveal>

@@ -14,7 +14,6 @@ $crumb_current = $page_title;
 include dirname(__DIR__) . '/partials/page-hero.php';
 ?>
 <div class="app-shell">
-    <?php include dirname(__DIR__) . '/partials/app-rail.php'; ?>
     <div class="app-shell__main">
         <?php if (!empty($cms['has_custom_body'])): ?>
         <div class="shell shell--wide page-pad prose cms-page-body" data-reveal>

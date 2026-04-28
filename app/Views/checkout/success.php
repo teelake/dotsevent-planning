@@ -9,7 +9,6 @@ $crumb_current = 'Order';
 include dirname(__DIR__) . '/partials/page-hero.php';
 ?>
 <div class="app-shell">
-    <?php include dirname(__DIR__) . '/partials/app-rail.php'; ?>
     <div class="app-shell__main">
         <div class="shell shell--wide page-pad checkout-success app-panel checkout-success-panel" data-reveal>
             <?php if ($orderId !== null): ?>

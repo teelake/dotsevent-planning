@@ -106,7 +106,6 @@ $home_intro_html = trim((string) ($home_intro_html ?? ''));
         </section>
 
         <div class="app-shell__below">
-            <?php include dirname(__DIR__) . '/partials/app-rail.php'; ?>
             <div class="app-shell__main">
         <?php if ($home_intro_html !== ''): ?>
         <section class="app-band app-band--surface section--tight" data-reveal>

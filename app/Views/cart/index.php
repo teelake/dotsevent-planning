@@ -11,7 +11,6 @@ $crumb_current = 'Cart';
 include dirname(__DIR__) . '/partials/page-hero.php';
 ?>
 <div class="app-shell">
-    <?php include dirname(__DIR__) . '/partials/app-rail.php'; ?>
     <div class="app-shell__main">
         <div class="shell shell--wide page-pad" data-reveal>
             <?php if ($lines === []): ?>

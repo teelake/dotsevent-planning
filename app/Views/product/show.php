@@ -13,7 +13,6 @@ $crumb_current = $name;
 include dirname(__DIR__) . '/partials/page-hero.php';
 ?>
 <div class="app-shell">
-    <?php include dirname(__DIR__) . '/partials/app-rail.php'; ?>
     <div class="app-shell__main">
         <div class="shell shell--wide page-pad product-layout" data-reveal>
             <div class="product-layout__media">
