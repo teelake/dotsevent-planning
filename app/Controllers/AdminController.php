@@ -308,7 +308,7 @@ final class AdminController extends Controller
         }
         $this->assertDb();
 
-        $logoUpload = $this->ingestBrandUpload($_FILES['logo_upload'] ?? null, 'brand-logo', 5 * 1024 * 1024, false);
+        $logoUpload = $this->ingestBrandUpload($_FILES['logo_upload'] ?? null, 'brand-logo', 5 * 1024 * 1024, false, 'assets/image/logo');
         if ($logoUpload === false) {
             $this->redirect('/admin/cms');
 
@@ -349,12 +349,13 @@ final class AdminController extends Controller
     }
 
     /**
-     * Store a brand image under /public/uploads/. Registers row in cms_media.
+     * Store a brand image under /public/{publicRelativeDir}/. Registers row in cms_media.
      *
      * @param array<string, mixed>|null $file $_FILES[*] slice
-     * @param string|false|null string = public-relative path uploads/..., null = skipped, false = error (Flash set)
+     * @param string $publicRelativeDir path under /public/, e.g. uploads or assets/image/logo
+     * @param string|false|null string = public-relative path, null = skipped, false = error (Flash set)
      */
-    private function ingestBrandUpload(?array $file, string $namePrefix, int $maxBytes, bool $allowIco): string|false|null
+    private function ingestBrandUpload(?array $file, string $namePrefix, int $maxBytes, bool $allowIco, string $publicRelativeDir = 'uploads'): string|false|null
     {
         if ($file === null || ! isset($file['error'])) {
             return null;
@@ -419,7 +420,12 @@ final class AdminController extends Controller
             }
         }
 
-        $uploadDir = dirname(__DIR__, 2) . '/public/uploads';
+        $publicRelativeDir = trim(str_replace('\\', '/', $publicRelativeDir), '/');
+        if ($publicRelativeDir === '' || str_contains($publicRelativeDir, '..')) {
+            $publicRelativeDir = 'uploads';
+        }
+
+        $uploadDir = dirname(__DIR__, 2) . '/public/' . $publicRelativeDir;
         if (! is_dir($uploadDir)) {
             @mkdir($uploadDir, 0775, true);
         }
@@ -430,7 +436,7 @@ final class AdminController extends Controller
 
             return false;
         }
-        $publicPath = 'uploads/' . $name;
+        $publicPath = $publicRelativeDir . '/' . $name;
         (new CmsMediaRepository())->create($publicPath, $mime, $size > 0 ? $size : (int) (@filesize($dest) ?: 0), $orig);
 
         return $publicPath;
