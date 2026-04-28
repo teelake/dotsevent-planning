@@ -284,26 +284,8 @@
 }
 
 .admin-sidebar__brand {
-  padding: 1.15rem 1.1rem 1rem;
+  padding: 1rem 0.95rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.admin-sidebar__brand-name {
-  font-family: var(--font-display);
-  font-size: 1.15rem;
-  font-weight: 600;
-  color: #faf6ef;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-  margin: 0;
-}
-
-.admin-sidebar__brand-sub {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: #8a847b;
-  margin: 0.2rem 0 0;
 }
 
 .admin-sidebar__nav {
@@ -1119,4 +1101,135 @@ body.admin-sidebar-open .admin-backdrop {
   display: flex;
   flex-wrap: wrap;
   gap: 0.6rem;
+}
+
+/* —— Ops Console alignment (authenticated admin) —— */
+.page-admin.page-admin--authed {
+  background: #f7f7f9 !important;
+  background-image:
+    linear-gradient(90deg, rgba(1, 1, 1, 0.035) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(1, 1, 1, 0.035) 1px, transparent 1px) !important;
+  background-size: 72px 72px !important;
+  background-position: -1px -1px !important;
+}
+
+.admin-sidebar__lockup {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  text-decoration: none;
+  padding: 0.15rem 0;
+  border-radius: 12px;
+  transition: background 0.2s ease;
+}
+
+.admin-sidebar__lockup:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.admin-sidebar__logo-img {
+  display: block;
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 1px 0 rgba(248, 195, 19, 0.12);
+  flex-shrink: 0;
+}
+
+.admin-sidebar__lockup-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+  min-width: 0;
+}
+
+.admin-sidebar__brand-name {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #faf6ef;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.admin-sidebar__brand-sub {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #8a847b;
+}
+
+/* CMS — logo / favicon uploads */
+.admin-settings-brand {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1.35rem;
+  padding: 1.1rem 1.15rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.65);
+}
+
+@media (min-width: 720px) {
+  .admin-settings-brand {
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+  }
+}
+
+.admin-settings-brand__caption {
+  margin: 0 0 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink-soft);
+}
+
+.admin-settings-brand__thumb-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 8rem;
+  height: 8rem;
+  border-radius: 14px;
+  border: 1px solid var(--color-line);
+  background: #fff;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(1, 1, 1, 0.05);
+}
+
+.admin-settings-brand__thumb-wrap--small {
+  width: 5rem;
+  height: 5rem;
+}
+
+.admin-settings-brand__thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.admin-settings-brand__thumb--tiny {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.admin-settings-brand__noop {
+  font-size: 0.82rem;
+  color: var(--color-ink-soft);
+  padding: 0.5rem;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.admin-settings-hint {
+  font-size: 0.82rem !important;
+  display: block;
+  margin-top: 0.35rem;
+  line-height: 1.4;
 }

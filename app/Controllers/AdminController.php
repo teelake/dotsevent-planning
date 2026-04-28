@@ -307,6 +307,20 @@ final class AdminController extends Controller
             $this->redirect('/admin/cms');
         }
         $this->assertDb();
+
+        $logoUpload = $this->ingestBrandUpload($_FILES['logo_upload'] ?? null, 'brand-logo', 5 * 1024 * 1024, false);
+        if ($logoUpload === false) {
+            $this->redirect('/admin/cms');
+
+            return;
+        }
+        $faviconUpload = $this->ingestBrandUpload($_FILES['favicon_upload'] ?? null, 'brand-favicon', 2 * 1024 * 1024, true);
+        if ($faviconUpload === false) {
+            $this->redirect('/admin/cms');
+
+            return;
+        }
+
         $pairs = [
             'logo_path' => trim((string) ($_POST['logo_path'] ?? '')),
             'favicon_path' => trim((string) ($_POST['favicon_path'] ?? '')),
@@ -320,10 +334,106 @@ final class AdminController extends Controller
             'address_line1' => trim((string) ($_POST['address_line1'] ?? '')),
             'address_line2' => trim((string) ($_POST['address_line2'] ?? '')),
         ];
+
+        if (is_string($logoUpload)) {
+            $pairs['logo_path'] = $logoUpload;
+        }
+        if (is_string($faviconUpload)) {
+            $pairs['favicon_path'] = $faviconUpload;
+        }
+
         // allow empty = fallback; store empty string explicitly
         (new CmsSettingsRepository())->setMany($pairs);
         Flash::set(Flash::SUCCESS, 'Settings saved.');
         $this->redirect('/admin/cms');
+    }
+
+    /**
+     * Store a brand image under /public/uploads/. Registers row in cms_media.
+     *
+     * @param array<string, mixed>|null $file $_FILES[*] slice
+     * @param string|false|null string = public-relative path uploads/..., null = skipped, false = error (Flash set)
+     */
+    private function ingestBrandUpload(?array $file, string $namePrefix, int $maxBytes, bool $allowIco): string|false|null
+    {
+        if ($file === null || ! isset($file['error'])) {
+            return null;
+        }
+        $err = (int) ($file['error'] ?? UPLOAD_ERR_NO_FILE);
+        if ($err === UPLOAD_ERR_NO_FILE) {
+            return null;
+        }
+        if ($err !== UPLOAD_ERR_OK) {
+            Flash::set(Flash::ERROR, 'File upload failed. Try a smaller image or a different format.');
+
+            return false;
+        }
+        $tmp = (string) ($file['tmp_name'] ?? '');
+        $size = (int) ($file['size'] ?? 0);
+        $orig = (string) ($file['name'] ?? '');
+        if ($tmp === '' || ! is_uploaded_file($tmp)) {
+            Flash::set(Flash::ERROR, 'Invalid upload.');
+
+            return false;
+        }
+        if ($size < 1 || $size > $maxBytes) {
+            Flash::set(Flash::ERROR, 'File is too large (max ' . (int) floor($maxBytes / 1048576) . ' MB).');
+
+            return false;
+        }
+        $fi = new \finfo(FILEINFO_MIME_TYPE);
+        $mime = (string) $fi->file($tmp);
+
+        $extFromName = strtolower((string) (pathinfo($orig, PATHINFO_EXTENSION)));
+
+        /** @var array<string, string> */
+        static $mimeToExt = [
+            'image/jpeg' => 'jpg',
+            'image/png' => 'png',
+            'image/webp' => 'webp',
+            'image/gif' => 'gif',
+        ];
+        $ext = $mimeToExt[$mime] ?? '';
+        if ($ext === '') {
+            if (! $allowIco) {
+                Flash::set(Flash::ERROR, 'Unsupported file type for logo. Use PNG, JPG, WEBP, or GIF.');
+
+                return false;
+            }
+            $peek = @file_get_contents($tmp, false, null, 0, 8) ?: '';
+            $icoMagic = strlen($peek) >= 4 && substr($peek, 0, 4) === "\x00\x00\x01\x00";
+            $icoMimeOk = ($mime === 'image/x-icon' || $mime === 'image/vnd.microsoft.icon');
+            $icoNameOk = ($extFromName === 'ico');
+            $octetStreams = ($mime === 'application/octet-stream' || $mime === 'application/x-msdownload');
+            if ($icoMimeOk || ($icoMagic && ($icoNameOk || $octetStreams))) {
+                $mime = 'image/x-icon';
+                $ext = 'ico';
+            } elseif ($mime === 'image/svg+xml') {
+                Flash::set(Flash::ERROR, 'SVG uploads are disabled for safety. Use PNG or ICO for favicon.');
+
+                return false;
+            } else {
+                Flash::set(Flash::ERROR, 'Unsupported favicon type. Use PNG, JPG, WEBP, GIF, or ICO.');
+
+                return false;
+            }
+        }
+
+        $uploadDir = dirname(__DIR__, 2) . '/public/uploads';
+        if (! is_dir($uploadDir)) {
+            @mkdir($uploadDir, 0775, true);
+        }
+        $name = $namePrefix . '-' . date('Ymd-His') . '-' . bin2hex(random_bytes(3)) . '.' . $ext;
+        $dest = $uploadDir . '/' . $name;
+        if (! move_uploaded_file($tmp, $dest)) {
+            Flash::set(Flash::ERROR, 'Could not save uploaded file.');
+
+            return false;
+        }
+        $publicPath = 'uploads/' . $name;
+        (new CmsMediaRepository())->create($publicPath, $mime, $size > 0 ? $size : (int) (@filesize($dest) ?: 0), $orig);
+
+        return $publicPath;
     }
 
     private function cmsPageForm(string $slug): void

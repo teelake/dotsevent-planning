@@ -44,16 +44,57 @@ $cfg = app_config();
             <h2 class="card__title" style="margin:0 0 0.75rem;">Global settings</h2>
             <p class="card__text" style="margin:0 0 1rem;">These override <code>config/app.php</code> when the database is connected.</p>
 
-            <form class="admin-form" method="post" action="<?= e(app_url('admin/cms/settings')) ?>" style="max-width:none;">
+            <form class="admin-form" method="post" action="<?= e(app_url('admin/cms/settings')) ?>" enctype="multipart/form-data" style="max-width:none;">
                 <?= csrf_field() ?>
-                <div class="form-row">
-                    <label for="cms-logo">Logo path (under <code>/public</code>)</label>
-                    <input class="input" id="cms-logo" name="logo_path" type="text" placeholder="assets/images/logo-dots.svg" value="<?= e(s($settings, 'logo_path', 'assets/images/logo-dots.svg')) ?>">
-                    <span class="text-muted" style="font-size:0.85rem;">Example: <code>uploads/your-logo.png</code> or <code>assets/images/logo-dots.svg</code></span>
+
+                <div class="admin-settings-brand">
+                    <div class="admin-settings-brand__preview">
+                        <p class="admin-settings-brand__caption">Logo preview</p>
+                        <div class="admin-settings-brand__thumb-wrap">
+                            <img class="admin-settings-brand__thumb"
+                                 src="<?= e(app_url(ltrim(s($settings, 'logo_path', 'assets/images/logo-dots.svg'), '/'))) ?>"
+                                 alt=""
+                                 width="120"
+                                 height="120">
+                        </div>
+                    </div>
+                    <div class="admin-settings-brand__fields">
+                        <div class="form-row">
+                            <label for="cms-logo-upload">Upload logo image</label>
+                            <input class="input" id="cms-logo-upload" name="logo_upload" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
+                            <span class="text-muted admin-settings-hint">PNG or SVG-ready PNG recommended. SVG upload not supported · max 5 MB.</span>
+                        </div>
+                        <div class="form-row">
+                            <label for="cms-logo">Logo path override (relative to <code>/public</code>)</label>
+                            <input class="input" id="cms-logo" name="logo_path" type="text" placeholder="assets/images/logo-dots.svg" value="<?= e(s($settings, 'logo_path', 'assets/images/logo-dots.svg')) ?>">
+                            <span class="text-muted admin-settings-hint">Used when no upload is sent, or paste a path from <strong>Recent</strong> uploads below.</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-row">
-                    <label for="cms-favicon">Favicon path (under <code>/public</code>)</label>
-                    <input class="input" id="cms-favicon" name="favicon_path" type="text" placeholder="uploads/favicon.png" value="<?= e(s($settings, 'favicon_path', '')) ?>">
+
+                <div class="admin-settings-brand">
+                    <div class="admin-settings-brand__preview">
+                        <p class="admin-settings-brand__caption">Favicon preview</p>
+                        <div class="admin-settings-brand__thumb-wrap admin-settings-brand__thumb-wrap--small">
+                            <?php $fv = trim(s($settings, 'favicon_path', '')); ?>
+                            <?php if ($fv !== ''): ?>
+                            <img class="admin-settings-brand__thumb admin-settings-brand__thumb--tiny" src="<?= e(app_url(ltrim($fv, '/'))) ?>" alt="" width="48" height="48">
+                            <?php else: ?>
+                            <span class="admin-settings-brand__noop">Default browser icon until you upload one.</span>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <div class="admin-settings-brand__fields">
+                        <div class="form-row">
+                            <label for="cms-favicon-upload">Upload favicon</label>
+                            <input class="input" id="cms-favicon-upload" name="favicon_upload" type="file" accept="image/jpeg,image/png,image/webp,image/gif,.ico">
+                            <span class="text-muted admin-settings-hint">ICO, PNG, or JPG · max 2 MB.</span>
+                        </div>
+                        <div class="form-row">
+                            <label for="cms-favicon">Favicon path override (relative to <code>/public</code>)</label>
+                            <input class="input" id="cms-favicon" name="favicon_path" type="text" placeholder="uploads/favicon.png" value="<?= e(s($settings, 'favicon_path', '')) ?>">
+                        </div>
+                    </div>
                 </div>
                 <div class="form-row">
                     <label for="cms-map">Google maps embed URL</label>

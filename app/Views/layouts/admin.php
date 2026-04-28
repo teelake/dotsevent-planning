@@ -14,12 +14,19 @@ $logoPath = trim(site_setting('logo_path', 'assets/images/logo-dots.svg'));
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <?php
+    $faviconPathAdmin = trim(site_setting('favicon_path', ''));
+    ?>
+    <?php if ($faviconPathAdmin !== ''): ?>
+    <link rel="icon" href="<?= e(app_url(ltrim($faviconPathAdmin, '/'))) ?>">
+    <?php endif; ?>
     <title><?= $pageTitle ?></title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= e(asset('css/base.css')) ?>">
     <link rel="stylesheet" href="<?= e(asset('css/components.css')) ?>">
+    <link rel="stylesheet" href="<?= e(asset('css/app-shell.css')) ?>">
     <link rel="stylesheet" href="<?= e(asset('css/admin.css')) ?>">
 </head>
 <body class="page-admin<?= $adminAuthed ? ' page-admin--authed' : ' page-admin--login' ?><?= $bodyClass !== '' ? ' ' . e($bodyClass) : '' ?>">
@@ -56,8 +63,13 @@ $logoPath = trim(site_setting('logo_path', 'assets/images/logo-dots.svg'));
 <div class="admin-app">
     <aside class="admin-sidebar" id="admin-sidebar" data-admin-sidebar aria-label="Admin navigation">
         <div class="admin-sidebar__brand">
-            <p class="admin-sidebar__brand-name"><?= e($siteName) ?></p>
-            <p class="admin-sidebar__brand-sub">Control panel</p>
+            <a class="admin-sidebar__lockup" href="<?= e(app_url('admin/dashboard')) ?>">
+                <img class="admin-sidebar__logo-img" src="<?= e(app_url(ltrim($logoPath, '/'))) ?>" alt="" width="36" height="36">
+                <span class="admin-sidebar__lockup-text">
+                    <span class="admin-sidebar__brand-name"><?= e($siteName) ?></span>
+                    <span class="admin-sidebar__brand-sub">Control panel</span>
+                </span>
+            </a>
         </div>
         <nav class="admin-sidebar__nav" aria-label="Main">
             <a class="admin-sidebar__link<?= $activeAdminNav === 'dashboard' ? ' is-active' : '' ?>" href="<?= e(app_url('admin/dashboard')) ?>"<?= $activeAdminNav === 'dashboard' ? ' aria-current="page"' : '' ?>>
