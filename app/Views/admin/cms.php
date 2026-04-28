@@ -66,8 +66,8 @@ $cfg = app_config();
                         </div>
                         <div class="form-row">
                             <label for="cms-logo">Logo path override (relative to <code>/public</code>)</label>
-                            <input class="input" id="cms-logo" name="logo_path" type="text" placeholder="assets/image/logo/brand-logo-….jpg" value="<?= e(s($settings, 'logo_path', 'assets/images/logo-dots.svg')) ?>">
-                            <span class="text-muted admin-settings-hint">Uploads from here are saved under <code>public/assets/image/logo/</code>. Or paste a path from <strong>Recent</strong> uploads below.</span>
+                            <input class="input" id="cms-logo" name="logo_path" type="text" placeholder="assets/images/logo/brand-logo-….jpg" value="<?= e(s($settings, 'logo_path', 'assets/images/logo-dots.svg')) ?>">
+                            <span class="text-muted admin-settings-hint">Uploads from here are saved under <code>public/assets/images/logo/</code>. Or paste a path from <strong>Recent</strong> uploads below.</span>
                         </div>
                     </div>
                 </div>
@@ -92,8 +92,8 @@ $cfg = app_config();
                         </div>
                         <div class="form-row">
                             <label for="cms-favicon">Favicon path override (relative to <code>/public</code>)</label>
-                            <input class="input" id="cms-favicon" name="favicon_path" type="text" placeholder="assets/image/favicon/brand-favicon-….png" value="<?= e(s($settings, 'favicon_path', '')) ?>">
-                            <span class="text-muted admin-settings-hint">Uploads from here are saved under <code>public/assets/image/favicon/</code>. Or paste from <strong>Recent</strong> uploads.</span>
+                            <input class="input" id="cms-favicon" name="favicon_path" type="text" placeholder="assets/images/favicon/brand-favicon-….png" value="<?= e(s($settings, 'favicon_path', '')) ?>">
+                            <span class="text-muted admin-settings-hint">Uploads from here are saved under <code>public/assets/images/favicon/</code>. Or paste from <strong>Recent</strong> uploads.</span>
                         </div>
                     </div>
                 </div>
