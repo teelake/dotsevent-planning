@@ -20,13 +20,13 @@ return [
     'phone_display' => '+1 (506) 555-0100',
     // Digits only for tel: link (E.164 without spaces)
     'phone_tel' => '+15065550100',
-    'address_line1' => '181 McNamara Drive',
-    'address_line2' => 'Saint John, NB E2J 3L2',
+    'address_line1' => '473 Suite E, Millidge Avenue',
+    'address_line2' => 'Saint John, NB',
     'address_country' => 'CA',
     /**
-     * Google Maps embed (no API key). Replace with your own “Share → Embed map” URL in production if needed.
+     * Google Maps embed (no API key). Use Maps “Share → Embed a map”; override in Admin → CMS → Global settings.
      */
-    'map_embed_url' => 'https://maps.google.com/maps?q=181+McNamara+Drive%2C+Saint+John%2C+New+Brunswick%2C+Canada&hl=en&z=15&output=embed',
+    'map_embed_url' => 'https://maps.google.com/maps?q=473+Millidge+Avenue+Suite+E+Saint+John+NB+Canada&hl=en&z=16&output=embed',
 
     /**
      * Social profile URLs — leave empty to hide that icon in the footer.

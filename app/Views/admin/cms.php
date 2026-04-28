@@ -98,8 +98,20 @@ $cfg = app_config();
                     </div>
                 </div>
                 <div class="form-row">
-                    <label for="cms-map">Google maps embed URL</label>
+                    <p class="text-muted" style="margin:0 0 0.5rem; font-size:0.82rem;"><strong>Contact &amp; location</strong> — shown in the footer, contact page sidebar, and used for maps when no override is pasted below.</p>
+                    <label>Contact</label>
+                    <div class="placeholder-grid" style="grid-template-columns:1fr; gap:0.75rem; margin:0;">
+                        <input class="input" name="email" type="email" placeholder="Email" value="<?= e(s($settings, 'email', (string) ($cfg['email'] ?? ''))) ?>">
+                        <input class="input" name="phone_display" type="text" placeholder="Phone (display)" value="<?= e(s($settings, 'phone_display', (string) ($cfg['phone_display'] ?? ''))) ?>">
+                        <input class="input" name="phone_tel" type="text" placeholder="Phone for tel: link (e.g. +15065550100)" value="<?= e(s($settings, 'phone_tel', (string) ($cfg['phone_tel'] ?? ''))) ?>">
+                        <input class="input" name="address_line1" id="cms-address-line1" type="text" placeholder="Address line 1 (e.g. street & suite)" value="<?= e(s($settings, 'address_line1', (string) ($cfg['address_line1'] ?? ''))) ?>">
+                        <input class="input" name="address_line2" id="cms-address-line2" type="text" placeholder="Address line 2 (city, province, postal)" value="<?= e(s($settings, 'address_line2', (string) ($cfg['address_line2'] ?? ''))) ?>">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <label for="cms-map">Google Maps embed URL</label>
                     <input class="input" id="cms-map" name="map_embed_url" type="text" value="<?= e(s($settings, 'map_embed_url', (string) ($cfg['map_embed_url'] ?? ''))) ?>">
+                    <span class="text-muted admin-settings-hint">Google Maps → Share → Embed a map → paste the iframe <code>src</code>. Shown on Contact and footer. If the saved value here is blank, we fall back to <code>map_embed_url</code> in config.</span>
                 </div>
 
                 <div class="form-row">
@@ -108,17 +120,6 @@ $cfg = app_config();
                         <input class="input" name="social_facebook" type="url" placeholder="Facebook URL" value="<?= e(s($settings, 'social_facebook', (string) ($cfg['social_facebook'] ?? ''))) ?>">
                         <input class="input" name="social_instagram" type="url" placeholder="Instagram URL" value="<?= e(s($settings, 'social_instagram', (string) ($cfg['social_instagram'] ?? ''))) ?>">
                         <input class="input" name="social_youtube" type="url" placeholder="YouTube URL" value="<?= e(s($settings, 'social_youtube', (string) ($cfg['social_youtube'] ?? ''))) ?>">
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <label>Contact</label>
-                    <div class="placeholder-grid" style="grid-template-columns:1fr; gap:0.75rem; margin:0;">
-                        <input class="input" name="email" type="email" placeholder="Email" value="<?= e(s($settings, 'email', (string) ($cfg['email'] ?? ''))) ?>">
-                        <input class="input" name="phone_display" type="text" placeholder="Phone (display)" value="<?= e(s($settings, 'phone_display', (string) ($cfg['phone_display'] ?? ''))) ?>">
-                        <input class="input" name="phone_tel" type="text" placeholder="Phone (tel:)" value="<?= e(s($settings, 'phone_tel', (string) ($cfg['phone_tel'] ?? ''))) ?>">
-                        <input class="input" name="address_line1" type="text" placeholder="Address line 1" value="<?= e(s($settings, 'address_line1', (string) ($cfg['address_line1'] ?? ''))) ?>">
-                        <input class="input" name="address_line2" type="text" placeholder="Address line 2" value="<?= e(s($settings, 'address_line2', (string) ($cfg['address_line2'] ?? ''))) ?>">
                     </div>
                 </div>
 

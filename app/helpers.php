@@ -116,6 +116,16 @@ function site_setting(string $key, string $fallback = ''): string
 function site_map_embed_url(): string
 {
     $u = trim(site_setting('map_embed_url', ''));
+    $fallback = '';
+    try {
+        $cfg = app_config();
+        $fallback = trim((string) ($cfg['map_embed_url'] ?? ''));
+    } catch (\Throwable) {
+        /* ignore */
+    }
+    if ($u === '' && $fallback !== '') {
+        $u = $fallback;
+    }
     return $u !== '' ? $u : 'https://maps.google.com/maps?q=Saint+John%2C+New+Brunswick%2C+Canada&z=12&output=embed';
 }
 
