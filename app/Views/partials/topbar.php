@@ -22,7 +22,7 @@ $cn = (int) cart_count();
 <header class="app-topbar" data-topbar>
     <div class="app-topbar__inner shell shell--wide">
         <a class="app-brand" href="<?= e(app_url('')) ?>" aria-label="<?= e($siteName) ?> — home">
-            <img class="app-brand__mark" src="<?= e(public_file_url($logoPath)) ?>" alt="<?= e($siteName) ?>" width="40" height="40">
+            <img class="app-brand__mark" src="<?= e(public_file_url($logoPath)) ?>" alt="<?= e($siteName) ?>" width="48" height="48">
         </a>
 
         <nav class="app-site-nav" aria-label="Primary">
