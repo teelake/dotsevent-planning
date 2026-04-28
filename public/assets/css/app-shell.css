@@ -356,14 +356,42 @@
   border: 1px solid rgba(1, 1, 1, 0.1);
 }
 
+/* Subtle striped panels: related neutrals + one ink row (not arbitrary rainbow) */
+.tile-metric-strip > .tile-metric:nth-child(1) {
+  background: #fffefb;
+}
+
+.tile-metric-strip > .tile-metric:nth-child(2) {
+  background: color-mix(in srgb, var(--color-brand-gold) 9%, #fffefb);
+}
+
+.tile-metric-strip > .tile-metric:nth-child(3) {
+  background: linear-gradient(155deg, #161411 0%, #0c0b0a 100%);
+  border-bottom-color: transparent;
+}
+
 .tile-metric {
   padding: 1rem 1.15rem;
-  background: rgba(255, 255, 255, 0.8);
   border-bottom: 1px solid rgba(1, 1, 1, 0.08);
 }
 
 .tile-metric:last-child {
   border-bottom: 0;
+}
+
+/* Standalone metric card (e.g. About) — not inside .tile-metric-strip */
+.tile-metric--compact {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: var(--radius-panel, 14px);
+  border: 1px solid rgba(1, 1, 1, 0.1);
+}
+
+.tile-metric-strip > .tile-metric:nth-child(3) .tile-metric__value {
+  color: #fff4c8;
+}
+
+.tile-metric-strip > .tile-metric:nth-child(3) .tile-metric__label {
+  color: rgba(245, 232, 200, 0.55);
 }
 
 .tile-metric__value {
@@ -372,6 +400,12 @@
   font-size: clamp(1.85rem, 2.8vw, 2.25rem);
   font-weight: 600;
   color: var(--color-brand-black);
+  font-variant-numeric: tabular-nums;
+}
+
+.tile-metric__num {
+  display: inline-block;
+  min-width: 3.25ch;
 }
 
 .tile-metric__label {
@@ -380,6 +414,12 @@
   letter-spacing: 0.12em;
   font-weight: 700;
   color: rgba(1, 1, 1, 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile-metric__num[data-metric-count] {
+    transition: none;
+  }
 }
 
 .app-band--surface.section--tight {

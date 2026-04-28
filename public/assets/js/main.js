@@ -222,4 +222,75 @@
       markRevealInview();
     }
   }
+
+  /** Home intro metrics: count-up when strip scrolls into view (respects reduced motion). */
+  var metricStrip = document.querySelector("[data-metric-strip]");
+  var metricNodes = metricStrip ? metricStrip.querySelectorAll("[data-metric-count]") : [];
+  function easeOutCubic(t) {
+    return 1 - Math.pow(1 - t, 3);
+  }
+  function setMetricFinal() {
+    metricNodes.forEach(function (el) {
+      var target = parseFloat(el.getAttribute("data-target") || "0", 10);
+      var suf = el.getAttribute("data-suffix") || "";
+      if (!isNaN(target)) {
+        el.textContent = Math.round(target) + suf;
+      }
+    });
+  }
+  if (metricStrip && metricNodes.length) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setMetricFinal();
+    } else if (!("IntersectionObserver" in window)) {
+      setMetricFinal();
+    } else {
+      var metricDone = false;
+      var metricIo = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting || metricDone) {
+              return;
+            }
+            metricDone = true;
+            metricIo.unobserve(metricStrip);
+            var duration = 1100;
+            var startTs = null;
+            var targets = Array.prototype.map.call(metricNodes, function (el) {
+              return parseFloat(el.getAttribute("data-target") || "0", 10);
+            });
+            metricNodes.forEach(function (el) {
+              var suf = el.getAttribute("data-suffix") || "";
+              el.textContent = "0" + suf;
+            });
+            function frame(now) {
+              if (startTs === null) {
+                startTs = now;
+              }
+              var elapsed = now - startTs;
+              var p = Math.min(1, elapsed / duration);
+              var e = easeOutCubic(p);
+              metricNodes.forEach(function (el, i) {
+                var tgt = targets[i];
+                var suf = el.getAttribute("data-suffix") || "";
+                if (isNaN(tgt)) {
+                  return;
+                }
+                var n = Math.round(e * tgt);
+                if (p >= 1) {
+                  n = Math.round(tgt);
+                }
+                el.textContent = n + suf;
+              });
+              if (p < 1) {
+                window.requestAnimationFrame(frame);
+              }
+            }
+            window.requestAnimationFrame(frame);
+          });
+        },
+        { root: null, rootMargin: "0px 0px -12% 0px", threshold: 0.2 }
+      );
+      metricIo.observe(metricStrip);
+    }
+  }
 })();

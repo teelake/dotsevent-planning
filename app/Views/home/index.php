@@ -123,17 +123,17 @@ $home_intro_html = trim((string) ($home_intro_html ?? ''));
                         <p class="section__lead">We sweat the brief, the budget, and the backup plan so you’re not doing it the night before. Honest timelines, clear costs, and a crew that shows up like they mean it.</p>
                         <a class="text-link" href="<?= e(app_url('about')) ?>">How we work</a>
                     </div>
-                    <div class="tile-metric-strip" role="list">
+                    <div class="tile-metric-strip" data-metric-strip role="list">
                         <div class="tile-metric" role="listitem">
-                            <span class="tile-metric__value">300+</span>
+                            <span class="tile-metric__value"><span class="tile-metric__num" data-metric-count data-target="300" data-suffix="+">300+</span></span>
                             <span class="tile-metric__label">Happy clients</span>
                         </div>
                         <div class="tile-metric" role="listitem">
-                            <span class="tile-metric__value">150+</span>
+                            <span class="tile-metric__value"><span class="tile-metric__num" data-metric-count data-target="150" data-suffix="+">150+</span></span>
                             <span class="tile-metric__label">Events delivered</span>
                         </div>
                         <div class="tile-metric" role="listitem">
-                            <span class="tile-metric__value">360°</span>
+                            <span class="tile-metric__value"><span class="tile-metric__num" data-metric-count data-target="360" data-suffix="°">360°</span></span>
                             <span class="tile-metric__label">Photo booth &amp; more</span>
                         </div>
                     </div>
