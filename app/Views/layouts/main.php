@@ -28,8 +28,8 @@ $faviconPath = trim(site_setting('favicon_path', ''));
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#e8e2d9" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#0c0b09" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#010101" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#010101" media="(prefers-color-scheme: dark)">
     <title><?= $pageTitle ?></title>
     <?php if ($faviconPath !== ''): ?>
     <link rel="icon" href="<?= e(app_url(ltrim($faviconPath, '/'))) ?>">
@@ -59,6 +59,7 @@ $faviconPath = trim(site_setting('favicon_path', ''));
     <link rel="stylesheet" href="<?= e(asset('css/components.css')) ?>">
     <link rel="stylesheet" href="<?= e(asset('css/layout.css')) ?>">
     <link rel="stylesheet" href="<?= e(asset('css/pages.css')) ?>">
+    <link rel="stylesheet" href="<?= e(asset('css/app-shell.css')) ?>">
     <?= $extraHeader ?>
 </head>
 <body class="<?= e($bodyClass) ?>">

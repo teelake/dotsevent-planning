@@ -301,6 +301,13 @@ body.is-drawer-open {
     padding: 0;
   }
 
+  .app-shell__below {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+  }
+
   .app-shell--home .app-rail {
     display: flex;
     flex-wrap: nowrap;
@@ -851,10 +858,6 @@ body.is-drawer-open {
   margin-top: 1rem;
 }
 
-.contact-page-layout .contact-page__aside {
-  margin-top: 0;
-}
-
 .shop-toolbar__lead {
   margin: 0;
 }
@@ -921,4 +924,10 @@ body.is-drawer-open {
 .app-panel--rail {
   position: sticky;
   top: calc(var(--app-topbar-h, 64px) + 1rem);
+}
+
+/* Alerts — sit above fixed header + drawer */
+.flash {
+  position: relative;
+  z-index: 230;
 }

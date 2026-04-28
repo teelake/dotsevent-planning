@@ -1,7 +1,6 @@
 /**
- * In Chromium, cross-page navigations use View Transitions when @view-transition
- * { navigation: auto; } is set in CSS (see base.css). Other browsers get the same
- * HTML/CSS; transitions simply instant-load as usual.
+ * View Transitions supported in Chromium when @view-transition { navigation: auto; }
+ * is set in CSS (see base.css).
  */
 (function () {
   "use strict";
@@ -13,12 +12,63 @@
     return Boolean(el.closest("input, textarea, select, [contenteditable='true']"));
   }
 
-  // Mobile nav — toggle, Escape, scroll lock, focus return
-  var header = document.querySelector("[data-header]");
+  var drawerToggle = document.querySelector("[data-drawer-toggle]");
+  var drawerRoot = document.querySelector("[data-drawer]");
+  var backdrop = drawerRoot ? drawerRoot.querySelector("[data-drawer-backdrop]") : null;
+  var closeBtn = drawerRoot ? drawerRoot.querySelector("[data-drawer-close]") : null;
+  var drawerPanel = drawerRoot ? drawerRoot.querySelector(".app-drawer__panel") : null;
+
+  function setDrawer(open) {
+    if (!drawerRoot || !drawerToggle) {
+      return;
+    }
+    drawerRoot.classList.toggle("is-open", open);
+    drawerToggle.setAttribute("aria-expanded", open ? "true" : "false");
+    drawerRoot.setAttribute("aria-hidden", open ? "false" : "true");
+    document.body.classList.toggle("is-drawer-open", open);
+    if (open && closeBtn && typeof closeBtn.focus === "function") {
+      window.setTimeout(function () {
+        closeBtn.focus({ preventScroll: true });
+      }, 50);
+    } else if (!open) {
+      drawerToggle.focus({ preventScroll: true });
+    }
+  }
+
+  if (drawerRoot && drawerToggle) {
+    drawerToggle.addEventListener("click", function () {
+      var open = !drawerRoot.classList.contains("is-open");
+      setDrawer(open);
+    });
+    if (backdrop) {
+      backdrop.addEventListener("click", function () {
+        setDrawer(false);
+      });
+    }
+    if (closeBtn) {
+      closeBtn.addEventListener("click", function () {
+        setDrawer(false);
+      });
+    }
+    drawerRoot.querySelectorAll("a.app-drawer__link").forEach(function (link) {
+      link.addEventListener("click", function () {
+        setDrawer(false);
+      });
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key !== "Escape") {
+        return;
+      }
+      if (document.body.classList.contains("is-drawer-open")) {
+        setDrawer(false);
+      }
+    });
+  }
+
   var toggle = document.querySelector("[data-nav-toggle]");
   var nav = document.querySelector("[data-nav]");
 
-  function setNavOpen(open) {
+  function setLegacyNavOpen(open) {
     if (!nav || !toggle) {
       return;
     }
@@ -27,7 +77,7 @@
     document.body.classList.toggle("is-nav-open", open);
     if (open) {
       var first = nav.querySelector("a[href]");
-      if (first) {
+      if (first && typeof first.focus === "function") {
         first.focus({ preventScroll: true });
       }
     } else {
@@ -38,25 +88,24 @@
   if (toggle && nav) {
     toggle.addEventListener("click", function () {
       var open = !nav.classList.contains("is-open");
-      setNavOpen(open);
+      setLegacyNavOpen(open);
     });
     document.querySelectorAll(".site-nav__link").forEach(function (link) {
       link.addEventListener("click", function () {
         if (window.matchMedia("(max-width: 959px)").matches) {
-          setNavOpen(false);
+          setLegacyNavOpen(false);
         }
       });
     });
     document.addEventListener("keydown", function (e) {
       if (e.key === "Escape" && nav.classList.contains("is-open")) {
-        setNavOpen(false);
+        setLegacyNavOpen(false);
       }
     });
   }
 
-  // Inner pages: header gains depth after scroll (home keeps transparent hero)
   var headerScroll = document.querySelector("[data-header-scroll]");
-  if (headerScroll && !document.body.classList.contains("page-home")) {
+  if (headerScroll && document.body && document.body.classList.contains("page-home") === false) {
     function onHeaderScroll() {
       headerScroll.classList.toggle("site-header--scrolled", window.scrollY > 4);
     }
@@ -64,19 +113,18 @@
     window.addEventListener("scroll", onHeaderScroll, { passive: true });
   }
 
-  // Hero slider (home only)
-  var root = document.querySelector("[data-hero-slider]");
-  if (root) {
-    var slides = root.querySelectorAll("[data-hero-slide]");
-    var prev = root.querySelector("[data-hero-prev]");
-    var next = root.querySelector("[data-hero-next]");
-    var dotContainer = root.querySelector("[data-hero-dots]");
+  var rootHero = document.querySelector("[data-hero-slider]");
+  if (rootHero) {
+    var slides = rootHero.querySelectorAll("[data-hero-slide]");
+    var prev = rootHero.querySelector("[data-hero-prev]");
+    var next = rootHero.querySelector("[data-hero-next]");
+    var dotContainer = rootHero.querySelector("[data-hero-dots]");
     var dots = dotContainer ? dotContainer.querySelectorAll("[data-hero-dot]") : [];
     var live = document.getElementById("hero-aria-live");
     var total = slides.length;
 
     if (total > 0) {
-      var i = 0;
+      var iSlide = 0;
       var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       var autoplayMs = reduceMotion ? 0 : 8000;
       var timer = null;
@@ -85,37 +133,43 @@
         if (!live) {
           return;
         }
-        var el = slides[i];
+        var el = slides[iSlide];
         var label = el.getAttribute("data-hero-label") || "";
-        live.textContent = "Slide " + (i + 1) + " of " + total + ". " + label;
+        live.textContent = "Slide " + (iSlide + 1) + " of " + total + ". " + label;
       }
 
       function go(index) {
-        if (index < 0) index = total - 1;
-        if (index >= total) index = 0;
-        i = index;
+        if (index < 0) {
+          index = total - 1;
+        }
+        if (index >= total) {
+          index = 0;
+        }
+        iSlide = index;
         slides.forEach(function (el, n) {
-          var active = n === i;
+          var active = n === iSlide;
           el.classList.toggle("is-active", active);
           el.setAttribute("aria-hidden", active ? "false" : "true");
         });
         dots.forEach(function (d, n) {
-          d.classList.toggle("is-active", n === i);
-          d.setAttribute("aria-selected", n === i ? "true" : "false");
+          d.classList.toggle("is-active", n === iSlide);
+          d.setAttribute("aria-selected", n === iSlide ? "true" : "false");
         });
         announceSlide();
       }
 
       function nextSlide() {
-        go(i + 1);
+        go(iSlide + 1);
       }
 
       function prevSlide() {
-        go(i - 1);
+        go(iSlide - 1);
       }
 
       function startAutoplay() {
-        if (autoplayMs < 1) return;
+        if (autoplayMs < 1) {
+          return;
+        }
         stopAutoplay();
         timer = window.setInterval(nextSlide, autoplayMs);
       }
@@ -127,8 +181,20 @@
         }
       }
 
-      if (next) next.addEventListener("click", function () { stopAutoplay(); nextSlide(); startAutoplay(); });
-      if (prev) prev.addEventListener("click", function () { stopAutoplay(); prevSlide(); startAutoplay(); });
+      if (next) {
+        next.addEventListener("click", function () {
+          stopAutoplay();
+          nextSlide();
+          startAutoplay();
+        });
+      }
+      if (prev) {
+        prev.addEventListener("click", function () {
+          stopAutoplay();
+          prevSlide();
+          startAutoplay();
+        });
+      }
 
       dots.forEach(function (d) {
         d.addEventListener("click", function () {
@@ -141,11 +207,13 @@
         });
       });
 
-      root.addEventListener("mouseenter", stopAutoplay);
-      root.addEventListener("mouseleave", startAutoplay);
-      root.addEventListener("focusin", stopAutoplay);
-      root.addEventListener("focusout", function (e) {
-        if (!root.contains(e.relatedTarget)) startAutoplay();
+      rootHero.addEventListener("mouseenter", stopAutoplay);
+      rootHero.addEventListener("mouseleave", startAutoplay);
+      rootHero.addEventListener("focusin", stopAutoplay);
+      rootHero.addEventListener("focusout", function (e) {
+        if (!rootHero.contains(e.relatedTarget)) {
+          startAutoplay();
+        }
       });
 
       document.addEventListener("keydown", function (e) {
@@ -170,7 +238,6 @@
     }
   }
 
-  // Dismiss flash banners
   document.querySelectorAll("[data-flash-dismiss]").forEach(function (btn) {
     btn.addEventListener("click", function () {
       var row = btn.closest("[data-flash]");
@@ -180,7 +247,6 @@
     });
   });
 
-  // Scroll-triggered section reveals (respects reduced motion)
   var revealNodes = document.querySelectorAll("[data-reveal]");
   function markRevealInview() {
     revealNodes.forEach(function (el) {
