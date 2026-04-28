@@ -5,14 +5,15 @@
 
 .hero--slider {
   position: relative;
-  min-height: min(100vh, 900px);
+  /* Full-viewport first fold (common for marketing); cap height on very tall displays */
+  min-height: min(100vh, 920px);
   color: #f5f0e8;
   background: #010101;
 }
 
 .hero__viewport {
   position: relative;
-  min-height: min(100vh, 900px);
+  min-height: min(100vh, 920px);
   overflow: hidden;
 }
 
@@ -99,13 +100,14 @@
 
 @media (min-width: 641px) {
   .hero--slider .hero__slide--align-left .hero__content {
-    max-width: min(44rem, 58vw);
+    /* Wider measure so headline/body don’t break as aggressively (was 34rem — too narrow) */
+    max-width: min(52rem, 92vw);
     margin-left: clamp(var(--space-lg), 5vw, 3.5rem);
     margin-right: auto;
   }
 
   .hero--slider .hero__slide--align-right .hero__content {
-    max-width: min(44rem, 58vw);
+    max-width: min(52rem, 92vw);
     margin-left: auto;
     margin-right: clamp(var(--space-lg), 5vw, 3.5rem);
     text-align: right;
@@ -153,10 +155,11 @@
   font-family: var(--font-display);
   font-size: clamp(2.35rem, 4.8vw, 3.5rem);
   font-weight: 600;
-  line-height: 1.05;
+  line-height: 1.06;
   letter-spacing: -0.03em;
   margin: 0 0 1.1rem;
-  max-width: min(40ch, 100%);
+  /* 18ch forced very short lines — use a comfortable display measure instead */
+  max-width: min(48ch, 100%);
   color: #fffdf8;
   text-shadow:
     0 2px 40px rgba(0, 0, 0, 0.45),
@@ -164,9 +167,9 @@
 }
 
 .hero__subtitle {
-  font-size: 1.1rem;
+  font-size: clamp(1.02rem, 1.35vw, 1.15rem);
   line-height: 1.65;
-  max-width: min(52ch, 100%);
+  max-width: min(62ch, 100%);
   color: rgba(255, 248, 240, 0.94);
   margin: 0 0 1.5rem;
   font-weight: 500;
@@ -309,6 +312,14 @@
 }
 
 @media (max-width: 640px) {
+  .hero__title {
+    max-width: min(42ch, 100%);
+  }
+
+  .hero__subtitle {
+    max-width: min(52ch, 100%);
+  }
+
   .hero--slider {
     min-height: 100svh;
   }
