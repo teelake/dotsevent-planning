@@ -20,7 +20,8 @@ final class CmsPublicPage
      *   about_blocks?: array<string, mixed>,
      *   services_blocks?: array<string, mixed>,
      *   contact_blocks?: array<string, mixed>,
-     *   portfolio_blocks?: array<string, mixed>
+     *   portfolio_blocks?: array<string, mixed>,
+     *   rentals_blocks?: array<string, mixed>
      * }
      */
     public static function page(string $slug, string $defaultTitle, string $defaultMeta): array
@@ -90,6 +91,14 @@ final class CmsPublicPage
                 $storedPortfolio = $data['blocks'];
             }
             $out['portfolio_blocks'] = PortfolioPageBlocks::merged($storedPortfolio);
+        }
+
+        if ($slug === 'rentals') {
+            $storedRentals = null;
+            if ($data !== null && isset($data['blocks']) && is_array($data['blocks'])) {
+                $storedRentals = $data['blocks'];
+            }
+            $out['rentals_blocks'] = RentalsPageBlocks::merged($storedRentals);
         }
 
         return $out;

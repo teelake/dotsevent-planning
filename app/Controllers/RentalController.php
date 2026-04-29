@@ -7,20 +7,36 @@ namespace App\Controllers;
 use App\Core\Controller;
 use App\Core\Database;
 use App\Models\ProductRepository;
+use App\Services\CmsPublicPage;
 
 final class RentalController extends Controller
 {
     public function index(): void
     {
-        $repo = new ProductRepository();
+        $repo     = new ProductRepository();
         $products = $repo->allActive();
+
+        $cms = CmsPublicPage::page(
+            'rentals',
+            'Rentals',
+            'Browse decor and event rentals from DOTS in Saint John — chairs, backdrops, linens and finishing pieces. Add to cart and check out online.'
+        );
+
+        $rentals_blocks = $cms['rentals_blocks'] ?? [];
+        $hero           = $rentals_blocks['hero'] ?? [];
+
         $this->render('rentals/index', [
-            'title' => 'Rentals',
-            'active_nav' => 'rentals',
-            'body_class' => 'page-rentals',
-            'products' => $products,
-            'db_ready' => Database::getInstance() !== null,
-            'meta_description' => 'Browse decor and event rentals from DOTS in Saint John—chairs, backdrops, and finishing pieces. Real inventory, add to cart, and check out online.',
+            'title'           => $cms['doc_title']       !== '' ? $cms['doc_title']       : 'Rentals',
+            'active_nav'      => 'rentals',
+            'body_class'      => 'page-rentals',
+            'products'        => $products,
+            'db_ready'        => Database::getInstance() !== null,
+            'rentals_blocks'  => $rentals_blocks,
+            'hero_kicker'     => (string) ($hero['kicker']  ?? 'Event-ready inventory'),
+            'page_title'      => (string) ($hero['title']   ?? 'Rentals'),
+            'crumb_current'   => 'Rentals',
+            'show_breadcrumbs'=> (bool)   ($hero['show_breadcrumbs'] ?? true),
+            'meta_description'=> $cms['meta_description'],
         ]);
     }
 }

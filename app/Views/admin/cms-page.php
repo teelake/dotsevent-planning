@@ -39,6 +39,10 @@ $mergedPortfolioBlocks = null;
 if ($slug === 'portfolio') {
     $mergedPortfolioBlocks = \App\Services\PortfolioPageBlocks::merged($storedBlocks);
 }
+$mergedRentalsBlocks = null;
+if ($slug === 'rentals') {
+    $mergedRentalsBlocks = \App\Services\RentalsPageBlocks::merged($storedBlocks);
+}
 ?>
 <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet">
 <section class="section--tight" style="padding-top: 0;">
@@ -60,6 +64,8 @@ if ($slug === 'portfolio') {
             <p class="text-muted" style="font-size: 0.88rem; margin: 0 0 1rem;">Structured Contact content is saved as <code>content_json.blocks</code>. The live Contact page now reads modular sections from blocks and dynamic values from CMS settings.</p>
         <?php elseif ($slug === 'portfolio'): ?>
             <p class="text-muted" style="font-size: 0.88rem; margin: 0 0 1rem;">Structured Portfolio content is saved as <code>content_json.blocks</code>. Use items for featured/gallery and keep media paths dynamic via CMS media uploads.</p>
+        <?php elseif ($slug === 'rentals'): ?>
+            <p class="text-muted" style="font-size: 0.88rem; margin: 0 0 1rem;">Rentals page layout blocks are saved as <code>content_json.blocks</code>. Individual products are managed via <a class="text-link" href="<?= e(app_url('admin/products')) ?>">Products</a>.</p>
         <?php endif; ?>
 
         <form class="admin-form" method="post" action="<?= e(app_url('admin/cms/page/' . $slug . '/save')) ?>" id="cms-page-form">
@@ -98,6 +104,11 @@ if ($slug === 'portfolio') {
                 <span class="home-blocks-editor__label">Portfolio page sections</span>
                 <?php include __DIR__ . '/partials/portfolio-blocks-editor.php'; ?>
             </div>
+            <?php elseif ($slug === 'rentals' && $mergedRentalsBlocks !== null): ?>
+            <div class="form-row">
+                <span class="home-blocks-editor__label">Rentals page sections</span>
+                <?php include __DIR__ . '/partials/rentals-blocks-editor.php'; ?>
+            </div>
             <?php endif; ?>
             <div class="form-row">
                 <label for="editor">Body</label>
@@ -118,6 +129,8 @@ if ($slug === 'portfolio') {
 <script src="<?= e(asset('js/admin-contact-blocks.js')) ?>"></script>
 <?php elseif ($slug === 'portfolio'): ?>
 <script src="<?= e(asset('js/admin-portfolio-blocks.js')) ?>"></script>
+<?php elseif ($slug === 'rentals'): ?>
+<script src="<?= e(asset('js/admin-rentals-blocks.js')) ?>"></script>
 <?php endif; ?>
 <script>
 (function () {
@@ -186,6 +199,9 @@ if ($slug === 'portfolio') {
   }
   if (pageSlug === 'portfolio' && typeof window.dotsePortfolioBlocksBind === 'function') {
     window.dotsePortfolioBlocksBind();
+  }
+  if (pageSlug === 'rentals' && typeof window.dotseRentalsBlocksBind === 'function') {
+    window.dotseRentalsBlocksBind();
   }
 
   const metaEl = document.getElementById('cms-meta-description');
@@ -422,6 +438,9 @@ if ($slug === 'portfolio') {
     }
     if (pageSlug === 'portfolio' && typeof window.dotsePortfolioBlocksCollect === 'function') {
       payload.blocks = window.dotsePortfolioBlocksCollect();
+    }
+    if (pageSlug === 'rentals' && typeof window.dotseRentalsBlocksCollect === 'function') {
+      payload.blocks = window.dotseRentalsBlocksCollect();
     }
     if (Array.isArray(data.slides)) {
       payload.slides = data.slides;

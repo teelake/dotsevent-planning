@@ -16,6 +16,8 @@ final class ProductRepository
         $this->pdo = Database::getInstance();
     }
 
+    private const CATALOG_COLS = 'id, slug, name, description, price_cents, price_max_cents, currency, image_url, stock, has_options, category_key, badge_label, meta_json';
+
     /** @return list<array<string, mixed>> */
     public function allActive(): array
     {
@@ -23,7 +25,7 @@ final class ProductRepository
             return [];
         }
         $st = $this->pdo->query(
-            'SELECT id, slug, name, description, price_cents, currency, image_url, stock, has_options
+            'SELECT ' . self::CATALOG_COLS . '
              FROM products WHERE is_active = 1 ORDER BY sort_order ASC, name ASC'
         );
         $rows = $st->fetchAll(PDO::FETCH_ASSOC);
@@ -37,12 +39,37 @@ final class ProductRepository
             return null;
         }
         $st = $this->pdo->prepare(
-            'SELECT id, slug, name, description, price_cents, currency, image_url, stock, has_options
+            'SELECT ' . self::CATALOG_COLS . '
              FROM products WHERE id = :id AND is_active = 1 LIMIT 1'
         );
         $st->execute(['id' => $id]);
         $row = $st->fetch(PDO::FETCH_ASSOC);
         return $row !== false ? $row : null;
+    }
+
+    /**
+     * Returns up to $limit active products in the same category, excluding the current product.
+     *
+     * @return list<array<string, mixed>>
+     */
+    public function relatedByCategory(int $currentId, string $categoryKey, int $limit = 4): array
+    {
+        if ($this->pdo === null || $categoryKey === '') {
+            return [];
+        }
+        $st = $this->pdo->prepare(
+            'SELECT ' . self::CATALOG_COLS . '
+             FROM products
+             WHERE is_active = 1 AND category_key = :cat AND id != :id
+             ORDER BY sort_order ASC, name ASC
+             LIMIT :lim'
+        );
+        $st->bindValue('cat', $categoryKey);
+        $st->bindValue('id', $currentId, PDO::PARAM_INT);
+        $st->bindValue('lim', $limit, PDO::PARAM_INT);
+        $st->execute();
+        $rows = $st->fetchAll(PDO::FETCH_ASSOC);
+        return is_array($rows) ? $rows : [];
     }
 
     /**
@@ -54,7 +81,7 @@ final class ProductRepository
             return [];
         }
         $st = $this->pdo->query(
-            'SELECT id, slug, name, description, price_cents, currency, image_url, stock, has_options, is_active, sort_order, created_at
+            'SELECT id, slug, name, description, price_cents, price_max_cents, currency, image_url, stock, has_options, category_key, badge_label, meta_json, is_active, sort_order, created_at
              FROM products ORDER BY sort_order ASC, id ASC'
         );
         if ($st === false) {
@@ -71,7 +98,7 @@ final class ProductRepository
             return null;
         }
         $st = $this->pdo->prepare(
-            'SELECT id, slug, name, description, price_cents, currency, image_url, stock, has_options, is_active, sort_order, created_at
+            'SELECT id, slug, name, description, price_cents, price_max_cents, currency, image_url, stock, has_options, category_key, badge_label, meta_json, is_active, sort_order, created_at
              FROM products WHERE id = :id LIMIT 1'
         );
         $st->execute(['id' => $id]);
