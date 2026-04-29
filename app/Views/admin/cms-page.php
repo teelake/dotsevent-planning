@@ -213,9 +213,9 @@ if ($slug === 'home') {
       pkgs.push(pkg);
     });
 
-    var qs = [];
+    var quoteRows = [];
     hbRoot.querySelectorAll('.js-hb-quote-row').forEach(function (row) {
-      qs.push({
+      quoteRows.push({
         quote: row.querySelector('.js-quote-text') ? row.querySelector('.js-quote-text').value.trim() : '',
         name: row.querySelector('.js-quote-name') ? row.querySelector('.js-quote-name').value.trim() : '',
         role: row.querySelector('.js-quote-role') ? row.querySelector('.js-quote-role').value.trim() : '',
@@ -280,7 +280,7 @@ if ($slug === 'home') {
         enabled: ck('hb-ts-enabled'),
         title: v('hb-ts-title'),
         subtitle: v('hb-ts-subtitle'),
-        quotes: qs,
+        quotes: quoteRows,
       },
       newsletter: {
         enabled: ck('hb-nw-enabled'),
@@ -317,14 +317,38 @@ if ($slug === 'home') {
         hbAppendTemplate('hb-tpl-cluster', 'hb-cluster-rows');
       });
     }
-    var addStep = document.getTileById('hb-add-step'); // BUG - getElementById
-```
+    var addStep = document.getElementById('hb-add-step');
+    if (addStep) {
+      addStep.addEventListener('click', function () {
+        hbAppendTemplate('hb-tpl-step', 'hb-om-steps');
+      });
+    }
+    var addPkg = document.getElementById('hb-add-pkg');
+    if (addPkg) {
+      addPkg.addEventListener('click', function () {
+        hbAppendTemplate('hb-tpl-pkg', 'hb-pk-items');
+      });
+    }
+    var addQuote = document.getElementById('hb-add-quote');
+    if (addQuote) {
+      addQuote.addEventListener('click', function () {
+        hbAppendTemplate('hb-tpl-quote', 'hb-quotes');
+      });
+    }
+  }
 
-Wait I made typo getTileById -> fix in patch
-
-Let me continue the replace - I accidentally cut the script. Need to complete from addStep through end of IIFE.
-
-
-
-Read
+  document.getElementById('cms-page-form').addEventListener('submit', function () {
+    var payload = { html: quill.root.innerHTML };
+    if (metaEl) {
+      payload.meta_description = metaEl.value.trim();
+    }
+    if (pageSlug === 'home' && hbRoot) {
+      payload.blocks = collectHomeBlocks();
+    }
+    if (Array.isArray(data.slides)) {
+      payload.slides = data.slides;
+    }
+    document.getElementById('cms-content-json').value = JSON.stringify(payload);
+  });
+})();
 </script>
