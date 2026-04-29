@@ -35,6 +35,10 @@ $mergedContactBlocks = null;
 if ($slug === 'contact') {
     $mergedContactBlocks = \App\Services\ContactPageBlocks::merged($storedBlocks);
 }
+$mergedPortfolioBlocks = null;
+if ($slug === 'portfolio') {
+    $mergedPortfolioBlocks = \App\Services\PortfolioPageBlocks::merged($storedBlocks);
+}
 ?>
 <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet">
 <section class="section--tight" style="padding-top: 0;">
@@ -54,6 +58,8 @@ if ($slug === 'contact') {
             <p class="text-muted" style="font-size: 0.88rem; margin: 0 0 1rem;">Structured Services content is saved as <code>content_json.blocks</code>. The Body field can hold legacy markup; the live Services page uses the sections below.</p>
         <?php elseif ($slug === 'contact'): ?>
             <p class="text-muted" style="font-size: 0.88rem; margin: 0 0 1rem;">Structured Contact content is saved as <code>content_json.blocks</code>. The live Contact page now reads modular sections from blocks and dynamic values from CMS settings.</p>
+        <?php elseif ($slug === 'portfolio'): ?>
+            <p class="text-muted" style="font-size: 0.88rem; margin: 0 0 1rem;">Structured Portfolio content is saved as <code>content_json.blocks</code>. Use items for featured/gallery and keep media paths dynamic via CMS media uploads.</p>
         <?php endif; ?>
 
         <form class="admin-form" method="post" action="<?= e(app_url('admin/cms/page/' . $slug . '/save')) ?>" id="cms-page-form">
@@ -87,6 +93,11 @@ if ($slug === 'contact') {
                 <span class="home-blocks-editor__label">Contact page sections</span>
                 <?php include __DIR__ . '/partials/contact-blocks-editor.php'; ?>
             </div>
+            <?php elseif ($slug === 'portfolio' && $mergedPortfolioBlocks !== null): ?>
+            <div class="form-row">
+                <span class="home-blocks-editor__label">Portfolio page sections</span>
+                <?php include __DIR__ . '/partials/portfolio-blocks-editor.php'; ?>
+            </div>
             <?php endif; ?>
             <div class="form-row">
                 <label for="editor">Body</label>
@@ -105,6 +116,8 @@ if ($slug === 'contact') {
 <script src="<?= e(asset('js/admin-services-blocks.js')) ?>"></script>
 <?php elseif ($slug === 'contact'): ?>
 <script src="<?= e(asset('js/admin-contact-blocks.js')) ?>"></script>
+<?php elseif ($slug === 'portfolio'): ?>
+<script src="<?= e(asset('js/admin-portfolio-blocks.js')) ?>"></script>
 <?php endif; ?>
 <script>
 (function () {
@@ -170,6 +183,9 @@ if ($slug === 'contact') {
   }
   if (pageSlug === 'contact' && typeof window.dotseContactBlocksBind === 'function') {
     window.dotseContactBlocksBind();
+  }
+  if (pageSlug === 'portfolio' && typeof window.dotsePortfolioBlocksBind === 'function') {
+    window.dotsePortfolioBlocksBind();
   }
 
   const metaEl = document.getElementById('cms-meta-description');
@@ -403,6 +419,9 @@ if ($slug === 'contact') {
     }
     if (pageSlug === 'contact' && typeof window.dotseContactBlocksCollect === 'function') {
       payload.blocks = window.dotseContactBlocksCollect();
+    }
+    if (pageSlug === 'portfolio' && typeof window.dotsePortfolioBlocksCollect === 'function') {
+      payload.blocks = window.dotsePortfolioBlocksCollect();
     }
     if (Array.isArray(data.slides)) {
       payload.slides = data.slides;
