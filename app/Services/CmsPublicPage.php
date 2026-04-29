@@ -14,11 +14,15 @@ final class CmsPublicPage
      *   has_custom_body: bool,
      *   body_html: string,
      *   doc_title: string,
-     *   meta_description: string
+     *   meta_description: string,
+     *   about_blocks?: array<string, mixed>
      * }
      */
     public static function page(string $slug, string $defaultTitle, string $defaultMeta): array
     {
+        $data = null;
+        $row = self::findRow($slug);
+
         $out = [
             'has_custom_body' => false,
             'body_html' => '',
@@ -26,34 +30,37 @@ final class CmsPublicPage
             'meta_description' => $defaultMeta,
         ];
 
-        $row = self::findRow($slug);
-        if ($row === null) {
-            return $out;
-        }
+        if ($row !== null) {
+            $t = trim((string) ($row['title'] ?? ''));
+            if ($t !== '') {
+                $out['doc_title'] = $t;
+            }
 
-        $t = trim((string) ($row['title'] ?? ''));
-        if ($t !== '') {
-            $out['doc_title'] = $t;
-        }
+            $data = self::decodeJson((string) ($row['content_json'] ?? ''));
+            if ($data !== null) {
+                $meta = $data['meta_description'] ?? null;
+                if (is_string($meta)) {
+                    $m = trim($meta);
+                    if ($m !== '') {
+                        $out['meta_description'] = $m;
+                    }
+                }
 
-        $data = self::decodeJson((string) ($row['content_json'] ?? ''));
-        if ($data === null) {
-            return $out;
-        }
-
-        $meta = $data['meta_description'] ?? null;
-        if (is_string($meta)) {
-            $m = trim($meta);
-            if ($m !== '') {
-                $out['meta_description'] = $m;
+                $html = isset($data['html']) && is_string($data['html']) ? $data['html'] : '';
+                $san = CmsHtmlSanitizer::sanitize($html);
+                if ($san !== '') {
+                    $out['has_custom_body'] = true;
+                    $out['body_html'] = $san;
+                }
             }
         }
 
-        $html = isset($data['html']) && is_string($data['html']) ? $data['html'] : '';
-        $san = CmsHtmlSanitizer::sanitize($html);
-        if ($san !== '') {
-            $out['has_custom_body'] = true;
-            $out['body_html'] = $san;
+        if ($slug === 'about') {
+            $storedAbout = null;
+            if ($data !== null && isset($data['blocks']) && is_array($data['blocks'])) {
+                $storedAbout = $data['blocks'];
+            }
+            $out['about_blocks'] = AboutPageBlocks::merged($storedAbout);
         }
 
         return $out;

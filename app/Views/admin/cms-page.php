@@ -23,6 +23,10 @@ $mergedBlocks = null;
 if ($slug === 'home') {
     $mergedBlocks = \App\Services\HomePageBlocks::merged($storedBlocks);
 }
+$mergedAboutBlocks = null;
+if ($slug === 'about') {
+    $mergedAboutBlocks = \App\Services\AboutPageBlocks::merged($storedBlocks);
+}
 ?>
 <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet">
 <section class="section--tight" style="padding-top: 0;">
@@ -36,6 +40,8 @@ if ($slug === 'home') {
         <h2 class="card__title" style="margin: 0 0 1rem;">Edit page</h2>
         <?php if ($slug === 'home'): ?>
             <p class="text-muted" style="font-size: 0.88rem; margin: 0 0 1rem;">Hero slides: <a class="text-link" href="<?= e(app_url('admin/cms/slides')) ?>">Hero carousel</a>. Edit intro HTML, meta description, and the structured homepage sections below. Changes are saved as <code>content_json.blocks</code> together with the rich-text body.</p>
+        <?php elseif ($slug === 'about'): ?>
+            <p class="text-muted" style="font-size: 0.88rem; margin: 0 0 1rem;">Structured About page content is saved under <code>content_json.blocks</code>. The rich-text “Body” field remains available for legacy copy; public About uses the modular sections below.</p>
         <?php endif; ?>
 
         <form class="admin-form" method="post" action="<?= e(app_url('admin/cms/page/' . $slug . '/save')) ?>" id="cms-page-form">
@@ -54,6 +60,11 @@ if ($slug === 'home') {
                 <span class="home-blocks-editor__label">Structured homepage</span>
                 <?php include __DIR__ . '/partials/home-blocks-editor.php'; ?>
             </div>
+            <?php elseif ($slug === 'about' && $mergedAboutBlocks !== null): ?>
+            <div class="form-row">
+                <span class="home-blocks-editor__label">About page sections</span>
+                <?php include __DIR__ . '/partials/about-blocks-editor.php'; ?>
+            </div>
             <?php endif; ?>
             <div class="form-row">
                 <label for="editor">Body</label>
@@ -66,6 +77,9 @@ if ($slug === 'home') {
 </section>
 
 <script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
+<?php if ($slug === 'about'): ?>
+<script src="<?= e(asset('js/admin-about-blocks.js')) ?>"></script>
+<?php endif; ?>
 <script>
 (function () {
   const pageSlug = <?= json_encode($slug, JSON_THROW_ON_ERROR) ?>;
@@ -120,6 +134,10 @@ if ($slug === 'home') {
   const html = typeof data.html === 'string' ? data.html : '';
   if (html) {
     quill.root.innerHTML = html;
+  }
+
+  if (pageSlug === 'about' && typeof window.dotseAboutBlocksBind === 'function') {
+    window.dotseAboutBlocksBind();
   }
 
   const metaEl = document.getElementById('cms-meta-description');
@@ -344,6 +362,9 @@ if ($slug === 'home') {
     }
     if (pageSlug === 'home' && hbRoot) {
       payload.blocks = collectHomeBlocks();
+    }
+    if (pageSlug === 'about' && typeof window.dotseAboutBlocksCollect === 'function') {
+      payload.blocks = window.dotseAboutBlocksCollect();
     }
     if (Array.isArray(data.slides)) {
       payload.slides = data.slides;

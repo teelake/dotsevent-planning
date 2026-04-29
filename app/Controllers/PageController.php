@@ -28,6 +28,7 @@ final class PageController extends Controller
         $this->render('pages/about', [
             'title' => $cms['doc_title'],
             'active_nav' => 'about',
+            'body_class' => 'page-about',
             'meta_description' => $cms['meta_description'],
             'cms' => $cms,
         ]);

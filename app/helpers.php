@@ -278,7 +278,8 @@ function allowed_return(string $url): string
  *   has_custom_body: bool,
  *   body_html: string,
  *   doc_title: string,
- *   meta_description: string
+ *   meta_description: string,
+ *   about_blocks?: array<string, mixed>
  * }
  */
 function cms_public_page(string $slug, string $defaultTitle, string $defaultMeta): array
