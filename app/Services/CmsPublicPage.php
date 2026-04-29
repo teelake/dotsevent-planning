@@ -64,7 +64,8 @@ final class CmsPublicPage
      * @return array{
      *   slides: list<array<string, string>>,
      *   intro_html: string,
-     *   meta_description: string
+     *   meta_description: string,
+     *   home_blocks: array<string, mixed>
      * }
      */
     public static function home(array $defaultSlides, string $defaultMeta): array
@@ -73,6 +74,7 @@ final class CmsPublicPage
             'slides' => $defaultSlides,
             'intro_html' => '',
             'meta_description' => $defaultMeta,
+            'home_blocks' => HomePageBlocks::merged(null),
         ];
 
         $dbSlides = self::slidesFromDatabase();
@@ -113,6 +115,9 @@ final class CmsPublicPage
         if ($san !== '') {
             $out['intro_html'] = $san;
         }
+
+        $blocksRaw = $data['blocks'] ?? null;
+        $out['home_blocks'] = HomePageBlocks::merged(is_array($blocksRaw) ? $blocksRaw : null);
 
         return $out;
     }

@@ -55,6 +55,7 @@ final class HomeController extends Controller
             'body_class' => 'page-home',
             'slides' => $cms['slides'],
             'home_intro_html' => $cms['intro_html'],
+            'home_blocks' => $cms['home_blocks'],
             'meta_description' => $cms['meta_description'],
         ]);
     }

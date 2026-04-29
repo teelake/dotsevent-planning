@@ -293,7 +293,8 @@ function cms_public_page(string $slug, string $defaultTitle, string $defaultMeta
  * @return array{
  *   slides: list<array<string, string>>,
  *   intro_html: string,
- *   meta_description: string
+ *   meta_description: string,
+ *   home_blocks: array<string, mixed>
  * }
  */
 function cms_public_home(array $defaultSlides, string $defaultMeta): array

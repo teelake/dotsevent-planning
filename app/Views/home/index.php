@@ -2,7 +2,25 @@
 declare(strict_types=1);
 /** @var array<int, array<string, string>> $slides */
 $slides = $slides ?? [];
+/** @var array<string, mixed> $home_blocks */
+$home_blocks = isset($home_blocks) && is_array($home_blocks) ? $home_blocks : \App\Services\HomePageBlocks::merged(null);
 $home_intro_html = trim((string) ($home_intro_html ?? ''));
+
+$hEnabled = static function (?array $section): bool {
+    if ($section === null) {
+        return false;
+    }
+
+    return ($section['enabled'] ?? true) !== false;
+};
+
+$confidence = is_array($home_blocks['confidence'] ?? null) ? $home_blocks['confidence'] : [];
+$partnership = is_array($home_blocks['partnership'] ?? null) ? $home_blocks['partnership'] : [];
+$clusters = is_array($home_blocks['clusters'] ?? null) ? $home_blocks['clusters'] : [];
+$operating = is_array($home_blocks['operating_model'] ?? null) ? $home_blocks['operating_model'] : [];
+$packages = is_array($home_blocks['packages'] ?? null) ? $home_blocks['packages'] : [];
+$testimonials = is_array($home_blocks['testimonials'] ?? null) ? $home_blocks['testimonials'] : [];
+$newsletterBk = is_array($home_blocks['newsletter'] ?? null) ? $home_blocks['newsletter'] : [];
 ?>
 <div class="app-shell app-shell--home">
         <section
@@ -113,84 +131,364 @@ $home_intro_html = trim((string) ($home_intro_html ?? ''));
                 <?= $home_intro_html ?>
             </div>
         </section>
-        <?php else: ?>
-        <section class="app-band app-band--surface section--tight" aria-labelledby="home-intro-heading" data-reveal>
+        <?php endif; ?>
+
+        <?php if ($hEnabled($confidence)): ?>
+        <?php
+        $__cm = isset($confidence['metrics']) && is_array($confidence['metrics']) ? $confidence['metrics'] : [];
+        $confEyebrow = trim((string) ($confidence['eyebrow'] ?? ''));
+        $confTitle = trim((string) ($confidence['title'] ?? ''));
+        $confLead = trim((string) ($confidence['lead'] ?? ''));
+        $confCta = trim((string) ($confidence['cta_label'] ?? ''));
+        $confHref = trim((string) ($confidence['cta_href'] ?? ''));
+        ?>
+        <section id="confidence" class="app-band app-band--surface section--tight home-blocks-confidence" aria-labelledby="home-confidence-heading" data-reveal>
             <div class="shell shell--wide">
                 <div class="home-intro-grid">
                     <div class="home-intro-grid__copy">
-                        <p class="eyebrow">Saint John &amp; region</p>
-                        <h2 id="home-intro-heading" class="section__title">Events are loud—planning shouldn’t be</h2>
-                        <p class="section__lead">We sweat the brief, the budget, and the backup plan so you’re not doing it the night before. Honest timelines, clear costs, and a crew that shows up like they mean it.</p>
-                        <a class="text-link" href="<?= e(app_url('about')) ?>">How we work</a>
+                        <?php if ($confEyebrow !== ''): ?>
+                        <p class="eyebrow"><?= e($confEyebrow) ?></p>
+                        <?php endif; ?>
+                        <?php if ($confTitle !== ''): ?>
+                        <h2 id="home-confidence-heading" class="section__title"><?= e($confTitle) ?></h2>
+                        <?php endif; ?>
+                        <?php if ($confLead !== ''): ?>
+                        <p class="section__lead"><?= e($confLead) ?></p>
+                        <?php endif; ?>
+                        <?php if ($confCta !== '' && $confHref !== ''): ?>
+                        <a class="text-link" href="<?= e($confHref) ?>"><?= e($confCta) ?></a>
+                        <?php endif; ?>
                     </div>
-                    <div class="tile-metric-strip" data-metric-strip role="list">
+                    <?php if ($__cm !== []): ?>
+                    <div class="tile-metric-strip home-blocks-confidence__strip" data-metric-strip role="list">
+                        <?php foreach ($__cm as $m): ?>
+                        <?php
+                        if (!is_array($m)) {
+                            continue;
+                        }
+                        $label = trim((string) ($m['label'] ?? ''));
+                        $display = trim((string) ($m['display'] ?? ''));
+                        $target = isset($m['target']) ? (int) $m['target'] : 0;
+                        $suffix = (string) ($m['suffix'] ?? '+');
+                        $animate = $target > 0;
+                        ?>
                         <div class="tile-metric" role="listitem">
-                            <span class="tile-metric__value"><span class="tile-metric__num" data-metric-count data-target="300" data-suffix="+">300+</span></span>
-                            <span class="tile-metric__label">Happy clients</span>
+                            <span class="tile-metric__value">
+                                <?php if ($animate): ?>
+                                <span class="tile-metric__num" data-metric-count data-target="<?= (int) $target ?>" data-suffix="<?= e($suffix) ?>"><?= e($display) ?></span>
+                                <?php else: ?>
+                                <span class="tile-metric__num"><?= e($display !== '' ? $display : '—') ?></span>
+                                <?php endif; ?>
+                            </span>
+                            <?php if ($label !== ''): ?>
+                            <span class="tile-metric__label"><?= e($label) ?></span>
+                            <?php endif; ?>
                         </div>
-                        <div class="tile-metric" role="listitem">
-                            <span class="tile-metric__value"><span class="tile-metric__num" data-metric-count data-target="150" data-suffix="+">150+</span></span>
-                            <span class="tile-metric__label">Events delivered</span>
-                        </div>
-                        <div class="tile-metric" role="listitem">
-                            <span class="tile-metric__value"><span class="tile-metric__num" data-metric-count data-target="360" data-suffix="°">360°</span></span>
-                            <span class="tile-metric__label">Photo booth &amp; more</span>
-                        </div>
+                        <?php endforeach; ?>
                     </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </section>
         <?php endif; ?>
 
-        <section class="app-band section" aria-labelledby="home-services-heading">
-            <div class="shell shell--wide">
-                <div class="section__head" data-reveal>
-                    <p class="eyebrow">Where we help</p>
-                    <h2 id="home-services-heading" class="section__title">A few things we get asked for a lot</h2>
+        <?php if ($hEnabled($partnership)): ?>
+        <?php
+        $pq = trim((string) ($partnership['pull_quote'] ?? ''));
+        $pkt = trim((string) ($partnership['kicker'] ?? ''));
+        $pt = trim((string) ($partnership['title'] ?? ''));
+        $pl = trim((string) ($partnership['lead'] ?? ''));
+        $pCta = trim((string) ($partnership['cta_label'] ?? ''));
+        $pHref = trim((string) ($partnership['cta_href'] ?? ''));
+        ?>
+        <section class="app-band section home-blocks-partnership" aria-labelledby="home-partnership-heading" data-reveal>
+            <div class="shell shell--wide home-blocks-partnership__layout">
+                <div class="home-blocks-partnership__main">
+                    <?php if ($pkt !== ''): ?>
+                    <p class="eyebrow"><?= e($pkt) ?></p>
+                    <?php endif; ?>
+                    <?php if ($pt !== ''): ?>
+                    <h2 id="home-partnership-heading" class="section__title"><?= e($pt) ?></h2>
+                    <?php endif; ?>
+                    <?php if ($pl !== ''): ?>
+                    <p class="section__lead"><?= e($pl) ?></p>
+                    <?php endif; ?>
+                    <?php if ($pCta !== '' && $pHref !== ''): ?>
+                    <p class="section__cta-row" style="margin-top: 1.25rem;">
+                        <a class="btn btn--secondary" href="<?= e($pHref) ?>"><?= e($pCta) ?></a>
+                    </p>
+                    <?php endif; ?>
                 </div>
-                <div class="spec-grid reveal-stagger" data-reveal>
-                    <article class="spec-tile spec-tile--dark">
-                        <span class="spec-tile__glyph" aria-hidden="true">◆</span>
-                        <span class="spec-tile__index" aria-hidden="true">01</span>
-                        <h3 class="spec-tile__title">Corporate &amp; brand</h3>
-                        <p class="spec-tile__text">Launches, staff nights, and client events—tight run-of-show, AV that works, and signage that actually matches the deck.</p>
-                    </article>
-                    <article class="spec-tile">
-                        <span class="spec-tile__index" aria-hidden="true">02</span>
-                        <h3 class="spec-tile__title">Weddings &amp; social</h3>
-                        <p class="spec-tile__text">Mood, flow, and those small touches guests remember. We coordinate vendors so you’re not passing notes on the dance floor.</p>
-                    </article>
-                    <article class="spec-tile">
-                        <span class="spec-tile__index" aria-hidden="true">03</span>
-                        <h3 class="spec-tile__title">Kids parties</h3>
-                        <p class="spec-tile__text">Packages, play, and add-ons for real families (not just Pinterest). Less chaos, more “they actually enjoyed it.”</p>
-                    </article>
-                    <article class="spec-tile spec-tile--accent">
-                        <span class="spec-tile__index" aria-hidden="true">04</span>
-                        <h3 class="spec-tile__title">Rentals</h3>
-                        <p class="spec-tile__text">Chairs, backdrops, and finishing pieces—see what’s in stock and check out when you’re ready.</p>
-                    </article>
-                </div>
-                <p class="section__cta-row">
-                    <a class="btn btn--secondary" href="<?= e(app_url('services')) ?>">View all services</a>
-                </p>
+                <?php if ($pq !== ''): ?>
+                <blockquote class="home-blocks-partnership__quote">
+                    <p><?= e($pq) ?></p>
+                </blockquote>
+                <?php endif; ?>
             </div>
         </section>
+        <?php endif; ?>
 
-        <section class="app-band app-band--newsletter" aria-labelledby="newsletter-heading" data-reveal>
+        <?php if ($hEnabled($clusters)): ?>
+        <?php
+        $cEyebrow = trim((string) ($clusters['eyebrow'] ?? ''));
+        $cTitle = trim((string) ($clusters['title'] ?? ''));
+        $cLink = trim((string) ($clusters['link_all_label'] ?? ''));
+        $cHref = trim((string) ($clusters['link_all_href'] ?? ''));
+        $cItems = isset($clusters['items']) && is_array($clusters['items']) ? $clusters['items'] : [];
+        ?>
+        <section class="app-band app-band--surface section home-blocks-clusters" aria-labelledby="home-clusters-heading" data-reveal>
+            <div class="shell shell--wide">
+                <div class="section__head">
+                    <?php if ($cEyebrow !== ''): ?>
+                    <p class="eyebrow"><?= e($cEyebrow) ?></p>
+                    <?php endif; ?>
+                    <?php if ($cTitle !== ''): ?>
+                    <h2 id="home-clusters-heading" class="section__title"><?= e($cTitle) ?></h2>
+                    <?php endif; ?>
+                </div>
+                <?php if ($cItems !== []): ?>
+                <div class="home-cluster-bento reveal-stagger">
+                    <?php foreach ($cItems as $ci): ?>
+                    <?php
+                    if (!is_array($ci)) {
+                        continue;
+                    }
+                    $ct = trim((string) ($ci['title'] ?? ''));
+                    $ctx = trim((string) ($ci['text'] ?? ''));
+                    $mods = ['home-cluster-card'];
+                    if (!empty($ci['accent'])) {
+                        $mods[] = 'home-cluster-card--accent';
+                    }
+                    if (!empty($ci['muted'])) {
+                        $mods[] = 'home-cluster-card--muted';
+                    }
+                    ?>
+                    <article class="<?= e(implode(' ', $mods)) ?>">
+                        <?php if ($ct !== ''): ?>
+                        <h3 class="home-cluster-card__title"><?= e($ct) ?></h3>
+                        <?php endif; ?>
+                        <?php if ($ctx !== ''): ?>
+                        <p class="home-cluster-card__text"><?= e($ctx) ?></p>
+                        <?php endif; ?>
+                    </article>
+                    <?php endforeach; ?>
+                </div>
+                <?php endif; ?>
+                <?php if ($cLink !== '' && $cHref !== ''): ?>
+                <p class="section__cta-row">
+                    <a class="btn btn--secondary" href="<?= e($cHref) ?>"><?= e($cLink) ?></a>
+                </p>
+                <?php endif; ?>
+            </div>
+        </section>
+        <?php endif; ?>
+
+        <?php if ($hEnabled($operating)): ?>
+        <?php
+        $omTitle = trim((string) ($operating['title'] ?? ''));
+        $omSub = trim((string) ($operating['subtitle'] ?? ''));
+        $steps = isset($operating['steps']) && is_array($operating['steps']) ? $operating['steps'] : [];
+        $hl = is_array($operating['highlight'] ?? null) ? $operating['highlight'] : [];
+        $hlTitle = trim((string) ($hl['title'] ?? ''));
+        $hlBody = trim((string) ($hl['body'] ?? ''));
+        ?>
+        <section class="app-band section home-blocks-ops" aria-labelledby="home-ops-heading" data-reveal>
+            <div class="shell shell--wide">
+                <div class="section__head">
+                    <?php if ($omTitle !== ''): ?>
+                    <h2 id="home-ops-heading" class="section__title"><?= e($omTitle) ?></h2>
+                    <?php endif; ?>
+                    <?php if ($omSub !== ''): ?>
+                    <p class="section__lead" style="margin-top: 0.5rem;"><?= e($omSub) ?></p>
+                    <?php endif; ?>
+                </div>
+                <div class="home-blocks-ops__grid">
+                    <?php if ($steps !== []): ?>
+                    <ol class="home-blocks-ops__steps">
+                        <?php foreach ($steps as $si => $st): ?>
+                        <?php
+                        if (!is_array($st)) {
+                            continue;
+                        }
+                        $stitle = trim((string) ($st['title'] ?? ''));
+                        $stext = trim((string) ($st['text'] ?? ''));
+                        ?>
+                        <li class="home-blocks-ops__step">
+                            <span class="home-blocks-ops__step-index" aria-hidden="true"><?= str_pad((string) ((int) $si + 1), 2, '0', STR_PAD_LEFT) ?></span>
+                            <div>
+                                <?php if ($stitle !== ''): ?>
+                                <h3 class="home-blocks-ops__step-title"><?= e($stitle) ?></h3>
+                                <?php endif; ?>
+                                <?php if ($stext !== ''): ?>
+                                <p class="home-blocks-ops__step-text"><?= e($stext) ?></p>
+                                <?php endif; ?>
+                            </div>
+                        </li>
+                        <?php endforeach; ?>
+                    </ol>
+                    <?php endif; ?>
+                    <?php if ($hlTitle !== '' || $hlBody !== ''): ?>
+                    <aside class="home-blocks-ops__highlight">
+                        <?php if ($hlTitle !== ''): ?>
+                        <h3 class="home-blocks-ops__highlight-title"><?= e($hlTitle) ?></h3>
+                        <?php endif; ?>
+                        <?php if ($hlBody !== ''): ?>
+                        <p class="home-blocks-ops__highlight-body"><?= e($hlBody) ?></p>
+                        <?php endif; ?>
+                    </aside>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </section>
+        <?php endif; ?>
+
+        <?php if ($hEnabled($packages)): ?>
+        <?php
+        $pkgEyebrow = trim((string) ($packages['eyebrow'] ?? ''));
+        $pkgTitle = trim((string) ($packages['title'] ?? ''));
+        $pkgSub = trim((string) ($packages['subtitle'] ?? ''));
+        $pkgItems = isset($packages['items']) && is_array($packages['items']) ? $packages['items'] : [];
+        ?>
+        <section id="investment" class="app-band app-band--surface section home-blocks-packages" aria-labelledby="home-packages-heading" data-reveal>
+            <div class="shell shell--wide">
+                <div class="section__head">
+                    <?php if ($pkgEyebrow !== ''): ?>
+                    <p class="eyebrow"><?= e($pkgEyebrow) ?></p>
+                    <?php endif; ?>
+                    <?php if ($pkgTitle !== ''): ?>
+                    <h2 id="home-packages-heading" class="section__title"><?= e($pkgTitle) ?></h2>
+                    <?php endif; ?>
+                    <?php if ($pkgSub !== ''): ?>
+                    <p class="section__lead" style="margin-top: 0.5rem; max-width: 56ch;"><?= e($pkgSub) ?></p>
+                    <?php endif; ?>
+                </div>
+                <?php if ($pkgItems !== []): ?>
+                <div class="home-packages-grid reveal-stagger">
+                    <?php foreach ($pkgItems as $pkg): ?>
+                    <?php
+                    if (!is_array($pkg)) {
+                        continue;
+                    }
+                    $pname = trim((string) ($pkg['name'] ?? ''));
+                    $pprice = trim((string) ($pkg['price_display'] ?? ''));
+                    $pfeat = isset($pkg['features']) && is_array($pkg['features']) ? $pkg['features'] : [];
+                    $pCta = trim((string) ($pkg['cta_label'] ?? ''));
+                    $pHref = trim((string) ($pkg['cta_href'] ?? ''));
+                    $featured = !empty($pkg['featured']);
+                    ?>
+                    <article class="home-package-card<?= $featured ? ' home-package-card--featured' : '' ?>">
+                        <?php if ($featured): ?>
+                        <p class="home-package-card__ribbon">Featured</p>
+                        <?php endif; ?>
+                        <?php if ($pname !== ''): ?>
+                        <h3 class="home-package-card__name"><?= e($pname) ?></h3>
+                        <?php endif; ?>
+                        <?php if ($pprice !== ''): ?>
+                        <p class="home-package-card__price"><?= e($pprice) ?></p>
+                        <?php endif; ?>
+                        <?php if ($pfeat !== []): ?>
+                        <ul class="home-package-card__features">
+                            <?php foreach ($pfeat as $line): ?>
+                            <?php if (is_string($line) && trim($line) !== ''): ?>
+                            <li><?= e(trim($line)) ?></li>
+                            <?php endif; ?>
+                            <?php endforeach; ?>
+                        </ul>
+                        <?php endif; ?>
+                        <?php if ($pCta !== '' && $pHref !== ''): ?>
+                        <div class="home-package-card__foot">
+                            <a class="<?= $featured ? 'btn btn--primary' : 'btn btn--secondary' ?>" href="<?= e($pHref) ?>"><?= e($pCta) ?></a>
+                        </div>
+                        <?php endif; ?>
+                    </article>
+                    <?php endforeach; ?>
+                </div>
+                <?php endif; ?>
+            </div>
+        </section>
+        <?php endif; ?>
+
+        <?php if ($hEnabled($testimonials)): ?>
+        <?php
+        $tstTitle = trim((string) ($testimonials['title'] ?? ''));
+        $tstSub = trim((string) ($testimonials['subtitle'] ?? ''));
+        $quotes = isset($testimonials['quotes']) && is_array($testimonials['quotes']) ? $testimonials['quotes'] : [];
+        ?>
+        <section class="app-band section home-blocks-testimonials" aria-labelledby="home-testimonials-heading" data-reveal>
+            <div class="shell shell--wide">
+                <div class="section__head">
+                    <?php if ($tstTitle !== ''): ?>
+                    <h2 id="home-testimonials-heading" class="section__title"><?= e($tstTitle) ?></h2>
+                    <?php endif; ?>
+                    <?php if ($tstSub !== ''): ?>
+                    <p class="section__lead" style="margin-top: 0.5rem;"><?= e($tstSub) ?></p>
+                    <?php endif; ?>
+                </div>
+                <?php if ($quotes !== []): ?>
+                <div class="home-testimonials-grid reveal-stagger">
+                    <?php foreach ($quotes as $q): ?>
+                    <?php
+                    if (!is_array($q)) {
+                        continue;
+                    }
+                    $qq = trim((string) ($q['quote'] ?? ''));
+                    $qn = trim((string) ($q['name'] ?? ''));
+                    $qr = trim((string) ($q['role'] ?? ''));
+                    ?>
+                    <figure class="home-testimonial-card">
+                        <?php if ($qq !== ''): ?>
+                        <blockquote class="home-testimonial-card__quote">
+                            <p><?= e($qq) ?></p>
+                        </blockquote>
+                        <?php endif; ?>
+                        <figcaption class="home-testimonial-card__cite">
+                            <?php if ($qn !== ''): ?>
+                            <cite class="home-testimonial-card__name"><?= e($qn) ?></cite>
+                            <?php endif; ?>
+                            <?php if ($qr !== ''): ?>
+                            <span class="home-testimonial-card__role"><?= e($qr) ?></span>
+                            <?php endif; ?>
+                        </figcaption>
+                    </figure>
+                    <?php endforeach; ?>
+                </div>
+                <?php endif; ?>
+            </div>
+        </section>
+        <?php endif; ?>
+
+        <?php if ($hEnabled($newsletterBk)): ?>
+        <?php
+        $nwTitle = trim((string) ($newsletterBk['title'] ?? ''));
+        $nwText = trim((string) ($newsletterBk['text'] ?? ''));
+        $nwBtn = trim((string) ($newsletterBk['button_label'] ?? ''));
+        $nwPh = trim((string) ($newsletterBk['placeholder'] ?? ''));
+        if ($nwBtn === '') {
+            $nwBtn = 'Subscribe';
+        }
+        if ($nwPh === '') {
+            $nwPh = 'Your email';
+        }
+        ?>
+        <section class="app-band app-band--newsletter home-blocks-newsletter" aria-labelledby="home-newsletter-heading" data-reveal>
             <div class="shell shell--wide newsletter-app">
                 <div>
-                    <h2 id="newsletter-heading" class="newsletter__title">Short notes, zero fluff</h2>
-                    <p class="newsletter__text">A few times a year: one useful idea, one photo worth stealing, and where we’re booking next. Unsubscribe any time.</p>
+                    <?php if ($nwTitle !== ''): ?>
+                    <h2 id="home-newsletter-heading" class="newsletter__title"><?= e($nwTitle) ?></h2>
+                    <?php endif; ?>
+                    <?php if ($nwText !== ''): ?>
+                    <p class="newsletter__text"><?= e($nwText) ?></p>
+                    <?php endif; ?>
                 </div>
                 <form class="newsletter__form newsletter-app__form" method="post" action="<?= e(app_url('newsletter')) ?>" novalidate>
                     <?= csrf_field() ?>
-                    <label class="visually-hidden" for="newsletter-email">Email</label>
-                    <input id="newsletter-email" class="input" type="email" name="email" placeholder="Your email" autocomplete="email" required>
-                    <button class="btn btn--dark" type="submit">Subscribe</button>
+                    <label class="visually-hidden" for="newsletter-email-home"><?= e($nwPh) ?></label>
+                    <input id="newsletter-email-home" class="input" type="email" name="email" placeholder="<?= e($nwPh) ?>" autocomplete="email" required>
+                    <button class="btn btn--dark" type="submit"><?= e($nwBtn) ?></button>
                 </form>
             </div>
         </section>
+        <?php endif; ?>
             </div>
         </div>
 </div>

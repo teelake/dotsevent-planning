@@ -1,0 +1,126 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * Default structured homepage sections (CMS). Keys merged with cms_pages.slug=home content_json.blocks.
+ */
+return [
+    'version' => 1,
+    'confidence' => [
+        'enabled' => true,
+        'eyebrow' => 'Saint John & region',
+        'title' => 'Events are loud—planning shouldn’t be',
+        'lead' => 'We sweat the brief, the budget, and the backup plan so you’re not scrambling the night before. Clear costs, timelines you can trust, and planners who answer when it matters.',
+        'cta_label' => 'How we work',
+        'cta_href' => '', // resolved in merge to app_url about
+        'metrics' => [
+            ['label' => 'Happy clients', 'display' => '300+', 'target' => 300, 'suffix' => '+'],
+            ['label' => 'Events delivered', 'display' => '150+', 'target' => 150, 'suffix' => '+'],
+            ['label' => 'Pieces in inventory', 'display' => '109+', 'target' => 109, 'suffix' => '+'],
+            ['label' => 'Years crafting nights', 'display' => '18+', 'target' => 18, 'suffix' => '+'],
+        ],
+    ],
+    'partnership' => [
+        'enabled' => true,
+        'kicker' => 'Your ultimate partner',
+        'title' => 'From first sketch to last dance',
+        'lead' => 'DOTS blends logistics with décor—floor plans beside mood boards—so timelines, signage, and the quiet moments all feel considered. Corporate launches, weddings, and celebrations across New Brunswick with one north star: you enjoy the room.',
+        'pull_quote' => 'We host your night like we’re hosting ours—calm backstage, radiant up front.',
+        'cta_label' => 'About DOTS',
+        'cta_href' => '',
+    ],
+    'clusters' => [
+        'enabled' => true,
+        'eyebrow' => 'Capability',
+        'title' => 'Where we concentrate',
+        'link_all_label' => 'Explore services',
+        'link_all_href' => '',
+        'items' => [
+            ['title' => 'Corporate & brand', 'text' => 'Launches, staff nights, and client receptions—run-of-show, AV, and signage that matches the slide deck—not the apology email.', 'accent' => true],
+            ['title' => 'Weddings & social', 'text' => 'Flow that respects your people, vendors who coordinate, and cues you don’t have to announce.'],
+            ['title' => 'Kids parties', 'text' => 'Families-first packages—play zones, sane timelines, décor that survives cake and cousins.'],
+            ['title' => 'Kick-offs & retreats', 'text' => 'Breakouts that start on time, ice that doesn’t cringe, and spaces that reboot your team—not drain them.', 'muted' => true],
+        ],
+    ],
+    'operating_model' => [
+        'enabled' => true,
+        'title' => 'Inside the studio',
+        'subtitle' => 'No mystery process—three beats we repeat.',
+        'steps' => [
+            ['title' => 'Align', 'text' => 'Budget, vibe, venues, and contingency in plain language—you sign off early.'],
+            ['title' => 'Design & source', 'text' => 'Look, furnishings, staffing, rentals—woven into one run sheet.'],
+            ['title' => 'Show up locked in', 'text' => 'On-site command, headset calm, receipts handled—photos optional.'],
+        ],
+        'highlight' => [
+            'title' => 'Expert planning',
+            'body' => 'Dedicated lead across vendors, timelines, and the stuff nobody Instagrams—the extension cords, cue lights, rain plan.',
+        ],
+    ],
+    'packages' => [
+        'enabled' => true,
+        'eyebrow' => 'Investment',
+        'title' => 'Transparent packages',
+        'subtitle' => 'Starting points—we tailor after we hear the room size, guest count, and level of sparkle.',
+        'items' => [
+            [
+                'name' => 'Essential',
+                'price_display' => 'Starting at CAD $1,500',
+                'featured' => false,
+                'cta_label' => 'Discuss Essential',
+                'cta_href' => '',
+                'features' => [
+                    'Discovery call & written brief',
+                    'Single-venue itinerary & checklist',
+                    'Vendor shortlist introductions',
+                    'Day-of cue sheet (+ email support)',
+                ],
+            ],
+            [
+                'name' => 'Signature',
+                'price_display' => 'Starting at CAD $2,500',
+                'featured' => true,
+                'cta_label' => 'Reserve Signature',
+                'cta_href' => '',
+                'features' => [
+                    'Everything in Essential',
+                    'Two design-direction sessions',
+                    'Floor plan revisions & signage pack',
+                    'On-site planner (up to 8 hours)',
+                    'Incident triage playbook',
+                ],
+            ],
+            [
+                'name' => 'Elevate',
+                'price_display' => 'Starting at CAD $4,000',
+                'featured' => false,
+                'cta_label' => 'Plan Elevate',
+                'cta_href' => '',
+                'features' => [
+                    'Everything in Signature',
+                    'Dedicated senior planner tour',
+                    'Multi-day rehearsal & vendor tech check',
+                    'Extended on-site roster & strike plan',
+                    'Post-event recap + photo delivery assist',
+                ],
+            ],
+        ],
+    ],
+    'testimonials' => [
+        'enabled' => true,
+        'title' => 'Voices from the room',
+        'subtitle' => 'Clients who traded stress for swagger.',
+        'quotes' => [
+            ['quote' => 'Guests thought family ran the whole evening—that’s exactly the quiet miracle we hoped for.', 'name' => 'Alex & Mara', 'role' => 'Wedding, Saint John'],
+            ['quote' => 'Brief was chaos. Delivered program was immaculate. Exec team still talks about the pacing.', 'name' => 'Regional Director', 'role' => 'Corporate gala'],
+            ['quote' => 'Kids tore through the cupcake wall and we still smiled in the recap photos—actually smiled.', 'name' => 'Sarah P.', 'role' => 'Birthday, Quispamsis'],
+        ],
+    ],
+    'newsletter' => [
+        'enabled' => true,
+        'title' => 'Short notes, zero fluff',
+        'text' => 'A few times a year: one useful idea, one photo worth borrowing, where we\'re staffing next.',
+        'button_label' => 'Subscribe',
+        'placeholder' => 'Your email',
+    ],
+];
