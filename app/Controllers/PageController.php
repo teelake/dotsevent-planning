@@ -44,6 +44,7 @@ final class PageController extends Controller
         $this->render('pages/services', [
             'title' => $cms['doc_title'],
             'active_nav' => 'services',
+            'body_class' => 'page-services',
             'meta_description' => $cms['meta_description'],
             'cms' => $cms,
         ]);

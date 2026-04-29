@@ -15,8 +15,9 @@ final class CmsPublicPage
      *   body_html: string,
      *   doc_title: string,
      *   meta_description: string,
-     *   about_blocks?: array<string, mixed>
-     * }
+ *   about_blocks?: array<string, mixed>,
+ *   services_blocks?: array<string, mixed>
+ * }
      */
     public static function page(string $slug, string $defaultTitle, string $defaultMeta): array
     {
@@ -61,6 +62,14 @@ final class CmsPublicPage
                 $storedAbout = $data['blocks'];
             }
             $out['about_blocks'] = AboutPageBlocks::merged($storedAbout);
+        }
+
+        if ($slug === 'services') {
+            $storedServices = null;
+            if ($data !== null && isset($data['blocks']) && is_array($data['blocks'])) {
+                $storedServices = $data['blocks'];
+            }
+            $out['services_blocks'] = ServicesPageBlocks::merged($storedServices);
         }
 
         return $out;
