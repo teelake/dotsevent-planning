@@ -55,6 +55,31 @@ final class RentalsPageBlocks
             }
         }
 
+        foreach (['cta_primary_href', 'cta_secondary_href'] as $hrefKey) {
+            if (!isset($merged['hero'][$hrefKey]) || !is_string($merged['hero'][$hrefKey])) {
+                continue;
+            }
+            $h = trim((string) $merged['hero'][$hrefKey]);
+            if ($h !== '' && !self::safeRentalHeroHref($h)) {
+                $merged['hero'][$hrefKey] = '';
+            }
+        }
+
         return $merged;
+    }
+
+    private static function safeRentalHeroHref(string $href): bool
+    {
+        if (stripos($href, 'javascript:') === 0 || stripos($href, 'data:') === 0) {
+            return false;
+        }
+        if (str_starts_with($href, '#')) {
+            return strlen($href) <= 200;
+        }
+        if (str_starts_with($href, '/') && !str_starts_with($href, '//')) {
+            return !str_contains($href, '..');
+        }
+
+        return preg_match('#^https?://#i', $href) === 1;
     }
 }

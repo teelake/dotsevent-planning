@@ -511,6 +511,8 @@ final class AdminController extends Controller
             Flash::set(Flash::ERROR, 'Content payload is invalid. Please try again.');
             $this->redirect('/admin/cms/page/' . $slug);
         }
+        unset($incoming['_csrf']);
+
         $repo = new CmsPagesRepository();
         $oldRow = $repo->findBySlug($slug);
         $old = [];

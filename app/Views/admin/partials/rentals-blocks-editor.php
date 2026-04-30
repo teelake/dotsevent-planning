@@ -39,6 +39,12 @@ $sortOpts   = is_array($controls['sort_options'] ?? null) ? $controls['sort_opti
             <label class="hb-label">Primary CTA href
                 <input class="input" id="rb-hero-cta-href" type="text" value="<?= e((string) ($hero['cta_primary_href'] ?? '')) ?>">
             </label>
+            <label class="hb-label">Secondary CTA label
+                <input class="input" id="rb-hero-cta2-label" type="text" value="<?= e((string) ($hero['cta_secondary_label'] ?? '')) ?>">
+            </label>
+            <label class="hb-label">Secondary CTA href
+                <input class="input" id="rb-hero-cta2-href" type="text" value="<?= e((string) ($hero['cta_secondary_href'] ?? '')) ?>">
+            </label>
             <label class="hb-label">Background image path
                 <input class="input" id="rb-hero-bg" type="text" value="<?= e((string) ($hero['bg_image_path'] ?? '')) ?>" placeholder="/assets/images/…">
             </label>

@@ -86,6 +86,8 @@
                 subtitle:          v('rb-hero-subtitle'),
                 cta_primary_label: v('rb-hero-cta-label'),
                 cta_primary_href:  v('rb-hero-cta-href'),
+                cta_secondary_label: v('rb-hero-cta2-label'),
+                cta_secondary_href:  v('rb-hero-cta2-href'),
                 bg_image_path:     v('rb-hero-bg'),
             },
             categories: {

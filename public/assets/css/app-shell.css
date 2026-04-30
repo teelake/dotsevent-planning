@@ -333,6 +333,44 @@
   color: #fffdf7;
 }
 
+.app-page-hero--photo {
+  position: relative;
+  background-image:
+    linear-gradient(120deg, rgba(9, 8, 6, 0.82) 0%, rgba(9, 8, 6, 0.55) 45%, rgba(9, 8, 6, 0.72) 100%),
+    var(--page-hero-photo);
+  background-size: cover;
+  background-position: center;
+  border-bottom-color: rgba(245, 192, 19, 0.22);
+}
+
+.app-page-hero__lead {
+  margin: clamp(0.65rem, 2vw, 1rem) 0 0;
+  max-width: 52ch;
+  font-size: clamp(1.02rem, 1.85vw, 1.22rem);
+  line-height: 1.52;
+  color: rgba(255, 251, 240, 0.88);
+  font-weight: 500;
+}
+
+.app-page-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem 1rem;
+  margin-top: clamp(1.1rem, 3vw, 1.75rem);
+}
+
+.app-page-hero__cta--ghost.btn--secondary {
+  border-color: rgba(252, 225, 120, 0.35);
+  color: rgba(255, 252, 237, 0.95);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.app-page-hero__cta--ghost.btn--secondary:hover {
+  border-color: rgba(252, 225, 120, 0.55);
+  background: rgba(255, 255, 255, 0.12);
+}
+
 /* Bands + home intro */
 .home-intro-grid {
   display: grid;
