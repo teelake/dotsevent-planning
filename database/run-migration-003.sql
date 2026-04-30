@@ -1,33 +1,38 @@
 -- ============================================================
--- DOTS Event Planning — Migration 003
+-- DOTS Event Planning - Migration 003
 -- Rentals page: new product columns + product_options table
 --
 -- HOW TO RUN:
---   Option A (phpMyAdmin) — paste everything below into the
+--   Option A (phpMyAdmin) - paste everything below into the
 --                           SQL tab and click Go.
---   Option B (SSH / CLI) — mysql -u USER -p DBNAME < run-migration-003.sql
+--   Option B (SSH / CLI) - mysql -u USER -p DBNAME < run-migration-003.sql
+--
+-- IMPORTANT:
+--   This version avoids JSON_OBJECT(), JSON columns, and ADD COLUMN IF NOT EXISTS.
+--   Run it once. If one of these columns already exists, skip that specific
+--   ADD COLUMN line in phpMyAdmin before running again.
 -- ============================================================
 
 SET NAMES utf8mb4;
 
 -- Step 1: Add new plain columns to the products table
 ALTER TABLE products
-  ADD COLUMN IF NOT EXISTS price_max_cents INT UNSIGNED NULL
+  ADD COLUMN price_max_cents INT UNSIGNED NULL
     COMMENT 'Highest option price in cents. NULL = single price.',
-  ADD COLUMN IF NOT EXISTS category_key VARCHAR(60) NULL
-    COMMENT 'Category slug for front-end filter (chairs, tables, backdrops…)',
-  ADD COLUMN IF NOT EXISTS badge_label VARCHAR(40) NULL
-    COMMENT 'Optional card badge text (Popular, New, Great for Kids…)',
-  ADD COLUMN IF NOT EXISTS details TEXT NULL
+  ADD COLUMN category_key VARCHAR(60) NULL
+    COMMENT 'Category slug for front-end filter',
+  ADD COLUMN badge_label VARCHAR(40) NULL
+    COMMENT 'Optional card badge text',
+  ADD COLUMN details TEXT NULL
     COMMENT 'Product detail bullet points, one per line',
-  ADD COLUMN IF NOT EXISTS ideal_for TEXT NULL
+  ADD COLUMN ideal_for TEXT NULL
     COMMENT 'Ideal-for bullet points, one per line (e.g. Weddings, Birthday parties)',
-  ADD COLUMN IF NOT EXISTS policy_note TEXT NULL
+  ADD COLUMN policy_note TEXT NULL
     COMMENT 'Short rental policy / return note shown on the detail page';
 
 -- Step 2: Index for category filter queries
 ALTER TABLE products
-  ADD KEY IF NOT EXISTS idx_products_category (category_key);
+  ADD KEY idx_products_category (category_key);
 
 -- Step 3: Per-product options table (for items with multiple variants / price tiers)
 CREATE TABLE IF NOT EXISTS product_options (
