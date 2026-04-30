@@ -724,18 +724,33 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.4rem 0.85rem;
-  border-radius: 999px;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.12);
   text-decoration: none;
-  font-size: 0.78rem;
-  font-weight: 700;
   color: rgba(255, 239, 180, 0.95);
+  transition: border-color 0.2s var(--ease-out), background 0.2s var(--ease-out), transform 0.2s var(--ease-out);
+}
+
+.app-social__link svg {
+  width: 1.05rem;
+  height: 1.05rem;
+  display: block;
+  fill: currentColor;
+}
+
+.app-social__link[aria-label="Instagram"] svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
 }
 
 .app-social__link:hover {
   border-color: rgba(245, 192, 19, 0.55);
   background: rgba(245, 192, 19, 0.12);
+  transform: translateY(-1px);
 }
 
 .app-footer__legal {

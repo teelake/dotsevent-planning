@@ -12,6 +12,11 @@ $footerLine1 = trim(site_setting('address_line1', (string) ($app['address_line1'
 $footerLine2 = trim(site_setting('address_line2', (string) ($app['address_line2'] ?? '')));
 $mapEmbed = site_map_embed_url();
 $cartCountFooter = (int) cart_count();
+$socialIcons = [
+    'facebook' => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.5 8.4V6.7c0-.8.3-1.2 1.3-1.2h1.6V2.8c-.8-.1-1.5-.2-2.3-.2-2.5 0-4.2 1.5-4.2 4.3v1.5H8.1v3h2.8v9.9h3.4v-9.9h2.8l.4-3h-3z"/></svg>',
+    'instagram' => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5.1"/><circle cx="12" cy="12" r="4.1"/><circle cx="17.2" cy="6.8" r="1.2"/></svg>',
+    'youtube' => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21.6 7.2a3 3 0 0 0-2.1-2.1C17.7 4.6 12 4.6 12 4.6s-5.7 0-7.5.5a3 3 0 0 0-2.1 2.1C2 9 2 12 2 12s0 3 .4 4.8a3 3 0 0 0 2.1 2.1c1.8.5 7.5.5 7.5.5s5.7 0 7.5-.5a3 3 0 0 0 2.1-2.1C22 15 22 12 22 12s0-3-.4-4.8z"/><path d="M10 15.3V8.7l5.8 3.3L10 15.3z"/></svg>',
+];
 ?>
 <footer class="app-footer">
     <div class="shell app-footer__grid">
@@ -34,13 +39,13 @@ $cartCountFooter = (int) cart_count();
             <?php if ($hasSocial): ?>
             <ul class="app-social" aria-label="Social links">
                 <?php if ($social['facebook'] !== ''): ?>
-                <li><a class="app-social__link" href="<?= e($social['facebook']) ?>" rel="noopener noreferrer" target="_blank" aria-label="Facebook">Facebook</a></li>
+                <li><a class="app-social__link" href="<?= e($social['facebook']) ?>" rel="noopener noreferrer" target="_blank" aria-label="Facebook"><?= $socialIcons['facebook'] ?></a></li>
                 <?php endif; ?>
                 <?php if (($social['instagram'] ?? '') !== ''): ?>
-                <li><a class="app-social__link" href="<?= e($social['instagram']) ?>" rel="noopener noreferrer" target="_blank" aria-label="Instagram">Instagram</a></li>
+                <li><a class="app-social__link" href="<?= e($social['instagram']) ?>" rel="noopener noreferrer" target="_blank" aria-label="Instagram"><?= $socialIcons['instagram'] ?></a></li>
                 <?php endif; ?>
                 <?php if (($social['youtube'] ?? '') !== ''): ?>
-                <li><a class="app-social__link" href="<?= e($social['youtube']) ?>" rel="noopener noreferrer" target="_blank" aria-label="YouTube">YouTube</a></li>
+                <li><a class="app-social__link" href="<?= e($social['youtube']) ?>" rel="noopener noreferrer" target="_blank" aria-label="YouTube"><?= $socialIcons['youtube'] ?></a></li>
                 <?php endif; ?>
             </ul>
             <?php endif; ?>
