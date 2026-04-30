@@ -92,7 +92,7 @@ $nwEn = (($nw['enabled'] ?? true) !== false);
                             <input class="input js-metric-suffix" type="text" value="<?= e((string) ($m['suffix'] ?? '+')) ?>">
                         </div>
                     </div>
-                    <button type="button" class="btn btn--ghost hb-row-remove" aria-label="Remove metric">Remove</button>
+                    <button type="button" class="hb-row-remove hb-row-remove--danger" aria-label="Remove metric">Remove metric</button>
                 </div>
                 <?php endforeach; ?>
             </div>
@@ -395,7 +395,7 @@ $nwEn = (($nw['enabled'] ?? true) !== false);
                 <input class="input js-metric-suffix" type="text" value="+">
             </div>
         </div>
-        <button type="button" class="btn btn--ghost hb-row-remove" aria-label="Remove metric">Remove</button>
+        <button type="button" class="hb-row-remove hb-row-remove--danger" aria-label="Remove metric">Remove metric</button>
     </div>
 </template>
 

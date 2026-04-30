@@ -382,7 +382,11 @@ if ($slug === 'rentals') {
 
   if (hbRoot) {
     hbRoot.addEventListener('click', function (ev) {
-      var btn = ev.target.closest('.hb-row-remove');
+      var target = ev.target;
+      if (!target || typeof target.closest !== 'function') {
+        return;
+      }
+      var btn = target.closest('.hb-row-remove');
       if (!btn || !hbRoot.contains(btn)) {
         return;
       }

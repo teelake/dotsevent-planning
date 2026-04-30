@@ -1661,6 +1661,33 @@ body.admin-sidebar-open .admin-backdrop {
   margin-top: 0.5rem;
 }
 
+.hb-row-remove {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: #991b1b;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 700;
+  min-height: 2rem;
+  padding: 0.25rem 0.15rem;
+}
+
+.hb-row-remove:hover,
+.hb-row-remove:focus-visible {
+  color: #7f1d1d;
+  text-decoration: underline;
+}
+
+.hb-row-remove:focus-visible {
+  border-radius: 6px;
+  outline: 3px solid rgba(153, 27, 27, 0.2);
+  outline-offset: 2px;
+}
+
 .hb-cluster-block {
   border-style: solid;
 }
