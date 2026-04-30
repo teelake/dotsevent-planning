@@ -94,74 +94,87 @@ $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
         <input type="hidden" name="content_json" id="cms-content-json" value="">
 
         <div class="cms-edit__layout">
-            <aside class="cms-edit__aside" aria-label="On this page">
-                <div class="cms-edit__aside-sticky">
-                    <p class="cms-edit__aside-title">Navigate</p>
-                    <nav class="cms-edit__aside-nav">
-                        <ul class="cms-edit__toc" id="cms-edit-toc-list"></ul>
-                    </nav>
-                </div>
-            </aside>
-
             <div class="cms-edit__main">
-                <section id="cms-section-essentials" class="cms-edit-panel">
-                    <div class="cms-edit-panel__head">
-                        <span class="cms-edit-panel__eyebrow">Step 1</span>
-                        <h3 class="cms-edit-panel__title">Publishing &amp; SEO</h3>
-                        <p class="cms-edit-panel__desc">How this route appears to visitors and search.</p>
-                    </div>
-                    <div class="cms-edit-panel__body">
-                        <div class="form-row">
-                            <label for="cms-page-title">Page title</label>
-                            <input class="input cms-edit-input" id="cms-page-title" name="title" type="text" value="<?= e($page_title) ?>" placeholder="Optional document title">
-                        </div>
-                        <div class="form-row">
-                            <label for="cms-meta-description">Meta description</label>
-                            <textarea class="input input--textarea cms-edit-input" id="cms-meta-description" rows="2" placeholder="Search snippet (~160 chars)"><?= e($meta_description_field) ?></textarea>
-                            <span class="cms-edit-field-help">Shown in Google when set; keep it persuasive and factual.</span>
-                        </div>
-                    </div>
-                </section>
-
-                <?php if ($cmsHasStructuredBlocks) : ?>
-                <section id="cms-section-blocks" class="cms-edit-panel cms-edit-panel--stretch">
-                    <div class="cms-edit-panel__head">
-                        <span class="cms-edit-panel__eyebrow">Step 2</span>
-                        <h3 class="cms-edit-panel__title">Structured sections</h3>
-                        <p class="cms-edit-panel__desc">Composable blocks merged with sane defaults.</p>
-                    </div>
-                    <div class="cms-edit-panel__body cms-edit-panel__body--flush">
-                        <div id="cms-blocks-stage" class="cms-blocks-stage">
-                            <?php if ($slug === 'home' && $mergedBlocks !== null) : ?>
-                                <?php include __DIR__ . '/partials/home-blocks-editor.php'; ?>
-                            <?php elseif ($slug === 'about' && $mergedAboutBlocks !== null) : ?>
-                                <?php include __DIR__ . '/partials/about-blocks-editor.php'; ?>
-                            <?php elseif ($slug === 'services' && $mergedServicesBlocks !== null) : ?>
-                                <?php include __DIR__ . '/partials/services-blocks-editor.php'; ?>
-                            <?php elseif ($slug === 'contact' && $mergedContactBlocks !== null) : ?>
-                                <?php include __DIR__ . '/partials/contact-blocks-editor.php'; ?>
-                            <?php elseif ($slug === 'portfolio' && $mergedPortfolioBlocks !== null) : ?>
-                                <?php include __DIR__ . '/partials/portfolio-blocks-editor.php'; ?>
-                            <?php elseif ($slug === 'rentals' && $mergedRentalsBlocks !== null) : ?>
-                                <?php include __DIR__ . '/partials/rentals-blocks-editor.php'; ?>
+                <div class="cms-edit-tabs" id="cms-edit-tabs-root">
+                    <div class="cms-edit-tabs__bar">
+                        <div role="tablist" class="cms-edit-tabs__list" aria-label="Page editor tabs">
+                            <button type="button" role="tab" class="cms-edit-tabs__tab" id="cms-tab-essentials"
+                                aria-selected="true" aria-controls="cms-panel-essentials" tabindex="0">Publishing &amp; SEO</button>
+                            <?php if ($cmsHasStructuredBlocks) : ?>
+                                <button type="button" role="tab" class="cms-edit-tabs__tab" id="cms-tab-blocks"
+                                    aria-selected="false" aria-controls="cms-panel-blocks" tabindex="-1">Structured sections</button>
                             <?php endif; ?>
+                            <button type="button" role="tab" class="cms-edit-tabs__tab" id="cms-tab-body"
+                                aria-selected="false" aria-controls="cms-panel-body" tabindex="-1">Rich text body</button>
                         </div>
                     </div>
-                </section>
-                <?php endif; ?>
 
-                <section id="cms-section-body" class="cms-edit-panel cms-edit-panel--stretch">
-                    <div class="cms-edit-panel__head">
-                        <span class="cms-edit-panel__eyebrow"><?= $cmsHasStructuredBlocks ? 'Step 3' : 'Step 2' ?></span>
-                        <h3 class="cms-edit-panel__title" id="cms-section-body-label">Rich text body</h3>
-                        <p class="cms-edit-panel__desc">Optional narrative HTML (intro, legal, or legacy copy).</p>
+                    <div id="cms-panel-essentials" role="tabpanel" class="cms-edit-tabs__panel" aria-labelledby="cms-tab-essentials">
+                        <section id="cms-section-essentials" class="cms-edit-panel">
+                            <div class="cms-edit-panel__head">
+                                <h3 class="cms-edit-panel__title">Publishing &amp; SEO</h3>
+                                <p class="cms-edit-panel__desc">How this route appears to visitors and search.</p>
+                            </div>
+                            <div class="cms-edit-panel__body">
+                                <div class="form-row">
+                                    <label for="cms-page-title">Page title</label>
+                                    <input class="input cms-edit-input" id="cms-page-title" name="title" type="text" value="<?= e($page_title) ?>" placeholder="Optional document title">
+                                </div>
+                                <div class="form-row">
+                                    <label for="cms-meta-description">Meta description</label>
+                                    <textarea class="input input--textarea cms-edit-input" id="cms-meta-description" rows="2" placeholder="Search snippet (~160 chars)"><?= e($meta_description_field) ?></textarea>
+                                    <span class="cms-edit-field-help">Shown in Google when set; keep it persuasive and factual.</span>
+                                </div>
+                            </div>
+                        </section>
                     </div>
-                    <div class="cms-edit-panel__body">
-                        <div class="form-row form-row--flush">
-                            <div id="editor" class="cms-edit-quill" role="textbox" aria-labelledby="cms-section-body-label"></div>
+
+                    <?php if ($cmsHasStructuredBlocks) : ?>
+                        <div id="cms-panel-blocks" role="tabpanel" class="cms-edit-tabs__panel" aria-labelledby="cms-tab-blocks" hidden>
+                            <div id="cms-edit-blocks-toc-wrap" class="cms-edit-blocks-toc-wrap" hidden>
+                                <p class="cms-edit-blocks-toc-wrap__label">Within structured sections</p>
+                                <ul class="cms-edit-blocks-toc" id="cms-edit-blocks-toc-list"></ul>
+                            </div>
+                            <section id="cms-section-blocks" class="cms-edit-panel cms-edit-panel--stretch">
+                                <div class="cms-edit-panel__head">
+                                    <h3 class="cms-edit-panel__title">Structured sections</h3>
+                                    <p class="cms-edit-panel__desc">Composable blocks merged with sane defaults.</p>
+                                </div>
+                                <div class="cms-edit-panel__body cms-edit-panel__body--flush">
+                                    <div id="cms-blocks-stage" class="cms-blocks-stage">
+                                        <?php if ($slug === 'home' && $mergedBlocks !== null) : ?>
+                                            <?php include __DIR__ . '/partials/home-blocks-editor.php'; ?>
+                                        <?php elseif ($slug === 'about' && $mergedAboutBlocks !== null) : ?>
+                                            <?php include __DIR__ . '/partials/about-blocks-editor.php'; ?>
+                                        <?php elseif ($slug === 'services' && $mergedServicesBlocks !== null) : ?>
+                                            <?php include __DIR__ . '/partials/services-blocks-editor.php'; ?>
+                                        <?php elseif ($slug === 'contact' && $mergedContactBlocks !== null) : ?>
+                                            <?php include __DIR__ . '/partials/contact-blocks-editor.php'; ?>
+                                        <?php elseif ($slug === 'portfolio' && $mergedPortfolioBlocks !== null) : ?>
+                                            <?php include __DIR__ . '/partials/portfolio-blocks-editor.php'; ?>
+                                        <?php elseif ($slug === 'rentals' && $mergedRentalsBlocks !== null) : ?>
+                                            <?php include __DIR__ . '/partials/rentals-blocks-editor.php'; ?>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </section>
                         </div>
+                    <?php endif; ?>
+
+                    <div id="cms-panel-body" role="tabpanel" class="cms-edit-tabs__panel" aria-labelledby="cms-tab-body" hidden>
+                        <section id="cms-section-body" class="cms-edit-panel cms-edit-panel--stretch">
+                            <div class="cms-edit-panel__head">
+                                <h3 class="cms-edit-panel__title" id="cms-section-body-label">Rich text body</h3>
+                                <p class="cms-edit-panel__desc">Optional narrative HTML (intro, legal, or legacy copy).</p>
+                            </div>
+                            <div class="cms-edit-panel__body">
+                                <div class="form-row form-row--flush">
+                                    <div id="editor" class="cms-edit-quill" aria-labelledby="cms-section-body-label"></div>
+                                </div>
+                            </div>
+                        </section>
                     </div>
-                </section>
+                </div>
 
                 <footer id="cms-section-save" class="cms-edit-savebar">
                     <div class="cms-edit-savebar__inner">
@@ -196,50 +209,58 @@ $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
   } catch (e) {
     data = {};
   }
-  const quill = new Quill('#editor', {
-    theme: 'snow',
-    modules: {
-      toolbar: {
-        container: [
-          [{ header: [1, 2, 3, false] }],
-          ['bold', 'italic', 'underline', 'strike'],
-          [{ list: 'ordered' }, { list: 'bullet' }],
-          ['blockquote', 'link', 'image', 'video'],
-          ['clean'],
-        ],
-        handlers: {
-          image: function () {
-            const input = document.createElement('input');
-            input.setAttribute('type', 'file');
-            input.setAttribute('accept', 'image/*');
-            input.click();
-            input.onchange = async function () {
-              const file = input.files && input.files[0];
-              if (!file) return;
-              const fd = new FormData();
-              fd.append('file', file);
-              fd.append('_csrf', <?= json_encode(\App\Core\Csrf::token(), JSON_THROW_ON_ERROR) ?>);
-              const res = await fetch(<?= json_encode(app_url('admin/media/upload'), JSON_THROW_ON_ERROR) ?>, {
-                method: 'POST',
-                body: fd,
-                credentials: 'same-origin',
-              });
-              const out = await res.json().catch(function () { return null; });
-              if (!out || !out.ok || !out.url) {
-                alert((out && out.error) ? out.error : 'Upload failed');
-                return;
-              }
-              const range = quill.getSelection(true);
-              quill.insertEmbed(range.index, 'image', out.url);
-            };
+  let quill = null;
+  function initQuill() {
+    if (quill !== null) {
+      return quill;
+    }
+    quill = new Quill('#editor', {
+      theme: 'snow',
+      modules: {
+        toolbar: {
+          container: [
+            [{ header: [1, 2, 3, false] }],
+            ['bold', 'italic', 'underline', 'strike'],
+            [{ list: 'ordered' }, { list: 'bullet' }],
+            ['blockquote', 'link', 'image', 'video'],
+            ['clean'],
+          ],
+          handlers: {
+            image: function () {
+              const input = document.createElement('input');
+              input.setAttribute('type', 'file');
+              input.setAttribute('accept', 'image/*');
+              input.click();
+              input.onchange = async function () {
+                const q = initQuill();
+                const file = input.files && input.files[0];
+                if (!file) return;
+                const fd = new FormData();
+                fd.append('file', file);
+                fd.append('_csrf', <?= json_encode(\App\Core\Csrf::token(), JSON_THROW_ON_ERROR) ?>);
+                const res = await fetch(<?= json_encode(app_url('admin/media/upload'), JSON_THROW_ON_ERROR) ?>, {
+                  method: 'POST',
+                  body: fd,
+                  credentials: 'same-origin',
+                });
+                const out = await res.json().catch(function () { return null; });
+                if (!out || !out.ok || !out.url) {
+                  alert((out && out.error) ? out.error : 'Upload failed');
+                  return;
+                }
+                const range = q.getSelection(true);
+                q.insertEmbed(range.index, 'image', out.url);
+              };
+            },
           },
         },
       },
-    },
-  });
-  const html = typeof data.html === 'string' ? data.html : '';
-  if (html) {
-    quill.root.innerHTML = html;
+    });
+    const htmlSeed = typeof data.html === 'string' ? data.html : '';
+    if (htmlSeed) {
+      quill.root.innerHTML = htmlSeed;
+    }
+    return quill;
   }
 
   if (pageSlug === 'about' && typeof window.dotseAboutBlocksBind === 'function') {
@@ -258,56 +279,115 @@ $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
     window.dotseRentalsBlocksBind();
   }
 
-  function buildCmsToc() {
-    const list = document.getElementById('cms-edit-toc-list');
-    if (!list) return;
-
-    /** @type {{href: string, label: string}[]} */
-    const links = [];
-
-    links.push({ href: '#cms-section-essentials', label: 'Publishing & SEO' });
-
-    const stage = document.getElementById('cms-blocks-stage');
-    if (stage) {
-      const blocks = stage.querySelectorAll(
-        'details.home-blocks-editor__details[id], details.hb-section[id]'
-      );
-      blocks.forEach(function (d) {
-        const id = d.getAttribute('id');
-        const sum = d.querySelector('summary');
-        let label = (sum && sum.textContent) ? sum.textContent.trim() : '';
-        if (!id || label === '') return;
-        links.push({ href: '#' + id, label: label });
-      });
+  function populateBlocksAnchors() {
+    var list = document.getElementById('cms-edit-blocks-toc-list');
+    var wrap = document.getElementById('cms-edit-blocks-toc-wrap');
+    var stage = document.getElementById('cms-blocks-stage');
+    if (!list || !stage) {
+      return;
     }
 
-    links.push({ href: '#cms-section-body', label: 'Rich text body' });
-    links.push({ href: '#cms-section-save', label: 'Save changes' });
+    /** @type {{ href: string, label: string }[]} */
+    var links = [];
+    stage.querySelectorAll('details.home-blocks-editor__details[id], details.hb-section[id]').forEach(function (d) {
+      var idAttr = d.getAttribute('id');
+      var summary = d.querySelector('summary');
+      var lbl = summary && summary.textContent ? summary.textContent.trim() : '';
+      if (!idAttr || lbl === '') return;
+      links.push({ href: '#' + idAttr, label: lbl });
+    });
 
     list.innerHTML = '';
     links.forEach(function (l) {
-      const li = document.createElement('li');
-      const a = document.createElement('a');
-      a.className = 'cms-edit__toc-link';
+      var li = document.createElement('li');
+      var a = document.createElement('a');
+      a.className = 'cms-edit-blocks-toc__link';
       a.href = l.href;
       a.textContent = l.label;
       a.addEventListener('click', function (e) {
-        const id = l.href.slice(1);
-        const el = document.getElementById(id);
-        if (el) {
-          e.preventDefault();
-          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          try {
-            history.replaceState(null, '', l.href);
-          } catch (_) {}
-        }
+        e.preventDefault();
+        var el = document.getElementById(l.href.slice(1));
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        try {
+          history.replaceState(null, '', l.href);
+        } catch (_) {}
       });
       li.appendChild(a);
       list.appendChild(li);
     });
+
+    if (wrap) wrap.hidden = links.length === 0;
   }
 
-  buildCmsToc();
+  function initCmsTabs(onBodyShown) {
+    var root = document.getElementById('cms-edit-tabs-root');
+    if (!root) return;
+    var list = root.querySelector('[role=\"tablist\"]');
+    if (!list) return;
+    /** @type {HTMLButtonElement[]} */
+    var tabs = Array.prototype.slice.call(list.querySelectorAll('[role=\"tab\"]'));
+    if (!tabs.length) return;
+
+    function panelFor(btn) {
+      var pid = btn.getAttribute('aria-controls');
+      return pid ? document.getElementById(pid) : null;
+    }
+
+    function select(ix) {
+      var i = Math.max(0, Math.min(ix, tabs.length - 1));
+      tabs.forEach(function (t, ti) {
+        var on = ti === i;
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+        t.tabIndex = on ? 0 : -1;
+        var panel = panelFor(t);
+        if (panel) {
+          if (on) panel.removeAttribute('hidden');
+          else panel.setAttribute('hidden', '');
+        }
+      });
+      if (tabs[i].id === 'cms-tab-body' && typeof onBodyShown === 'function') {
+        onBodyShown();
+      }
+    }
+
+    tabs.forEach(function (tab, ix) {
+      tab.addEventListener('click', function () {
+        select(ix);
+        tab.focus();
+      });
+    });
+
+    list.addEventListener('keydown', function (e) {
+      var active = tabs.indexOf(/** @type {HTMLButtonElement} */ (document.activeElement));
+      if (active < 0) return;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        var next = active + 1 >= tabs.length ? 0 : active + 1;
+        select(next);
+        tabs[next].focus();
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        var prev = active === 0 ? tabs.length - 1 : active - 1;
+        select(prev);
+        tabs[prev].focus();
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        select(0);
+        tabs[0].focus();
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        select(tabs.length - 1);
+        tabs[tabs.length - 1].focus();
+      }
+    });
+
+    var start = tabs.findIndex(function (t) { return t.getAttribute('aria-selected') === 'true'; });
+    if (start < 0) start = 0;
+    select(start);
+  }
+
+  populateBlocksAnchors();
+  initCmsTabs(initQuill);
 
   const metaEl = document.getElementById('cms-meta-description');
   const hbRoot = document.getElementById('home-blocks-editor');
@@ -502,7 +582,7 @@ $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
   }
 
   document.getElementById('cms-page-form').addEventListener('submit', function () {
-    var payload = { html: quill.root.innerHTML };
+    var payload = { html: initQuill().root.innerHTML };
     if (metaEl) {
       payload.meta_description = metaEl.value.trim();
     }
