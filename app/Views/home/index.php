@@ -144,7 +144,7 @@ $newsletterBk = is_array($home_blocks['newsletter'] ?? null) ? $home_blocks['new
         ?>
         <section id="confidence" class="app-band app-band--surface section--tight home-blocks-confidence" aria-labelledby="home-confidence-heading" data-reveal>
             <div class="shell shell--wide">
-                <div class="home-intro-grid">
+                <div class="home-intro-grid home-confidence-panel">
                     <div class="home-intro-grid__copy">
                         <?php if ($confEyebrow !== ''): ?>
                         <p class="eyebrow"><?= e($confEyebrow) ?></p>
@@ -170,6 +170,9 @@ $newsletterBk = is_array($home_blocks['newsletter'] ?? null) ? $home_blocks['new
                         $display = trim((string) ($m['display'] ?? ''));
                         $target = isset($m['target']) ? (int) $m['target'] : 0;
                         $suffix = (string) ($m['suffix'] ?? '+');
+                        if ($label === '' && $display === '' && $target <= 0) {
+                            continue;
+                        }
                         $animate = $target > 0;
                         ?>
                         <div class="tile-metric" role="listitem">

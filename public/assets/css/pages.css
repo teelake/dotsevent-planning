@@ -961,15 +961,80 @@
 
 /* ── Homepage structured sections (CMS `home_blocks`) ── */
 
-.home-blocks-confidence .tile-metric-strip > .tile-metric:nth-child(4) {
-  border-bottom: 0;
+.home-blocks-confidence {
   background:
-    radial-gradient(120% 100% at 100% 0%, rgba(245, 192, 19, 0.12) 0%, transparent 52%),
+    linear-gradient(180deg, #fffefb 0%, #faf7f1 100%);
+}
+
+.home-blocks-confidence .home-blocks-confidence__strip {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+}
+
+.home-blocks-confidence .home-blocks-confidence__strip > .tile-metric {
+  min-height: 148px;
+  padding: clamp(1rem, 2vw, 1.35rem);
+  border: 1px solid rgba(1, 1, 1, 0.08);
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(255, 250, 239, 0.82));
+  box-shadow: 0 16px 40px rgba(22, 14, 2, 0.06);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.home-blocks-confidence .home-blocks-confidence__strip > .tile-metric:nth-child(1) {
+  grid-column: span 2;
+  min-height: 170px;
+  background:
+    radial-gradient(95% 110% at 0% 0%, rgba(245, 192, 19, 0.2), transparent 60%),
     #fffefb;
 }
 
-.home-blocks-confidence .tile-metric-strip > .tile-metric:nth-child(4) .tile-metric__value {
-  color: var(--color-brand-black);
+.home-blocks-confidence .home-blocks-confidence__strip > .tile-metric:nth-child(3) {
+  background:
+    radial-gradient(90% 100% at 0% 0%, rgba(245, 192, 19, 0.14), transparent 52%),
+    linear-gradient(155deg, #15120e 0%, #070605 100%);
+  border-color: rgba(245, 192, 19, 0.22);
+}
+
+.home-blocks-confidence .home-blocks-confidence__strip > .tile-metric:nth-child(3) .tile-metric__value {
+  color: #fff2bf;
+}
+
+.home-blocks-confidence .home-blocks-confidence__strip > .tile-metric:nth-child(3) .tile-metric__label {
+  color: rgba(245, 232, 200, 0.62);
+}
+
+.home-blocks-confidence .home-blocks-confidence__strip > .tile-metric:nth-child(4) {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(250, 242, 226, 0.88));
+}
+
+.home-blocks-confidence .tile-metric__value {
+  font-size: clamp(2rem, 4vw, 3.15rem);
+  line-height: 0.95;
+}
+
+.home-blocks-confidence .tile-metric__label {
+  margin-top: 0.75rem;
+}
+
+@media (max-width: 760px) {
+  .home-blocks-confidence .home-blocks-confidence__strip {
+    grid-template-columns: 1fr;
+  }
+
+  .home-blocks-confidence .home-blocks-confidence__strip > .tile-metric:nth-child(1) {
+    grid-column: auto;
+  }
 }
 
 .home-blocks-partnership__layout {
