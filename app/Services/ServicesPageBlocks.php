@@ -68,7 +68,7 @@ final class ServicesPageBlocks
     public static function homeTeaserFromOfferings(array $merged): array
     {
         $off = isset($merged['offerings']) && is_array($merged['offerings']) ? $merged['offerings'] : [];
-        $offEnabled = (($off['enabled'] ?? true) !== false);
+        $teaserOn = (($off['home_teaser_enabled'] ?? true) !== false);
 
         $items = [];
         if (isset($off['items']) && is_array($off['items'])) {
@@ -97,7 +97,7 @@ final class ServicesPageBlocks
         $ctaH = isset($off['home_teaser_cta_href']) ? trim((string) $off['home_teaser_cta_href']) : '';
 
         return [
-            'enabled' => $offEnabled && $items !== [],
+            'enabled' => $teaserOn && $items !== [],
             'eyebrow' => isset($off['eyebrow']) ? trim((string) $off['eyebrow']) : '',
             'title' => isset($off['section_title']) ? trim((string) $off['section_title']) : '',
             'link_all_label' => $ctaL !== '' ? $ctaL : 'Explore services',

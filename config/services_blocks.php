@@ -20,7 +20,10 @@ return [
         'lead_html' => '<p>From brief to strike, DOTS plans weddings, private parties, corporate nights, immersive photo experiences, kids celebrations, and end-to-end production—everywhere in New Brunswick with one calm command channel.</p>',
     ],
     'offerings' => [
+        /* Services page: full offerings band */
         'enabled' => true,
+        /* Home page: teaser grid (independent of `enabled`) */
+        'home_teaser_enabled' => true,
         'eyebrow' => 'Capability',
         'section_title' => 'What we configure for you',
         'home_teaser_cta_label' => '',

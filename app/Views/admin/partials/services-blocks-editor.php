@@ -14,6 +14,7 @@ $hEn = (($h['enabled'] ?? true) !== false);
 $bc = !isset($h['show_breadcrumbs']) || $h['show_breadcrumbs'] !== false;
 $inEn = (($in['enabled'] ?? true) !== false);
 $ofEn = (($of['enabled'] ?? true) !== false);
+$ofHomeTeaser = (($of['home_teaser_enabled'] ?? true) !== false);
 $paEn = (($pa['enabled'] ?? true) !== false);
 $fEn = (($f['enabled'] ?? true) !== false);
 $nEn = (($nw['enabled'] ?? true) !== false);
@@ -54,12 +55,13 @@ $faqs = isset($f['items']) && is_array($f['items']) ? $f['items'] : [];
     <details class="home-blocks-editor__details" open>
         <summary class="home-blocks-editor__summary">Offerings</summary>
         <div class="home-blocks-editor__body">
-            <label class="home-blocks-editor__check"><input type="checkbox" id="svc-of-en" <?= $ofEn ? 'checked' : '' ?>><span>Show catalogue</span></label>
+            <label class="home-blocks-editor__check"><input type="checkbox" id="svc-of-en" <?= $ofEn ? 'checked' : '' ?>><span>Show catalogue on Services page</span></label>
+            <label class="home-blocks-editor__check"><input type="checkbox" id="svc-of-home-teaser-en" <?= $ofHomeTeaser ? 'checked' : '' ?>><span>Show teaser on Home page</span></label>
             <div class="home-blocks-editor__grid home-blocks-editor__grid--2">
                 <div class="form-row" style="margin:0;"><label for="svc-of-eye">Section eyebrow</label><input class="input" id="svc-of-eye" type="text" value="<?= e((string) ($of['eyebrow'] ?? '')) ?>"></div>
                 <div class="form-row" style="margin:0;"><label for="svc-of-stitle">Section title</label><input class="input" id="svc-of-stitle" type="text" value="<?= e((string) ($of['section_title'] ?? '')) ?>"></div>
             </div>
-            <p class="text-muted" style="font-size:0.85rem; margin:0 0 0.5rem;">Homepage teaser: the same offerings list appears on the home page services grid (heading and CTA configurable below).</p>
+            <p class="text-muted" style="font-size:0.85rem; margin:0 0 0.5rem;">You can hide the catalogue on the Services page but still promote the same list on Home (or the reverse), using the two toggles above. Heading and CTA for Home are below.</p>
             <div class="home-blocks-editor__grid home-blocks-editor__grid--2">
                 <div class="form-row" style="margin:0;"><label for="svc-of-home-cta-label">Home CTA label</label><input class="input" id="svc-of-home-cta-label" type="text" value="<?= e((string) ($of['home_teaser_cta_label'] ?? '')) ?>" placeholder="Explore services"></div>
                 <div class="form-row" style="margin:0;"><label for="svc-of-home-cta-href">Home CTA URL</label><input class="input" id="svc-of-home-cta-href" type="text" value="<?= e((string) ($of['home_teaser_cta_href'] ?? '')) ?>" placeholder="/services if empty"></div>

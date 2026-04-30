@@ -132,6 +132,7 @@
       },
       offerings: {
         enabled: c("svc-of-en"),
+        home_teaser_enabled: c("svc-of-home-teaser-en"),
         eyebrow: v("svc-of-eye"),
         section_title: v("svc-of-stitle"),
         home_teaser_cta_label: v("svc-of-home-cta-label"),
