@@ -55,17 +55,17 @@ if ($slug === 'rentals') {
     <div class="card card--folio" style="max-width: none;">
         <h2 class="card__title" style="margin: 0 0 1rem;">Edit page</h2>
         <?php if ($slug === 'home'): ?>
-            <p class="text-muted" style="font-size: 0.88rem; margin: 0 0 1rem;">Hero slides: <a class="text-link" href="<?= e(app_url('admin/cms/slides')) ?>">Hero carousel</a>. Edit intro HTML, meta description, and the structured homepage sections below. Changes are saved as <code>content_json.blocks</code> together with the rich-text body.</p>
+            <p class="text-muted" style="font-size: 0.88rem; margin: 0 0 1rem;">Hero slides: <a class="text-link" href="<?= e(app_url('admin/cms/slides')) ?>">Hero carousel</a>. Edit intro HTML, meta description, and the structured homepage sections below. Changes are saved as relational CMS fields.</p>
         <?php elseif ($slug === 'about'): ?>
-            <p class="text-muted" style="font-size: 0.88rem; margin: 0 0 1rem;">Structured About page content is saved under <code>content_json.blocks</code>. The rich-text “Body” field remains available for legacy copy; public About uses the modular sections below.</p>
+            <p class="text-muted" style="font-size: 0.88rem; margin: 0 0 1rem;">Structured About page content is saved as relational CMS fields. The rich-text “Body” field remains available for legacy copy; public About uses the modular sections below.</p>
         <?php elseif ($slug === 'services'): ?>
-            <p class="text-muted" style="font-size: 0.88rem; margin: 0 0 1rem;">Structured Services content is saved as <code>content_json.blocks</code>. The Body field can hold legacy markup; the live Services page uses the sections below.</p>
+            <p class="text-muted" style="font-size: 0.88rem; margin: 0 0 1rem;">Structured Services content is saved as relational CMS fields. The Body field can hold legacy markup; the live Services page uses the sections below.</p>
         <?php elseif ($slug === 'contact'): ?>
-            <p class="text-muted" style="font-size: 0.88rem; margin: 0 0 1rem;">Structured Contact content is saved as <code>content_json.blocks</code>. The live Contact page now reads modular sections from blocks and dynamic values from CMS settings.</p>
+            <p class="text-muted" style="font-size: 0.88rem; margin: 0 0 1rem;">Structured Contact content is saved as relational CMS fields. The live Contact page reads modular sections and dynamic values from CMS settings.</p>
         <?php elseif ($slug === 'portfolio'): ?>
-            <p class="text-muted" style="font-size: 0.88rem; margin: 0 0 1rem;">Structured Portfolio content is saved as <code>content_json.blocks</code>. Use items for featured/gallery and keep media paths dynamic via CMS media uploads.</p>
+            <p class="text-muted" style="font-size: 0.88rem; margin: 0 0 1rem;">Structured Portfolio content is saved as relational CMS fields. Use items for featured/gallery and keep media paths dynamic via CMS media uploads.</p>
         <?php elseif ($slug === 'rentals'): ?>
-            <p class="text-muted" style="font-size: 0.88rem; margin: 0 0 1rem;">Rentals page layout blocks are saved as <code>content_json.blocks</code>. Individual products are managed via <a class="text-link" href="<?= e(app_url('admin/products')) ?>">Products</a>.</p>
+            <p class="text-muted" style="font-size: 0.88rem; margin: 0 0 1rem;">Rentals page layout blocks are saved as relational CMS fields. Individual products are managed via <a class="text-link" href="<?= e(app_url('admin/products')) ?>">Products</a>.</p>
         <?php endif; ?>
 
         <form class="admin-form" method="post" action="<?= e(app_url('admin/cms/page/' . $slug . '/save')) ?>" id="cms-page-form">
@@ -77,7 +77,7 @@ if ($slug === 'rentals') {
             <div class="form-row">
                 <label for="cms-meta-description">Meta description (SEO)</label>
                 <textarea class="input input--textarea" id="cms-meta-description" rows="2" placeholder="Shown in search results when set"><?= e($meta_description_field) ?></textarea>
-                <span class="text-muted" style="font-size:0.85rem;">Stored in page JSON; overrides the default for this route.</span>
+                <span class="text-muted" style="font-size:0.85rem;">Stored as page metadata; overrides the default for this route.</span>
             </div>
             <?php if ($slug === 'home' && $mergedBlocks !== null): ?>
             <div class="form-row">

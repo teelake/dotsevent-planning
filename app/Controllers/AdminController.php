@@ -497,13 +497,13 @@ final class AdminController extends Controller
             $this->redirect('/admin/cms');
         }
         $title = trim((string) ($_POST['title'] ?? ''));
-        $contentJson = trim((string) ($_POST['content_json'] ?? ''));
-        if ($contentJson === '') {
-            $contentJson = '{}';
+        $contentPayload = trim((string) ($_POST['content_json'] ?? ''));
+        if ($contentPayload === '') {
+            $contentPayload = '{}';
         }
-        $incoming = json_decode($contentJson, true);
+        $incoming = json_decode($contentPayload, true);
         if (!is_array($incoming)) {
-            Flash::set(Flash::ERROR, 'Content JSON is invalid. Please try again.');
+            Flash::set(Flash::ERROR, 'Content payload is invalid. Please try again.');
             $this->redirect('/admin/cms/page/' . $slug);
         }
         $repo = new CmsPagesRepository();
