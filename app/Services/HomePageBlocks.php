@@ -40,20 +40,20 @@ final class HomePageBlocks
         $s = self::normalizeStoredHomeBlocks($stored);
         $out = array_replace_recursive($defaults, $s);
 
-        /** Full array replace where partial lists hurt UX */
-        if (!empty($s['confidence']) && is_array($s['confidence']) && isset($s['confidence']['metrics']) && is_array($s['confidence']['metrics'])) {
+        /** Full array replace where partial lists hurt UX (use array_key_exists so [] is intentional) */
+        if (!empty($s['confidence']) && is_array($s['confidence']) && array_key_exists('metrics', $s['confidence']) && is_array($s['confidence']['metrics'])) {
             $out['confidence']['metrics'] = $s['confidence']['metrics'];
         }
-        if (!empty($s['clusters']) && is_array($s['clusters']) && isset($s['clusters']['items']) && is_array($s['clusters']['items'])) {
+        if (!empty($s['clusters']) && is_array($s['clusters']) && array_key_exists('items', $s['clusters']) && is_array($s['clusters']['items'])) {
             $out['clusters']['items'] = $s['clusters']['items'];
         }
-        if (!empty($s['packages']) && is_array($s['packages']) && isset($s['packages']['items']) && is_array($s['packages']['items'])) {
+        if (!empty($s['packages']) && is_array($s['packages']) && array_key_exists('items', $s['packages']) && is_array($s['packages']['items'])) {
             $out['packages']['items'] = $s['packages']['items'];
         }
-        if (!empty($s['operating_model']) && is_array($s['operating_model']) && isset($s['operating_model']['steps']) && is_array($s['operating_model']['steps'])) {
+        if (!empty($s['operating_model']) && is_array($s['operating_model']) && array_key_exists('steps', $s['operating_model']) && is_array($s['operating_model']['steps'])) {
             $out['operating_model']['steps'] = $s['operating_model']['steps'];
         }
-        if (!empty($s['testimonials']) && is_array($s['testimonials']) && isset($s['testimonials']['quotes']) && is_array($s['testimonials']['quotes'])) {
+        if (!empty($s['testimonials']) && is_array($s['testimonials']) && array_key_exists('quotes', $s['testimonials']) && is_array($s['testimonials']['quotes'])) {
             $out['testimonials']['quotes'] = $s['testimonials']['quotes'];
         }
 
@@ -87,6 +87,22 @@ final class HomePageBlocks
             }
         }
 
+        if (isset($s['confidence']) && is_array($s['confidence'])) {
+            self::liftNumericListChildren($s['confidence'], 'metrics');
+        }
+        if (isset($s['clusters']) && is_array($s['clusters'])) {
+            self::liftNumericListChildren($s['clusters'], 'items');
+        }
+        if (isset($s['packages']) && is_array($s['packages'])) {
+            self::liftNumericListChildren($s['packages'], 'items');
+        }
+        if (isset($s['operating_model']) && is_array($s['operating_model'])) {
+            self::liftNumericListChildren($s['operating_model'], 'steps');
+        }
+        if (isset($s['testimonials']) && is_array($s['testimonials'])) {
+            self::liftNumericListChildren($s['testimonials'], 'quotes');
+        }
+
         if (isset($s['confidence']['metrics']) && is_array($s['confidence']['metrics'])) {
             $s['confidence']['metrics'] = array_values($s['confidence']['metrics']);
         }
@@ -104,6 +120,58 @@ final class HomePageBlocks
         }
 
         return $s;
+    }
+
+    /**
+     * cms_page_fields keys like blocks.clusters.0.title are siblings of blocks.clusters.title; the public
+     * view expects clusters.items[]. If `items` is missing or stored as empty [] (empty_array marker),
+     * rebuild items from numeric keys. If items is already non-empty, drop stray numeric siblings.
+     *
+     * @param array<string, mixed> $section
+     */
+    private static function liftNumericListChildren(array &$section, string $listKey): void
+    {
+        $toUnset = [];
+        $lifted = [];
+        foreach ($section as $k => $v) {
+            if ($k === $listKey || !is_array($v)) {
+                continue;
+            }
+            if (is_int($k)) {
+                $lifted[$k] = $v;
+                $toUnset[] = $k;
+
+                continue;
+            }
+            if (is_string($k) && $k !== '' && ctype_digit($k)) {
+                $lifted[(int) $k] = $v;
+                $toUnset[] = $k;
+            }
+        }
+        if ($lifted === []) {
+            return;
+        }
+        ksort($lifted, SORT_NUMERIC);
+        $mergedList = array_values($lifted);
+
+        $hadListKey = array_key_exists($listKey, $section);
+        $existing = ($hadListKey && is_array($section[$listKey])) ? $section[$listKey] : null;
+
+        $useLifted =
+            !$hadListKey
+            || !is_array($existing)
+            || $existing === [];
+
+        if ($useLifted) {
+            foreach ($toUnset as $k) {
+                unset($section[$k]);
+            }
+            $section[$listKey] = $mergedList;
+        } elseif (is_array($existing) && $existing !== []) {
+            foreach ($toUnset as $k) {
+                unset($section[$k]);
+            }
+        }
     }
 
     /**
