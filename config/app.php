@@ -15,6 +15,17 @@ return [
     // Absolute path (written by app/bootstrap). Server must allow writing to logs/.
     'error_log' => dirname(__DIR__) . '/logs/php-error.log',
 
+    /**
+     * JSON-lines audit file (requests, controller outcomes, JS actions). Writable by PHP.
+     */
+    'action_logging' => [
+        'enabled' => true,
+        'file' => dirname(__DIR__) . '/logs/app-actions.log',
+        'log_http' => true,
+        'log_browser' => true,
+        'log_events' => true,
+    ],
+
     // Site contact (footer, contact page, JSON-LD later)
     'email' => 'info@dotseventplanning.com',
     'phone_display' => '+1 (506) 555-0100',

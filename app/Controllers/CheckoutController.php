@@ -59,16 +59,19 @@ final class CheckoutController extends Controller
     public function pay(): void
     {
         if (strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? '')) !== 'POST' || !Csrf::validate($_POST['_csrf'] ?? null)) {
+            action_log('checkout', 'pay.rejected', ['reason' => 'csrf_or_method']);
             Flash::set(Flash::ERROR, 'Invalid session. Please try again.');
             $this->redirect('/checkout');
         }
         $sourceId = trim((string) ($_POST['source_id'] ?? ''));
         if ($sourceId === '') {
+            action_log('checkout', 'pay.rejected', ['reason' => 'no_payment_source']);
             Flash::set(Flash::ERROR, 'No payment method was provided.');
             $this->redirect('/checkout');
         }
         $email = trim((string) ($_POST['email'] ?? ''));
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            action_log('checkout', 'pay.rejected', ['reason' => 'invalid_email']);
             Flash::set(Flash::ERROR, 'Please enter a valid email.');
             $this->redirect('/checkout');
         }
@@ -94,6 +97,7 @@ final class CheckoutController extends Controller
             $subtotal += $c * $qty;
         }
         if ($lineRows === [] || $subtotal < 1) {
+            action_log('checkout', 'pay.rejected', ['reason' => 'empty_cart']);
             Flash::set(Flash::ERROR, 'Your cart is empty.');
             $this->redirect('/rentals');
         }
@@ -124,7 +128,15 @@ final class CheckoutController extends Controller
                 $lineRows
             );
             $_SESSION['last_order_id'] = $orderId;
+            action_log('checkout', 'order.paid', [
+                'order_id' => $orderId,
+                'total_cents' => $subtotal,
+                'currency' => $currency,
+            ]);
         } catch (Throwable $e) {
+            action_log('checkout', 'pay.exception', [
+                'exc' => $e::class,
+            ]);
             $msg = app_config()['debug'] ?? false
                 ? 'Payment could not be completed: ' . $e->getMessage()
                 : 'Payment could not be completed. Please try again or use another card.';

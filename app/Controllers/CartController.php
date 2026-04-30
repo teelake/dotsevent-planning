@@ -29,6 +29,7 @@ final class CartController extends Controller
     public function add(): void
     {
         if (!$this->isPost() || !Csrf::validate($_POST['_csrf'] ?? null)) {
+            action_log('cart', 'mutate.rejected', ['op' => 'add', 'reason' => 'csrf_or_method']);
             $this->redirect('/rentals');
         }
         $pid = (int) ($_POST['product_id'] ?? 0);
@@ -36,10 +37,12 @@ final class CartController extends Controller
         $repo = new ProductRepository();
         $p = $repo->find($pid);
         if ($p === null) {
+            action_log('cart', 'add.skipped', ['reason' => 'product_not_found', 'product_id' => $pid]);
             Flash::set(Flash::ERROR, 'This item is not available.');
             $this->redirect('/rentals');
         }
         Cart::add($pid, $qty);
+        action_log('cart', 'add', ['product_id' => $pid, 'quantity' => $qty]);
         Flash::set(Flash::SUCCESS, 'Added to cart.');
         $return = (string) ($_POST['return'] ?? '/rentals');
         $this->redirect(allowed_return($return));
@@ -48,21 +51,25 @@ final class CartController extends Controller
     public function update(): void
     {
         if (!$this->isPost() || !Csrf::validate($_POST['_csrf'] ?? null)) {
+            action_log('cart', 'mutate.rejected', ['op' => 'update']);
             $this->redirect('/cart');
         }
         $pid = (int) ($_POST['product_id'] ?? 0);
         $qty = (int) ($_POST['quantity'] ?? 0);
         Cart::set($pid, $qty);
+        action_log('cart', 'update', ['product_id' => $pid, 'quantity' => $qty]);
         $this->redirect('/cart');
     }
 
     public function remove(): void
     {
         if (!$this->isPost() || !Csrf::validate($_POST['_csrf'] ?? null)) {
+            action_log('cart', 'mutate.rejected', ['op' => 'remove']);
             $this->redirect('/cart');
         }
         $pid = (int) ($_POST['product_id'] ?? 0);
         Cart::remove($pid);
+        action_log('cart', 'remove', ['product_id' => $pid]);
         $this->redirect('/cart');
     }
 

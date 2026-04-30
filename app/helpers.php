@@ -220,8 +220,18 @@ function csrf_field(): string
 }
 
 /**
- * Safe redirect targets after add-to-cart (must stay under base_url, e.g. /new).
+ * Structured audit trail (see logs/app-actions.log when action_logging.enabled).
+ *
+ * @param array<string, mixed> $context
  */
+function action_log(string $channel, string $action, array $context = []): void
+{
+    try {
+        \App\Core\AppActionLogger::event($channel, $action, $context);
+    } catch (\Throwable) {
+    }
+}
+
 /**
  * URL-safe slug from a title (a-z0-9 hyphens).
  */
@@ -253,6 +263,7 @@ function current_admin_user_email(): string
     return $u !== null ? trim((string) ($u['email'] ?? '')) : '';
 }
 
+/** Safe redirect targets after add-to-cart (must stay under base_url). */
 function allowed_return(string $url): string
 {
     if ($url === '' || str_contains($url, '://') || str_starts_with($url, '//')) {

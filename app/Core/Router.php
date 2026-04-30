@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Core;
 
 use App\Controllers\AdminController;
+use App\Controllers\ActionLogController;
 use App\Controllers\CartController;
 use App\Controllers\CheckoutController;
 use App\Controllers\FormController;
@@ -17,12 +18,18 @@ final class Router
 {
     public function dispatch(): void
     {
+        AppActionLogger::requestBegin();
         $path = $this->pathString();
         $segs = $path === '' ? [] : explode('/', $path);
         $method = strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? 'GET'));
         $first = $segs[0] ?? '';
 
         if ($method === 'POST') {
+            if ($first === 'frontend-log' && count($segs) === 1) {
+                (new ActionLogController())->ingest();
+
+                return;
+            }
             if ($first === 'contact' && count($segs) === 1) {
                 (new FormController())->contactSubmit();
                 return;

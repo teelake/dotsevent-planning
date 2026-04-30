@@ -111,6 +111,7 @@ $whatsappIcon = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><
 </a>
 <?php endif; ?>
 
+<?php $__alogSurface = 'public'; include dirname(__DIR__) . '/partials/action-log-bootstrap.php'; ?>
 <script src="<?= e(asset('js/main.js')) ?>" defer></script>
 <?= $extraFooter ?? '' ?>
 </body>

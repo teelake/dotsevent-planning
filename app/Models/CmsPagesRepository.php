@@ -50,6 +50,8 @@ final class CmsPagesRepository
     public function upsert(string $slug, string $title, string $contentJson): bool
     {
         if ($this->pdo === null) {
+            error_log('CmsPagesRepository::upsert aborted: no DB connection (slug=' . $slug . ')');
+
             return false;
         }
 
@@ -66,14 +68,28 @@ final class CmsPagesRepository
                  ON DUPLICATE KEY UPDATE title = VALUES(title)'
             );
             if (! $st->execute(['s' => $slug, 't' => $title])) {
+                error_log(
+                    'CmsPagesRepository::upsert cms_pages insert/update failed (slug=' . $slug . '): '
+                    . json_encode($st->errorInfo(), JSON_UNESCAPED_UNICODE)
+                );
+
                 return false;
             }
             $pageId = $this->pageId($slug);
             if ($pageId <= 0) {
+                error_log('CmsPagesRepository::upsert could not resolve page_id (slug=' . $slug . ')');
+
                 return false;
             }
             $del = $this->pdo->prepare('DELETE FROM cms_page_fields WHERE page_id = :id');
-            $del->execute(['id' => $pageId]);
+            if (! $del->execute(['id' => $pageId])) {
+                error_log(
+                    'CmsPagesRepository::upsert delete cms_page_fields failed (slug=' . $slug . ' page_id=' . $pageId . '): '
+                    . json_encode($del->errorInfo(), JSON_UNESCAPED_UNICODE)
+                );
+
+                return false;
+            }
             $rows = [];
             self::flattenFields($data, '', $rows);
             if ($rows === []) {
@@ -90,6 +106,11 @@ final class CmsPagesRepository
                     'field_type' => $row['type'],
                     'field_value' => $row['value'],
                 ])) {
+                    error_log(
+                        'CmsPagesRepository::upsert cms_page_fields insert failed (slug=' . $slug . ' key=' . ($row['key'] ?? '')
+                        . '): ' . json_encode($ins->errorInfo(), JSON_UNESCAPED_UNICODE)
+                    );
+
                     return false;
                 }
             }
@@ -161,13 +182,31 @@ final class CmsPagesRepository
                 'INSERT INTO cms_pages (slug, title) VALUES (:s, :t)
                  ON DUPLICATE KEY UPDATE title = VALUES(title)'
             );
-            return $st->execute(['s' => $slug, 't' => $title]);
+            if (! $st->execute(['s' => $slug, 't' => $title])) {
+                error_log(
+                    'CmsPagesRepository::upsertLegacy cms_pages insert failed (slug=' . $slug . '): '
+                    . json_encode($st->errorInfo(), JSON_UNESCAPED_UNICODE)
+                );
+
+                return false;
+            }
+
+            return true;
         }
         $st = $this->pdo->prepare(
             'INSERT INTO cms_pages (slug, title, content_json) VALUES (:s, :t, :c)
              ON DUPLICATE KEY UPDATE title = VALUES(title), content_json = VALUES(content_json)'
         );
-        return $st->execute(['s' => $slug, 't' => $title, 'c' => $contentJson]);
+        if (! $st->execute(['s' => $slug, 't' => $title, 'c' => $contentJson])) {
+            error_log(
+                'CmsPagesRepository::upsertLegacy cms_pages+content_json upsert failed (slug=' . $slug . '): '
+                . json_encode($st->errorInfo(), JSON_UNESCAPED_UNICODE)
+            );
+
+            return false;
+        }
+
+        return true;
     }
 
     private function pageId(string $slug): int

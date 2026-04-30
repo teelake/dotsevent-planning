@@ -167,5 +167,7 @@ $logoPath = trim(site_setting('logo_path', 'assets/images/logo-dots.svg'));
 </div>
 <script src="<?= e(asset('js/admin.js')) ?>" defer></script>
 <?php endif; ?>
+<?php $__alogSurface = ($admin_authed ?? false) ? 'admin' : 'admin-login'; ?>
+<?php include dirname(__DIR__) . '/partials/action-log-bootstrap.php'; ?>
 </body>
 </html>

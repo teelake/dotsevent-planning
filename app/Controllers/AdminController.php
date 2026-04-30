@@ -25,6 +25,10 @@ final class AdminController extends Controller
      */
     public function route(string $method, array $segs): void
     {
+        action_log('admin', 'route', [
+            'method' => $method,
+            'path' => implode('/', array_slice($segs, 0, 20)),
+        ]);
         $n = count($segs);
         $second = $segs[1] ?? '';
 
@@ -519,10 +523,17 @@ final class AdminController extends Controller
         $merged = array_merge($old, $incoming);
         $encoded = json_encode($merged, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         if ($encoded === false) {
+            error_log(
+                'AdminController::cmsPageSave json_encode failed (slug=' . $slug . '): ' . json_last_error_msg()
+            );
             Flash::set(Flash::ERROR, 'Could not save content. Try again.');
             $this->redirect('/admin/cms/page/' . $slug);
         }
-        $repo->upsert($slug, $title, $encoded);
+        if (! $repo->upsert($slug, $title, $encoded)) {
+            error_log('AdminController::cmsPageSave upsert returned false (slug=' . $slug . ')');
+            Flash::set(Flash::ERROR, 'Could not save to the database. Check the server error log.');
+            $this->redirect('/admin/cms/page/' . $slug);
+        }
         Flash::set(Flash::SUCCESS, 'Page saved.');
         $this->redirect('/admin/cms/page/' . $slug);
     }
