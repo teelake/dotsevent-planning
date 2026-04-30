@@ -37,12 +37,22 @@ final class CmsPagesRepository
             $data = $this->hasFieldStorage()
                 ? $this->loadPageFields((int) ($r['id'] ?? 0))
                 : $this->loadLegacyContentJson($slug);
-            $encoded = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            $flags = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES;
+            if (\defined('JSON_INVALID_UTF8_SUBSTITUTE')) {
+                $flags |= \JSON_INVALID_UTF8_SUBSTITUTE;
+            }
+            $encoded = json_encode($data, $flags);
+            if ($encoded === false) {
+                error_log(
+                    'CmsPagesRepository::findBySlug json_encode failed for slug=' . $slug . ' — ' . json_last_error_msg()
+                );
+                $encoded = '{}';
+            }
 
             return [
                 'slug' => (string) ($r['slug'] ?? ''),
                 'title' => (string) ($r['title'] ?? ''),
-                'content_json' => is_string($encoded) ? $encoded : '{}',
+                'content_json' => $encoded,
             ];
         }, null);
     }

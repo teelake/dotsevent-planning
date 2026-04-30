@@ -62,42 +62,27 @@ final class CmsPublicPage
         }
 
         if ($slug === 'about') {
-            $storedAbout = null;
-            if ($data !== null && isset($data['blocks']) && is_array($data['blocks'])) {
-                $storedAbout = $data['blocks'];
-            }
+            $storedAbout = $data !== null ? self::blocksFromContentData($data) : null;
             $out['about_blocks'] = AboutPageBlocks::merged($storedAbout);
         }
 
         if ($slug === 'services') {
-            $storedServices = null;
-            if ($data !== null && isset($data['blocks']) && is_array($data['blocks'])) {
-                $storedServices = $data['blocks'];
-            }
+            $storedServices = $data !== null ? self::blocksFromContentData($data) : null;
             $out['services_blocks'] = ServicesPageBlocks::merged($storedServices);
         }
 
         if ($slug === 'contact') {
-            $storedContact = null;
-            if ($data !== null && isset($data['blocks']) && is_array($data['blocks'])) {
-                $storedContact = $data['blocks'];
-            }
+            $storedContact = $data !== null ? self::blocksFromContentData($data) : null;
             $out['contact_blocks'] = ContactPageBlocks::merged($storedContact);
         }
 
         if ($slug === 'portfolio') {
-            $storedPortfolio = null;
-            if ($data !== null && isset($data['blocks']) && is_array($data['blocks'])) {
-                $storedPortfolio = $data['blocks'];
-            }
+            $storedPortfolio = $data !== null ? self::blocksFromContentData($data) : null;
             $out['portfolio_blocks'] = PortfolioPageBlocks::merged($storedPortfolio);
         }
 
         if ($slug === 'rentals') {
-            $storedRentals = null;
-            if ($data !== null && isset($data['blocks']) && is_array($data['blocks'])) {
-                $storedRentals = $data['blocks'];
-            }
+            $storedRentals = $data !== null ? self::blocksFromContentData($data) : null;
             $out['rentals_blocks'] = RentalsPageBlocks::merged($storedRentals);
         }
 
@@ -161,8 +146,8 @@ final class CmsPublicPage
             $out['intro_html'] = $san;
         }
 
-        $blocksRaw = $data['blocks'] ?? null;
-        $out['home_blocks'] = HomePageBlocks::merged(is_array($blocksRaw) ? $blocksRaw : null);
+        $blocksRaw = self::blocksFromContentData($data);
+        $out['home_blocks'] = HomePageBlocks::merged($blocksRaw);
 
         return $out;
     }
@@ -248,6 +233,44 @@ final class CmsPublicPage
         }
 
         return $data;
+    }
+
+    /**
+     * Homepage (and block editors) historically read `content_json.blocks`; relational storage
+     * hydrates `blocks.*` keys. Support extra shapes: nested `blocks.blocks`, empty `blocks{}`
+     * with section keys at root, and mis-saved root-level `clusters`/`confidence`/… .
+     *
+     * @param array<string, mixed> $data
+     * @return array<string, mixed>|null
+     */
+    public static function blocksFromContentData(array $data): ?array
+    {
+        $b = $data['blocks'] ?? null;
+        while (is_array($b) && isset($b['blocks']) && is_array($b['blocks'])) {
+            $b = $b['blocks'];
+        }
+        if (is_array($b) && $b !== []) {
+            return $b;
+        }
+
+        $markers = [
+            'version',
+            'confidence',
+            'partnership',
+            'clusters',
+            'operating_model',
+            'packages',
+            'testimonials',
+            'newsletter',
+        ];
+        $fromRoot = [];
+        foreach ($markers as $k) {
+            if (array_key_exists($k, $data)) {
+                $fromRoot[$k] = $data[$k];
+            }
+        }
+
+        return $fromRoot === [] ? null : $fromRoot;
     }
 
     /**

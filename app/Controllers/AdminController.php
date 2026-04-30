@@ -521,7 +521,11 @@ final class AdminController extends Controller
             }
         }
         $merged = array_merge($old, $incoming);
-        $encoded = json_encode($merged, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        $flags = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES;
+        if (\defined('JSON_INVALID_UTF8_SUBSTITUTE')) {
+            $flags |= \JSON_INVALID_UTF8_SUBSTITUTE;
+        }
+        $encoded = json_encode($merged, $flags);
         if ($encoded === false) {
             error_log(
                 'AdminController::cmsPageSave json_encode failed (slug=' . $slug . '): ' . json_last_error_msg()

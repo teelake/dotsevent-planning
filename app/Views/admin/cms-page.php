@@ -15,10 +15,7 @@ if (is_array($dataPreview) && isset($dataPreview['meta_description']) && is_stri
     $meta_description_field = $dataPreview['meta_description'];
 }
 
-$storedBlocks = null;
-if (is_array($dataPreview) && isset($dataPreview['blocks']) && is_array($dataPreview['blocks'])) {
-    $storedBlocks = $dataPreview['blocks'];
-}
+$storedBlocks = is_array($dataPreview) ? \App\Services\CmsPublicPage::blocksFromContentData($dataPreview) : null;
 $mergedBlocks = null;
 if ($slug === 'home') {
     $mergedBlocks = \App\Services\HomePageBlocks::merged($storedBlocks);
