@@ -5,21 +5,40 @@ SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 CREATE TABLE IF NOT EXISTS products (
-  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  slug VARCHAR(160) NOT NULL,
-  name VARCHAR(255) NOT NULL,
-  description TEXT NULL,
-  price_cents INT UNSIGNED NOT NULL,
-  currency CHAR(3) NOT NULL DEFAULT 'CAD',
-  image_url VARCHAR(512) NULL,
-  stock INT NULL,
-  has_options TINYINT(1) NOT NULL DEFAULT 0,
-  is_active TINYINT(1) NOT NULL DEFAULT 1,
-  sort_order INT NOT NULL DEFAULT 0,
-  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  id             INT UNSIGNED  NOT NULL AUTO_INCREMENT,
+  slug           VARCHAR(160)  NOT NULL,
+  name           VARCHAR(255)  NOT NULL,
+  description    TEXT          NULL,
+  price_cents    INT UNSIGNED  NOT NULL,
+  price_max_cents INT UNSIGNED NULL     COMMENT 'Highest option price. NULL = single price.',
+  currency       CHAR(3)       NOT NULL DEFAULT 'CAD',
+  image_url      VARCHAR(512)  NULL,
+  stock          INT           NULL,
+  has_options    TINYINT(1)    NOT NULL DEFAULT 0,
+  category_key   VARCHAR(60)   NULL     COMMENT 'Category slug for front-end filter',
+  badge_label    VARCHAR(40)   NULL     COMMENT 'Optional card badge text',
+  details        TEXT          NULL     COMMENT 'Detail bullet points, one per line',
+  ideal_for      TEXT          NULL     COMMENT 'Ideal-for bullet points, one per line',
+  policy_note    TEXT          NULL     COMMENT 'Short rental policy note',
+  is_active      TINYINT(1)    NOT NULL DEFAULT 1,
+  sort_order     INT           NOT NULL DEFAULT 0,
+  created_at     TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   UNIQUE KEY uq_products_slug (slug),
-  KEY idx_products_active (is_active)
+  KEY idx_products_active (is_active),
+  KEY idx_products_category (category_key)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS product_options (
+  id          INT UNSIGNED  NOT NULL AUTO_INCREMENT,
+  product_id  INT UNSIGNED  NOT NULL,
+  label       VARCHAR(255)  NOT NULL,
+  price_cents INT UNSIGNED  NOT NULL DEFAULT 0,
+  sort_order  INT           NOT NULL DEFAULT 0,
+  PRIMARY KEY (id),
+  KEY idx_product_options_product (product_id),
+  CONSTRAINT fk_product_options_product
+    FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS orders (
