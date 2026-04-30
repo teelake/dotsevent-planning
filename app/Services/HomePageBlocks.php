@@ -41,19 +41,19 @@ final class HomePageBlocks
         $out = array_replace_recursive($defaults, $s);
 
         /** Full array replace where partial lists hurt UX */
-        if (!empty($s['confidence']) && is_array($s['confidence']) && isset($s['confidence']['metrics']) && is_array($s['confidence']['metrics']) && $s['confidence']['metrics'] !== []) {
+        if (!empty($s['confidence']) && is_array($s['confidence']) && isset($s['confidence']['metrics']) && is_array($s['confidence']['metrics'])) {
             $out['confidence']['metrics'] = $s['confidence']['metrics'];
         }
-        if (!empty($s['clusters']) && is_array($s['clusters']) && isset($s['clusters']['items']) && is_array($s['clusters']['items']) && $s['clusters']['items'] !== []) {
+        if (!empty($s['clusters']) && is_array($s['clusters']) && isset($s['clusters']['items']) && is_array($s['clusters']['items'])) {
             $out['clusters']['items'] = $s['clusters']['items'];
         }
-        if (!empty($s['packages']) && is_array($s['packages']) && isset($s['packages']['items']) && is_array($s['packages']['items']) && $s['packages']['items'] !== []) {
+        if (!empty($s['packages']) && is_array($s['packages']) && isset($s['packages']['items']) && is_array($s['packages']['items'])) {
             $out['packages']['items'] = $s['packages']['items'];
         }
-        if (!empty($s['operating_model']) && is_array($s['operating_model']) && isset($s['operating_model']['steps']) && is_array($s['operating_model']['steps']) && $s['operating_model']['steps'] !== []) {
+        if (!empty($s['operating_model']) && is_array($s['operating_model']) && isset($s['operating_model']['steps']) && is_array($s['operating_model']['steps'])) {
             $out['operating_model']['steps'] = $s['operating_model']['steps'];
         }
-        if (!empty($s['testimonials']) && is_array($s['testimonials']) && isset($s['testimonials']['quotes']) && is_array($s['testimonials']['quotes']) && $s['testimonials']['quotes'] !== []) {
+        if (!empty($s['testimonials']) && is_array($s['testimonials']) && isset($s['testimonials']['quotes']) && is_array($s['testimonials']['quotes'])) {
             $out['testimonials']['quotes'] = $s['testimonials']['quotes'];
         }
 

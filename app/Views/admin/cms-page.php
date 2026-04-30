@@ -234,11 +234,17 @@ if ($slug === 'rentals') {
       var suffix = row.querySelector('.js-metric-suffix');
       var tv = targetEl && targetEl.value.trim();
       var tn = tv === '' ? 0 : parseInt(tv, 10);
+      var labelVal = label ? label.value.trim() : '';
+      var displayVal = display ? display.value.trim() : '';
+      var suffixVal = suffix && suffix.value.trim() !== '' ? suffix.value.trim() : '+';
+      if (labelVal === '' && displayVal === '' && (isNaN(tn) || tn === 0)) {
+        return;
+      }
       metrics.push({
-        label: label ? label.value.trim() : '',
-        display: display ? display.value.trim() : '',
+        label: labelVal,
+        display: displayVal,
         target: isNaN(tn) ? 0 : tn,
-        suffix: suffix && suffix.value.trim() !== '' ? suffix.value.trim() : '+',
+        suffix: suffixVal,
       });
     });
 

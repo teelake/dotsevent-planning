@@ -213,6 +213,10 @@ final class CmsPagesRepository
     {
         foreach ($data as $key => $value) {
             $path = $prefix === '' ? (string) $key : $prefix . '.' . (string) $key;
+            if (is_array($value) && $value === []) {
+                $rows[] = ['key' => $path, 'type' => 'empty_array', 'value' => null];
+                continue;
+            }
             if (is_array($value)) {
                 self::flattenFields($value, $path, $rows);
                 continue;
@@ -248,6 +252,7 @@ final class CmsPagesRepository
             'int' => (int) $raw,
             'float' => (float) $raw,
             'null' => null,
+            'empty_array' => [],
             default => (string) ($raw ?? ''),
         };
     }
