@@ -22,6 +22,9 @@ $canonicalUrl = current_canonical_url();
 $ogImagePath = trim((string) ($app['og_image'] ?? ''));
 $ogImageAbsolute = $ogImagePath !== '' ? absolute_public_url($ogImagePath) : '';
 $faviconPath = trim(site_setting('favicon_path', ''));
+$layoutSocial = site_social_urls();
+$whatsappUrl = trim((string) ($layoutSocial['whatsapp'] ?? ''));
+$whatsappIcon = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.5 11.8a8.3 8.3 0 0 1-12.2 7.3L3.5 20.5l1.5-4.6a8.3 8.3 0 1 1 15.5-4.1z"/><path d="M8.8 8.1c.2-.5.4-.5.7-.5h.5c.2 0 .4.1.5.4l.7 1.7c.1.3 0 .5-.1.7l-.4.5c-.1.1-.2.3-.1.5.4.8 1 1.5 1.7 2 .5.3.9.5 1.1.6.2.1.4.1.5-.1l.8-.9c.2-.2.4-.2.6-.1l1.8.9c.3.1.4.3.4.5 0 .4-.3 1.2-.9 1.6-.5.4-1.1.5-1.8.4-1.1-.2-2.5-.8-4-2.1-1.8-1.6-2.8-3.5-3-4.6-.1-.5 0-1 .2-1.5z"/></svg>';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -100,6 +103,13 @@ $faviconPath = trim(site_setting('favicon_path', ''));
 </main>
 
 <?php include dirname(__DIR__) . '/partials/footer-status.php'; ?>
+
+<?php if ($whatsappUrl !== ''): ?>
+<a class="floating-whatsapp" href="<?= e($whatsappUrl) ?>" target="_blank" rel="noopener noreferrer" aria-label="Chat with DOTS on WhatsApp">
+    <?= $whatsappIcon ?>
+    <span class="floating-whatsapp__label">Chat</span>
+</a>
+<?php endif; ?>
 
 <script src="<?= e(asset('js/main.js')) ?>" defer></script>
 <?= $extraFooter ?? '' ?>

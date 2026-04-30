@@ -147,9 +147,4 @@ $float = is_array($b['floating_widget'] ?? null) ? $b['floating_widget'] : [];
 </section>
 <?php endif; ?>
 
-<?php if (($float['enabled'] ?? false) === true && trim((string) ($float['href'] ?? '')) !== ''): ?>
-<a href="<?= e((string) $float['href']) ?>" target="_blank" rel="noopener noreferrer" aria-label="<?= e((string) ($float['label'] ?? 'Chat')) ?>" class="contact-floating-widget" style="position:fixed;right:1rem;bottom:1rem;width:48px;height:48px;border-radius:999px;background:#24d366;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px rgba(0,0,0,.2);z-index:220;">
-  <span style="width:18px;height:18px;border-radius:50%;background:#fff;display:block;" aria-hidden="true"></span>
-</a>
-<?php endif; ?>
 

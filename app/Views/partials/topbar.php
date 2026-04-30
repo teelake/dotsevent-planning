@@ -7,22 +7,6 @@ $siteName = $app['name'] ?? 'DOTS Event Planning';
 $logoPath = trim(site_setting('logo_path', 'assets/images/logo-dots.svg'));
 $primaryCtaHref = app_url('book');
 $primaryCtaLabel = 'Book Your Event';
-$social = site_social_urls();
-$headerSocial = array_filter([
-    'facebook' => $social['facebook'] ?? '',
-    'instagram' => $social['instagram'] ?? '',
-    'whatsapp' => $social['whatsapp'] ?? '',
-], static fn (string $url): bool => trim($url) !== '');
-$headerIcons = [
-    'facebook' => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.5 8.4V6.7c0-.8.3-1.2 1.3-1.2h1.6V2.8c-.8-.1-1.5-.2-2.3-.2-2.5 0-4.2 1.5-4.2 4.3v1.5H8.1v3h2.8v9.9h3.4v-9.9h2.8l.4-3h-3z"/></svg>',
-    'instagram' => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5.1"/><circle cx="12" cy="12" r="4.1"/><circle cx="17.2" cy="6.8" r="1.2"/></svg>',
-    'whatsapp' => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.5 11.8a8.3 8.3 0 0 1-12.2 7.3L3.5 20.5l1.5-4.6a8.3 8.3 0 1 1 15.5-4.1z"/><path d="M8.8 8.1c.2-.5.4-.5.7-.5h.5c.2 0 .4.1.5.4l.7 1.7c.1.3 0 .5-.1.7l-.4.5c-.1.1-.2.3-.1.5.4.8 1 1.5 1.7 2 .5.3.9.5 1.1.6.2.1.4.1.5-.1l.8-.9c.2-.2.4-.2.6-.1l1.8.9c.3.1.4.3.4.5 0 .4-.3 1.2-.9 1.6-.5.4-1.1.5-1.8.4-1.1-.2-2.5-.8-4-2.1-1.8-1.6-2.8-3.5-3-4.6-.1-.5 0-1 .2-1.5z"/></svg>',
-];
-$headerLabels = [
-    'facebook' => 'Facebook',
-    'instagram' => 'Instagram',
-    'whatsapp' => 'Chat on WhatsApp',
-];
 $navItems = [
     'home' => ['Home', app_url('')],
     'about' => ['About Us', app_url('about')],
@@ -82,17 +66,6 @@ $cartAriaLabel = $cn > 0 ? ('Shopping cart, ' . $cn . ' items') : 'Shopping cart
         </nav>
 
         <div class="app-topbar__end">
-            <?php if ($headerSocial !== []): ?>
-            <ul class="app-topbar-social" aria-label="Quick social links">
-                <?php foreach ($headerSocial as $key => $url): ?>
-                <li>
-                    <a class="app-topbar-social__link app-topbar-social__link--<?= e($key) ?>" href="<?= e($url) ?>" rel="noopener noreferrer" target="_blank" aria-label="<?= e($headerLabels[$key] ?? ucfirst($key)) ?>">
-                        <?= $headerIcons[$key] ?? '' ?>
-                    </a>
-                </li>
-                <?php endforeach; ?>
-            </ul>
-            <?php endif; ?>
             <a class="btn btn--primary app-topbar__cta" href="<?= e($primaryCtaHref) ?>"<?= $activeNav === 'book' ? ' aria-current="page"' : '' ?>><?= e($primaryCtaLabel) ?></a>
         </div>
     </div>
