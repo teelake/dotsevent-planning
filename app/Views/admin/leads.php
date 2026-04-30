@@ -30,10 +30,22 @@ declare(strict_types=1);
             <td>
                 <?php
                 $m = (string) ($row['message'] ?? '');
-                $x = $row['extra'] ?? null;
-                if ($x !== null && $x !== '') {
-                    $j = is_string($x) ? $x : json_encode($x);
-                    echo '<details><summary>Details</summary><pre style="white-space:pre-wrap;font-size:0.8rem;margin:0.5rem 0 0;">' . e($j) . '</pre></details>';
+                $details = [];
+                foreach ([
+                    'subject' => 'Subject',
+                    'package_key' => 'Package',
+                    'event_date' => 'Event date',
+                    'guest_count' => 'Guests',
+                    'venue_city' => 'Venue/city',
+                    'extra' => 'Legacy details',
+                ] as $key => $label) {
+                    $value = trim((string) ($row[$key] ?? ''));
+                    if ($value !== '') {
+                        $details[] = $label . ': ' . $value;
+                    }
+                }
+                if ($details !== []) {
+                    echo '<details><summary>Details</summary><pre style="white-space:pre-wrap;font-size:0.8rem;margin:0.5rem 0 0;">' . e(implode("\n", $details)) . '</pre></details>';
                 }
                 if ($m !== '') {
                     $short = (function_exists('mb_strlen') && function_exists('mb_substr') && mb_strlen($m) > 200)

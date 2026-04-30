@@ -8,7 +8,7 @@
 --   Option B (SSH / CLI) - mysql -u USER -p DBNAME < run-migration-003.sql
 --
 -- IMPORTANT:
---   This version avoids JSON_OBJECT(), JSON columns, and ADD COLUMN IF NOT EXISTS.
+--   This version avoids JSON functions, JSON columns, and ADD COLUMN IF NOT EXISTS.
 --   Run it once. If one of these columns already exists, skip that specific
 --   ADD COLUMN line in phpMyAdmin before running again.
 -- ============================================================

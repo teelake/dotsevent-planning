@@ -1,7 +1,7 @@
 -- Adds rental-specific columns and the product_options table.
 -- Run: mysql -u USER -p DB_NAME < database/migrations/003_products_rental_extensions.sql
 --
--- This version avoids JSON_OBJECT(), JSON columns, and ADD COLUMN IF NOT EXISTS.
+-- This version avoids JSON functions, JSON columns, and ADD COLUMN IF NOT EXISTS.
 -- Run it once. If one of these columns already exists, skip that ADD COLUMN line.
 
 SET NAMES utf8mb4;

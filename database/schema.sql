@@ -74,7 +74,11 @@ CREATE TABLE IF NOT EXISTS leads (
   name VARCHAR(255) NULL,
   phone VARCHAR(64) NULL,
   message TEXT NULL,
-  extra JSON NULL,
+  subject VARCHAR(255) NULL,
+  package_key VARCHAR(64) NULL,
+  event_date VARCHAR(64) NULL,
+  guest_count VARCHAR(64) NULL,
+  venue_city VARCHAR(255) NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   KEY idx_leads_type (type),
@@ -99,15 +103,27 @@ CREATE TABLE IF NOT EXISTS cms_settings (
   PRIMARY KEY (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- CMS page content by slug (home/about/services/etc.) stored as JSON
+-- CMS page shell by slug (structured fields are stored in cms_page_fields)
 CREATE TABLE IF NOT EXISTS cms_pages (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   slug VARCHAR(80) NOT NULL,
   title VARCHAR(255) NOT NULL DEFAULT '',
-  content_json JSON NULL,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   UNIQUE KEY uq_cms_pages_slug (slug)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS cms_page_fields (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  page_id INT UNSIGNED NOT NULL,
+  field_key VARCHAR(255) NOT NULL,
+  field_type VARCHAR(24) NOT NULL DEFAULT 'string',
+  field_value MEDIUMTEXT NULL,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_cms_page_fields_key (page_id, field_key),
+  KEY idx_cms_page_fields_page (page_id),
+  CONSTRAINT fk_cms_page_fields_page FOREIGN KEY (page_id) REFERENCES cms_pages (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Uploaded media for CMS (images/videos). Stored under /public/uploads/

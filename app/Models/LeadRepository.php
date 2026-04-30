@@ -10,19 +10,87 @@ use PDO;
 final class LeadRepository
 {
     private ?PDO $pdo;
+    private static ?bool $extendedCols = null;
 
     public function __construct()
     {
         $this->pdo = Database::getInstance();
     }
 
-    public function create(string $type, string $email, ?string $name, ?string $phone, ?string $message, ?string $extraJson): bool
+    private function hasExtendedCols(): bool
+    {
+        if (self::$extendedCols !== null) {
+            return self::$extendedCols;
+        }
+        if ($this->pdo === null) {
+            return self::$extendedCols = false;
+        }
+        try {
+            $st = $this->pdo->query(
+                "SELECT COUNT(*) FROM information_schema.COLUMNS
+                 WHERE TABLE_SCHEMA = DATABASE()
+                   AND TABLE_NAME = 'leads'
+                   AND COLUMN_NAME = 'subject'"
+            );
+            self::$extendedCols = (int) $st->fetchColumn() > 0;
+        } catch (\Throwable) {
+            self::$extendedCols = false;
+        }
+        return self::$extendedCols;
+    }
+
+    public function create(
+        string $type,
+        string $email,
+        ?string $name,
+        ?string $phone,
+        ?string $message,
+        ?string $subject = null,
+        ?string $packageKey = null,
+        ?string $eventDate = null,
+        ?string $guestCount = null,
+        ?string $venueCity = null
+    ): bool
     {
         if ($this->pdo === null) {
             return false;
         }
+        if (! $this->hasExtendedCols()) {
+            $legacyExtra = null;
+            $legacyParts = [];
+            if ($subject !== null && $subject !== '') {
+                $legacyParts[] = 'Subject: ' . $subject;
+            }
+            if ($packageKey !== null && $packageKey !== '') {
+                $legacyParts[] = 'Package: ' . $packageKey;
+            }
+            if ($eventDate !== null && $eventDate !== '') {
+                $legacyParts[] = 'Event date: ' . $eventDate;
+            }
+            if ($guestCount !== null && $guestCount !== '') {
+                $legacyParts[] = 'Guests: ' . $guestCount;
+            }
+            if ($venueCity !== null && $venueCity !== '') {
+                $legacyParts[] = 'Venue/city: ' . $venueCity;
+            }
+            if ($legacyParts !== []) {
+                $legacyExtra = implode("\n", $legacyParts);
+            }
+            $st = $this->pdo->prepare(
+                'INSERT INTO leads (type, email, name, phone, message, extra) VALUES (:type, :email, :name, :phone, :message, :extra)'
+            );
+            return $st->execute([
+                'type' => $type,
+                'email' => $email,
+                'name' => $name,
+                'phone' => $phone,
+                'message' => $message,
+                'extra' => $legacyExtra,
+            ]);
+        }
         $st = $this->pdo->prepare(
-            'INSERT INTO leads (type, email, name, phone, message, extra) VALUES (:type, :email, :name, :phone, :message, :extra)'
+            'INSERT INTO leads (type, email, name, phone, message, subject, package_key, event_date, guest_count, venue_city)
+             VALUES (:type, :email, :name, :phone, :message, :subject, :package_key, :event_date, :guest_count, :venue_city)'
         );
         return $st->execute([
             'type' => $type,
@@ -30,7 +98,11 @@ final class LeadRepository
             'name' => $name,
             'phone' => $phone,
             'message' => $message,
-            'extra' => $extraJson,
+            'subject' => $subject,
+            'package_key' => $packageKey,
+            'event_date' => $eventDate,
+            'guest_count' => $guestCount,
+            'venue_city' => $venueCity,
         ]);
     }
 
@@ -61,9 +133,12 @@ final class LeadRepository
         }
         $limit = max(1, min(100, $limit));
         $offset = max(0, $offset);
+        $cols = $this->hasExtendedCols()
+            ? 'id, type, email, name, phone, message, subject, package_key, event_date, guest_count, venue_city, created_at'
+            : 'id, type, email, name, phone, message, extra, created_at';
         if ($type === null || $type === '') {
             $st = $this->pdo->prepare(
-                'SELECT id, type, email, name, phone, message, extra, created_at
+                'SELECT ' . $cols . '
                  FROM leads ORDER BY id DESC LIMIT :lim OFFSET :off'
             );
             $st->bindValue('lim', $limit, PDO::PARAM_INT);
@@ -71,7 +146,7 @@ final class LeadRepository
             $st->execute();
         } else {
             $st = $this->pdo->prepare(
-                'SELECT id, type, email, name, phone, message, extra, created_at
+                'SELECT ' . $cols . '
                  FROM leads WHERE type = :t ORDER BY id DESC LIMIT :lim OFFSET :off'
             );
             $st->bindValue('t', $type, PDO::PARAM_STR);

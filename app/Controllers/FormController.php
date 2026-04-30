@@ -26,9 +26,8 @@ final class FormController extends Controller
             Flash::set(Flash::ERROR, 'Please enter a valid email.');
             $this->redirect('/contact');
         }
-        $extra = json_encode(['subject' => $subject], JSON_THROW_ON_ERROR);
         $repo = new LeadRepository();
-        if ($repo->create('contact', $email, $name !== '' ? $name : null, $phone !== '' ? $phone : null, $message !== '' ? $message : null, $extra)) {
+        if ($repo->create('contact', $email, $name !== '' ? $name : null, $phone !== '' ? $phone : null, $message !== '' ? $message : null, $subject !== '' ? $subject : null)) {
             Flash::set(Flash::SUCCESS, 'Thanks — we will get back to you shortly.');
         } else {
             Flash::set(Flash::ERROR, 'Your message could not be saved. Please try again or email us directly.');
@@ -78,21 +77,23 @@ final class FormController extends Controller
         if (!in_array($package, $allowedP, true)) {
             $package = 'not_sure';
         }
-        $extra = json_encode(
-            [
-                'package' => $package,
-                'event_date' => $eventDate,
-                'guest_count' => $guests,
-                'venue_city' => $venue,
-            ],
-            JSON_THROW_ON_ERROR
-        );
         $msg = $message;
         if ($msg === '' && $eventDate . $venue . $guests !== '') {
             $msg = 'See structured fields in extra.';
         }
         $repo = new LeadRepository();
-        if ($repo->create('booking', $email, $name !== '' ? $name : null, $phone !== '' ? $phone : null, $msg !== '' ? $msg : null, $extra)) {
+        if ($repo->create(
+            'booking',
+            $email,
+            $name !== '' ? $name : null,
+            $phone !== '' ? $phone : null,
+            $msg !== '' ? $msg : null,
+            null,
+            $package,
+            $eventDate !== '' ? $eventDate : null,
+            $guests !== '' ? $guests : null,
+            $venue !== '' ? $venue : null
+        )) {
             Flash::set(Flash::SUCCESS, 'Thanks — we have your request and will be in touch.');
         } else {
             Flash::set(Flash::ERROR, 'Could not save your request. Please try again or email us.');
