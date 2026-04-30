@@ -12,6 +12,7 @@ $cmsPages = [
     'contact' => 'Contact',
     'book' => 'Book your event',
     'kids-party' => 'Kids Party',
+    'rentals' => 'Rentals',
 ];
 ?>
 <section class="admin-cms">

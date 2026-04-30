@@ -12,6 +12,8 @@ declare(strict_types=1);
             <th>Name</th>
             <th>Slug</th>
             <th>Price</th>
+            <th>Category</th>
+            <th>Badge</th>
             <th>Active</th>
             <th></th>
         </tr>
@@ -22,7 +24,15 @@ declare(strict_types=1);
             <td><?= (int) $p['id'] ?></td>
             <td><?= e((string) $p['name']) ?></td>
             <td><code><?= e((string) $p['slug']) ?></code></td>
-            <td><?= e(money_format_cents((int) $p['price_cents'], (string) ($p['currency'] ?? 'CAD'))) ?></td>
+            <?php
+                $price = money_format_cents((int) $p['price_cents'], (string) ($p['currency'] ?? 'CAD'));
+                if (isset($p['price_max_cents']) && $p['price_max_cents'] !== null && (int) $p['price_max_cents'] > (int) $p['price_cents']) {
+                    $price .= ' – ' . money_format_cents((int) $p['price_max_cents'], (string) ($p['currency'] ?? 'CAD'));
+                }
+            ?>
+            <td><?= e($price) ?></td>
+            <td><?= e((string) ($p['category_key'] ?? '')) ?></td>
+            <td><?= e((string) ($p['badge_label'] ?? '')) ?></td>
             <td><?= !empty($p['is_active']) ? 'Yes' : 'No' ?></td>
             <td>
                 <a class="text-link" href="<?= e(app_url('admin/product/' . (int) $p['id'] . '/edit')) ?>">Edit</a>

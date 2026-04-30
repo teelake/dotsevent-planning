@@ -865,6 +865,7 @@ final class AdminController extends Controller
             (new PageController())->notFound();
             return;
         }
+        $options = $id === null ? [] : $repo->findOptions($id);
         $this->render('admin/product-form', [
             'title' => $p === null ? 'New product' : 'Edit product',
             'active_nav' => '',
@@ -873,6 +874,7 @@ final class AdminController extends Controller
             'layout' => 'layouts/admin',
             'admin_authed' => true,
             'p' => $p,
+            'options' => $options,
         ]);
     }
 
@@ -890,11 +892,25 @@ final class AdminController extends Controller
         $description = trim((string) ($_POST['description'] ?? ''));
         $description = $description === '' ? null : $description;
         $priceCents = $this->parseMoneyToCents((string) ($_POST['price'] ?? ''));
+        $priceMaxCents = $this->parseMoneyToCents((string) ($_POST['price_max'] ?? ''));
         $currency = strtoupper(substr((string) ($_POST['currency'] ?? 'CAD'), 0, 3)) ?: 'CAD';
         $imageUrl = trim((string) ($_POST['image_url'] ?? ''));
         $imageUrl = $imageUrl === '' ? null : $imageUrl;
         $stockRaw = trim((string) ($_POST['stock'] ?? ''));
         $stock = $stockRaw === '' ? null : (int) $stockRaw;
+        $categoryKey = slugify(trim((string) ($_POST['category_key'] ?? '')));
+        $categoryKey = $categoryKey === '' ? null : $this->clipStr($categoryKey, 60);
+        $badgeLabel = $this->clipStr(trim((string) ($_POST['badge_label'] ?? '')), 40);
+        $badgeLabel = $badgeLabel === '' ? null : $badgeLabel;
+        $details = $this->normaliseTextareaLines((string) ($_POST['details'] ?? ''), 20, 180);
+        $idealFor = $this->normaliseTextareaLines((string) ($_POST['ideal_for'] ?? ''), 20, 120);
+        $policyNote = $this->clipStr(trim((string) ($_POST['policy_note'] ?? '')), 500);
+        $policyNote = $policyNote === '' ? null : $policyNote;
+        $options = $this->parseProductOptions($_POST['options'] ?? []);
+        $hasOpts = (int) !empty($_POST['has_options']);
+        if ($options !== []) {
+            $hasOpts = 1;
+        }
         if ($name === '') {
             Flash::set(Flash::ERROR, 'Name is required.');
             $this->redirect($id > 0 ? '/admin/product/' . $id . '/edit' : '/admin/product/new');
@@ -903,47 +919,66 @@ final class AdminController extends Controller
             Flash::set(Flash::ERROR, 'Valid price is required (e.g. 12.99).');
             $this->redirect($id > 0 ? '/admin/product/' . $id . '/edit' : '/admin/product/new');
         }
+        if ($priceMaxCents !== null && $priceMaxCents < $priceCents) {
+            Flash::set(Flash::ERROR, 'Max price must be greater than or equal to the base price.');
+            $this->redirect($id > 0 ? '/admin/product/' . $id . '/edit' : '/admin/product/new');
+        }
+        if (!preg_match('/^[A-Z]{3}$/', $currency)) {
+            Flash::set(Flash::ERROR, 'Currency must be a 3-letter code like CAD or USD.');
+            $this->redirect($id > 0 ? '/admin/product/' . $id . '/edit' : '/admin/product/new');
+        }
+        if ($stock !== null && $stock < 0) {
+            Flash::set(Flash::ERROR, 'Stock cannot be negative.');
+            $this->redirect($id > 0 ? '/admin/product/' . $id . '/edit' : '/admin/product/new');
+        }
+        if ($imageUrl !== null && !$this->productImagePathValid($imageUrl)) {
+            Flash::set(Flash::ERROR, 'Image URL must be http(s), or a local uploads/assets path.');
+            $this->redirect($id > 0 ? '/admin/product/' . $id . '/edit' : '/admin/product/new');
+        }
         $slug = $slugIn !== '' ? slugify($slugIn) : slugify($name);
-        $hasOpts = (int) !empty($_POST['has_options']);
         $isActive = isset($_POST['is_active']) ? 1 : 0;
         $sort = max(0, (int) ($_POST['sort_order'] ?? 0));
-        if ($id > 0) {
-            if ($repo->slugExists($slug, $id)) {
-                $slug = $this->makeUniqueSlug($repo, $slug, $id);
-            }
-            $ok = $repo->update($id, [
-                'slug' => $slug,
-                'name' => $name,
-                'description' => $description,
-                'price_cents' => $priceCents,
-                'currency' => $currency,
-                'image_url' => $imageUrl,
-                'stock' => $stock,
-                'has_options' => $hasOpts,
-                'is_active' => $isActive,
-                'sort_order' => $sort,
-            ]);
-            Flash::set($ok ? Flash::SUCCESS : Flash::ERROR, $ok ? 'Product updated.' : 'Update failed.');
-            $this->redirect('/admin/products');
-            return;
-        }
-        if ($repo->slugExists($slug, null)) {
-            $slug = $this->makeUniqueSlug($repo, $slug, null);
-        }
-        $newId = $repo->create([
+        $payload = [
             'slug' => $slug,
             'name' => $name,
             'description' => $description,
             'price_cents' => $priceCents,
+            'price_max_cents' => $priceMaxCents,
             'currency' => $currency,
             'image_url' => $imageUrl,
             'stock' => $stock,
             'has_options' => $hasOpts,
+            'category_key' => $categoryKey,
+            'badge_label' => $badgeLabel,
+            'details' => $details,
+            'ideal_for' => $idealFor,
+            'policy_note' => $policyNote,
             'is_active' => $isActive,
             'sort_order' => $sort,
-        ]);
+        ];
+        if ($id > 0) {
+            if ($repo->slugExists($slug, $id)) {
+                $slug = $this->makeUniqueSlug($repo, $slug, $id);
+                $payload['slug'] = $slug;
+            }
+            $ok = $repo->update($id, $payload);
+            if ($ok) {
+                $repo->replaceOptions($id, $options);
+            }
+            Flash::set($ok ? Flash::SUCCESS : Flash::ERROR, $ok ? 'Product updated.' : 'Update failed.');
+            $this->redirect('/admin/product/' . $id . '/edit');
+            return;
+        }
+        if ($repo->slugExists($slug, null)) {
+            $slug = $this->makeUniqueSlug($repo, $slug, null);
+            $payload['slug'] = $slug;
+        }
+        $newId = $repo->create($payload);
         if ($newId > 0) {
+            $repo->replaceOptions($newId, $options);
             Flash::set(Flash::SUCCESS, 'Product created.');
+            $this->redirect('/admin/product/' . $newId . '/edit');
+            return;
         } else {
             Flash::set(Flash::ERROR, 'Could not create product.');
         }
@@ -1200,7 +1235,7 @@ final class AdminController extends Controller
 
     /**
      * @param array<string, mixed> $p
-     * @return array{slug: string, name: string, description: ?string, price_cents: int, currency: string, image_url: ?string, stock: ?int, has_options: int, is_active: int, sort_order: int}
+     * @return array<string, mixed>
      */
     private function rowToSavePayload(array $p): array
     {
@@ -1215,13 +1250,84 @@ final class AdminController extends Controller
             'name' => (string) $p['name'],
             'description' => isset($p['description']) && (string) $p['description'] !== '' ? (string) $p['description'] : null,
             'price_cents' => (int) $p['price_cents'],
+            'price_max_cents' => isset($p['price_max_cents']) && $p['price_max_cents'] !== null && $p['price_max_cents'] !== '' ? (int) $p['price_max_cents'] : null,
             'currency' => (string) ($p['currency'] ?? 'CAD'),
             'image_url' => isset($p['image_url']) && $p['image_url'] !== '' && $p['image_url'] !== null ? (string) $p['image_url'] : null,
             'stock' => $stockVal,
             'has_options' => (int) ($p['has_options'] ?? 0),
+            'category_key' => isset($p['category_key']) && $p['category_key'] !== '' ? (string) $p['category_key'] : null,
+            'badge_label' => isset($p['badge_label']) && $p['badge_label'] !== '' ? (string) $p['badge_label'] : null,
+            'details' => isset($p['details']) && $p['details'] !== '' ? (string) $p['details'] : null,
+            'ideal_for' => isset($p['ideal_for']) && $p['ideal_for'] !== '' ? (string) $p['ideal_for'] : null,
+            'policy_note' => isset($p['policy_note']) && $p['policy_note'] !== '' ? (string) $p['policy_note'] : null,
             'is_active' => (int) ($p['is_active'] ?? 1),
             'sort_order' => (int) ($p['sort_order'] ?? 0),
         ];
+    }
+
+    private function normaliseTextareaLines(string $raw, int $maxLines, int $maxLineLength): ?string
+    {
+        $lines = [];
+        foreach (preg_split('/\r\n|\r|\n/', $raw) ?: [] as $line) {
+            $line = trim((string) $line);
+            if ($line === '') {
+                continue;
+            }
+            $lines[] = $this->clipStr($line, $maxLineLength);
+            if (count($lines) >= $maxLines) {
+                break;
+            }
+        }
+        return $lines === [] ? null : implode("\n", $lines);
+    }
+
+    /** @return list<array{label:string,price_cents:int,sort_order:int}> */
+    private function parseProductOptions(mixed $raw): array
+    {
+        if (!is_array($raw)) {
+            return [];
+        }
+        $out = [];
+        $i = 0;
+        foreach ($raw as $row) {
+            if (!is_array($row)) {
+                continue;
+            }
+            $label = $this->clipStr(trim((string) ($row['label'] ?? '')), 255);
+            $price = $this->parseMoneyToCents((string) ($row['price'] ?? ''));
+            $sort = max(0, (int) ($row['sort_order'] ?? $i));
+            if ($label === '' && ($price === null || $price === 0)) {
+                continue;
+            }
+            if ($label === '' || $price === null || $price < 0) {
+                Flash::set(Flash::ERROR, 'Every product option needs a label and valid price.');
+                $id = (int) ($_POST['id'] ?? 0);
+                $this->redirect($id > 0 ? '/admin/product/' . $id . '/edit' : '/admin/product/new');
+            }
+            $out[] = [
+                'label' => $label,
+                'price_cents' => $price,
+                'sort_order' => $sort,
+            ];
+            $i++;
+            if (count($out) >= 30) {
+                break;
+            }
+        }
+        return $out;
+    }
+
+    private function productImagePathValid(string $path): bool
+    {
+        $path = trim($path);
+        if ($path === '' || str_contains($path, '..')) {
+            return false;
+        }
+        if (preg_match('#^https?://#i', $path) === 1) {
+            return true;
+        }
+        $clean = ltrim($path, '/');
+        return str_starts_with($clean, 'uploads/') || str_starts_with($clean, 'assets/');
     }
 
     private function makeUniqueSlug(ProductRepository $repo, string $base, ?int $exceptId): string

@@ -133,6 +133,45 @@ final class ProductRepository
     }
 
     /**
+     * Replaces all option rows for a product.
+     *
+     * @param list<array{label:string, price_cents:int, sort_order:int}> $options
+     */
+    public function replaceOptions(int $productId, array $options): bool
+    {
+        if ($this->pdo === null || $productId < 1) {
+            return false;
+        }
+        try {
+            $this->pdo->beginTransaction();
+            $del = $this->pdo->prepare('DELETE FROM product_options WHERE product_id = :pid');
+            $del->execute(['pid' => $productId]);
+
+            if ($options !== []) {
+                $ins = $this->pdo->prepare(
+                    'INSERT INTO product_options (product_id, label, price_cents, sort_order)
+                     VALUES (:pid, :label, :price, :sort)'
+                );
+                foreach ($options as $opt) {
+                    $ins->execute([
+                        'pid' => $productId,
+                        'label' => $opt['label'],
+                        'price' => $opt['price_cents'],
+                        'sort' => $opt['sort_order'],
+                    ]);
+                }
+            }
+
+            return $this->pdo->commit();
+        } catch (\Throwable) {
+            if ($this->pdo->inTransaction()) {
+                $this->pdo->rollBack();
+            }
+            return false;
+        }
+    }
+
+    /**
      * Returns up to $limit active products in the same category, excluding the current product.
      *
      * @return list<array<string, mixed>>
@@ -216,8 +255,10 @@ final class ProductRepository
 
     /**
      * @param array{
-     *   slug: string, name: string, description: ?string, price_cents: int, currency: string,
-     *   image_url: ?string, stock: ?int, has_options: int, is_active: int, sort_order: int
+     *   slug: string, name: string, description: ?string, price_cents: int, price_max_cents?: ?int,
+     *   currency: string, image_url: ?string, stock: ?int, has_options: int, category_key?: ?string,
+     *   badge_label?: ?string, details?: ?string, ideal_for?: ?string, policy_note?: ?string,
+     *   is_active: int, sort_order: int
      * } $d
      */
     public function create(array $d): int
@@ -225,29 +266,57 @@ final class ProductRepository
         if ($this->pdo === null) {
             return 0;
         }
+        if ($this->hasExtendedCols()) {
+            $st = $this->pdo->prepare(
+                'INSERT INTO products (slug, name, description, price_cents, price_max_cents, currency, image_url, stock, has_options, category_key, badge_label, details, ideal_for, policy_note, is_active, sort_order)
+                 VALUES (:slug, :name, :desc, :price, :price_max, :cur, :img, :stock, :opts, :cat, :badge, :details, :ideal_for, :policy_note, :active, :sort)'
+            );
+            $st->execute([
+                'slug' => $d['slug'],
+                'name' => $d['name'],
+                'desc' => $d['description'],
+                'price' => $d['price_cents'],
+                'price_max' => $d['price_max_cents'] ?? null,
+                'cur' => strtoupper($d['currency']),
+                'img' => $d['image_url'],
+                'stock' => $d['stock'],
+                'opts' => $d['has_options'],
+                'cat' => $d['category_key'] ?? null,
+                'badge' => $d['badge_label'] ?? null,
+                'details' => $d['details'] ?? null,
+                'ideal_for' => $d['ideal_for'] ?? null,
+                'policy_note' => $d['policy_note'] ?? null,
+                'active' => $d['is_active'],
+                'sort' => $d['sort_order'],
+            ]);
+            return (int) $this->pdo->lastInsertId();
+        }
+
         $st = $this->pdo->prepare(
             'INSERT INTO products (slug, name, description, price_cents, currency, image_url, stock, has_options, is_active, sort_order)
              VALUES (:slug, :name, :desc, :price, :cur, :img, :stock, :opts, :active, :sort)'
         );
         $st->execute([
-            'slug'   => $d['slug'],
-            'name'   => $d['name'],
-            'desc'   => $d['description'],
-            'price'  => $d['price_cents'],
-            'cur'    => strtoupper($d['currency']),
-            'img'    => $d['image_url'],
-            'stock'  => $d['stock'],
-            'opts'   => $d['has_options'],
+            'slug' => $d['slug'],
+            'name' => $d['name'],
+            'desc' => $d['description'],
+            'price' => $d['price_cents'],
+            'cur' => strtoupper($d['currency']),
+            'img' => $d['image_url'],
+            'stock' => $d['stock'],
+            'opts' => $d['has_options'],
             'active' => $d['is_active'],
-            'sort'   => $d['sort_order'],
+            'sort' => $d['sort_order'],
         ]);
         return (int) $this->pdo->lastInsertId();
     }
 
     /**
      * @param array{
-     *   slug: string, name: string, description: ?string, price_cents: int, currency: string,
-     *   image_url: ?string, stock: ?int, has_options: int, is_active: int, sort_order: int
+     *   slug: string, name: string, description: ?string, price_cents: int, price_max_cents?: ?int,
+     *   currency: string, image_url: ?string, stock: ?int, has_options: int, category_key?: ?string,
+     *   badge_label?: ?string, details?: ?string, ideal_for?: ?string, policy_note?: ?string,
+     *   is_active: int, sort_order: int
      * } $d
      */
     public function update(int $id, array $d): bool
@@ -255,23 +324,52 @@ final class ProductRepository
         if ($this->pdo === null) {
             return false;
         }
+        if ($this->hasExtendedCols()) {
+            $st = $this->pdo->prepare(
+                'UPDATE products SET slug = :slug, name = :name, description = :desc, price_cents = :price,
+                    price_max_cents = :price_max, currency = :cur, image_url = :img, stock = :stock,
+                    has_options = :opts, category_key = :cat, badge_label = :badge, details = :details,
+                    ideal_for = :ideal_for, policy_note = :policy_note, is_active = :active, sort_order = :sort
+                 WHERE id = :id'
+            );
+            return $st->execute([
+                'id' => $id,
+                'slug' => $d['slug'],
+                'name' => $d['name'],
+                'desc' => $d['description'],
+                'price' => $d['price_cents'],
+                'price_max' => $d['price_max_cents'] ?? null,
+                'cur' => strtoupper($d['currency']),
+                'img' => $d['image_url'],
+                'stock' => $d['stock'],
+                'opts' => $d['has_options'],
+                'cat' => $d['category_key'] ?? null,
+                'badge' => $d['badge_label'] ?? null,
+                'details' => $d['details'] ?? null,
+                'ideal_for' => $d['ideal_for'] ?? null,
+                'policy_note' => $d['policy_note'] ?? null,
+                'active' => $d['is_active'],
+                'sort' => $d['sort_order'],
+            ]);
+        }
+
         $st = $this->pdo->prepare(
             'UPDATE products SET slug = :slug, name = :name, description = :desc, price_cents = :price,
                 currency = :cur, image_url = :img, stock = :stock, has_options = :opts, is_active = :active, sort_order = :sort
              WHERE id = :id'
         );
         return $st->execute([
-            'id'     => $id,
-            'slug'   => $d['slug'],
-            'name'   => $d['name'],
-            'desc'   => $d['description'],
-            'price'  => $d['price_cents'],
-            'cur'    => strtoupper($d['currency']),
-            'img'    => $d['image_url'],
-            'stock'  => $d['stock'],
-            'opts'   => $d['has_options'],
+            'id' => $id,
+            'slug' => $d['slug'],
+            'name' => $d['name'],
+            'desc' => $d['description'],
+            'price' => $d['price_cents'],
+            'cur' => strtoupper($d['currency']),
+            'img' => $d['image_url'],
+            'stock' => $d['stock'],
+            'opts' => $d['has_options'],
             'active' => $d['is_active'],
-            'sort'   => $d['sort_order'],
+            'sort' => $d['sort_order'],
         ]);
     }
 }
