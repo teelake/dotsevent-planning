@@ -14,10 +14,11 @@ $hiwSteps   = is_array($hiw['steps']   ?? null) ? $hiw['steps']   : [];
 $logItems   = is_array($logistics['items'] ?? null) ? $logistics['items'] : [];
 $sortOpts   = is_array($controls['sort_options'] ?? null) ? $controls['sort_options'] : [];
 ?>
-<div id="rentals-blocks-editor" style="display:flex;flex-direction:column;gap:1rem;margin-top:0.75rem;">
+<div id="rentals-blocks-editor" class="rentals-blocks-editor">
+
 
     <?php /* ── HERO ── */ ?>
-    <details class="hb-section" open>
+    <details id="cms-sec-rb-hero" class="hb-section" open>
         <summary class="hb-section__summary">Hero banner</summary>
         <div class="hb-section__body">
             <label class="hb-label">Enabled
@@ -45,8 +46,7 @@ $sortOpts   = is_array($controls['sort_options'] ?? null) ? $controls['sort_opti
     </details>
 
     <?php /* ── CATEGORY FILTER ITEMS ── */ ?>
-    <details class="hb-section">
-        <summary class="hb-section__summary">Category filter strip</summary>
+    <details id="cms-sec-rb-categories" class="hb-section">
         <div class="hb-section__body">
             <label class="hb-label">Enabled
                 <input type="checkbox" id="rb-cat-enabled" <?= !empty($categories['enabled']) ? 'checked' : '' ?>>
@@ -76,8 +76,7 @@ $sortOpts   = is_array($controls['sort_options'] ?? null) ? $controls['sort_opti
     </details>
 
     <?php /* ── CONTROLS BAR ── */ ?>
-    <details class="hb-section">
-        <summary class="hb-section__summary">Controls bar (search / sort)</summary>
+    <details id="cms-sec-rb-controls" class="hb-section">
         <div class="hb-section__body">
             <label class="hb-label">Search placeholder
                 <input class="input" id="rb-ctrl-search-ph" type="text" value="<?= e((string) ($controls['search_placeholder'] ?? 'Search rentals…')) ?>">
@@ -89,8 +88,7 @@ $sortOpts   = is_array($controls['sort_options'] ?? null) ? $controls['sort_opti
     </details>
 
     <?php /* ── HOW IT WORKS ── */ ?>
-    <details class="hb-section">
-        <summary class="hb-section__summary">How it works (3-step process)</summary>
+    <details id="cms-sec-rb-how-it-works" class="hb-section">
         <div class="hb-section__body">
             <label class="hb-label">Enabled
                 <input type="checkbox" id="rb-hiw-enabled" <?= !empty($hiw['enabled']) ? 'checked' : '' ?>>
@@ -132,8 +130,7 @@ $sortOpts   = is_array($controls['sort_options'] ?? null) ? $controls['sort_opti
     </details>
 
     <?php /* ── LOGISTICS BAR ── */ ?>
-    <details class="hb-section">
-        <summary class="hb-section__summary">Logistics trust bar</summary>
+    <details id="cms-sec-rb-logistics" class="hb-section">
         <div class="hb-section__body">
             <label class="hb-label">Enabled
                 <input type="checkbox" id="rb-log-enabled" <?= !empty($logistics['enabled']) ? 'checked' : '' ?>>
@@ -161,8 +158,7 @@ $sortOpts   = is_array($controls['sort_options'] ?? null) ? $controls['sort_opti
     </details>
 
     <?php /* ── NEWSLETTER ── */ ?>
-    <details class="hb-section">
-        <summary class="hb-section__summary">Newsletter CTA</summary>
+    <details id="cms-sec-rb-newsletter" class="hb-section">
         <div class="hb-section__body">
             <label class="hb-label">Enabled
                 <input type="checkbox" id="rb-nw-enabled" <?= !empty($newsletter['enabled']) ? 'checked' : '' ?>>

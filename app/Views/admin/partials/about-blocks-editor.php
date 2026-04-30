@@ -28,7 +28,7 @@ $members = isset($team['members']) && is_array($team['members']) ? $team['member
 <div class="home-blocks-editor" id="about-blocks-editor">
     <input type="hidden" id="ab-version" value="<?= (int) $ver ?>">
 
-    <details class="home-blocks-editor__details" open>
+    <details id="cms-sec-ab-hero" class="home-blocks-editor__details" open>
         <summary class="home-blocks-editor__summary">Hero title &amp; breadcrumb</summary>
         <div class="home-blocks-editor__body">
             <label class="home-blocks-editor__check">
@@ -52,7 +52,7 @@ $members = isset($team['members']) && is_array($team['members']) ? $team['member
         </div>
     </details>
 
-    <details class="home-blocks-editor__details" open>
+    <details id="cms-sec-ab-story" class="home-blocks-editor__details" open>
         <summary class="home-blocks-editor__summary">Story &amp; figures</summary>
         <div class="home-blocks-editor__body">
             <label class="home-blocks-editor__check">
@@ -102,7 +102,7 @@ $members = isset($team['members']) && is_array($team['members']) ? $team['member
         </div>
     </details>
 
-    <details class="home-blocks-editor__details">
+    <details id="cms-sec-ab-approach" class="home-blocks-editor__details">
         <summary class="home-blocks-editor__summary">Approach</summary>
         <div class="home-blocks-editor__body">
             <label class="home-blocks-editor__check">
@@ -142,7 +142,7 @@ $members = isset($team['members']) && is_array($team['members']) ? $team['member
         </div>
     </details>
 
-    <details class="home-blocks-editor__details">
+    <details id="cms-sec-ab-values" class="home-blocks-editor__details">
         <summary class="home-blocks-editor__summary">Core values</summary>
         <div class="home-blocks-editor__body">
             <label class="home-blocks-editor__check">
@@ -169,7 +169,7 @@ $members = isset($team['members']) && is_array($team['members']) ? $team['member
         </div>
     </details>
 
-    <details class="home-blocks-editor__details">
+    <details id="cms-sec-ab-team" class="home-blocks-editor__details">
         <summary class="home-blocks-editor__summary">Team</summary>
         <div class="home-blocks-editor__body">
             <label class="home-blocks-editor__check">
@@ -204,7 +204,7 @@ $members = isset($team['members']) && is_array($team['members']) ? $team['member
         </div>
     </details>
 
-    <details class="home-blocks-editor__details">
+    <details id="cms-sec-ab-newsletter" class="home-blocks-editor__details">
         <summary class="home-blocks-editor__summary">Newsletter strip</summary>
         <div class="home-blocks-editor__body">
             <label class="home-blocks-editor__check">

@@ -12,7 +12,7 @@ $featuredItems = is_array($featured['items'] ?? null) ? $featured['items'] : [];
 $galleryItems = is_array($gallery['items'] ?? null) ? $gallery['items'] : [];
 ?>
 <div class="home-blocks-editor" id="portfolio-blocks-editor">
-    <details class="home-blocks-editor__details" open>
+    <details id="cms-sec-pf-hero-intro" class="home-blocks-editor__details" open>
         <summary class="home-blocks-editor__summary">Hero + intro</summary>
         <div class="home-blocks-editor__body">
             <label class="home-blocks-editor__check"><input type="checkbox" id="pf-hero-en" <?= (($hero['enabled'] ?? true) !== false) ? 'checked' : '' ?>><span>Enable hero overrides</span></label>
@@ -24,7 +24,7 @@ $galleryItems = is_array($gallery['items'] ?? null) ? $gallery['items'] : [];
         </div>
     </details>
 
-    <details class="home-blocks-editor__details">
+    <details id="cms-sec-pf-controls" class="home-blocks-editor__details">
         <summary class="home-blocks-editor__summary">Controls</summary>
         <div class="home-blocks-editor__body">
             <label class="home-blocks-editor__check"><input type="checkbox" id="pf-ctrl-en" <?= (($controls['enabled'] ?? true) !== false) ? 'checked' : '' ?>><span>Show controls bar</span></label>
@@ -34,7 +34,7 @@ $galleryItems = is_array($gallery['items'] ?? null) ? $gallery['items'] : [];
         </div>
     </details>
 
-    <details class="home-blocks-editor__details">
+    <details id="cms-sec-pf-featured" class="home-blocks-editor__details">
         <summary class="home-blocks-editor__summary">Featured projects</summary>
         <div class="home-blocks-editor__body">
             <label class="home-blocks-editor__check"><input type="checkbox" id="pf-ft-en" <?= (($featured['enabled'] ?? true) !== false) ? 'checked' : '' ?>><span>Show featured section</span></label>
@@ -60,7 +60,7 @@ $galleryItems = is_array($gallery['items'] ?? null) ? $gallery['items'] : [];
         </div>
     </details>
 
-    <details class="home-blocks-editor__details">
+    <details id="cms-sec-pf-gallery" class="home-blocks-editor__details">
         <summary class="home-blocks-editor__summary">Gallery + newsletter</summary>
         <div class="home-blocks-editor__body">
             <label class="home-blocks-editor__check"><input type="checkbox" id="pf-gal-en" <?= (($gallery['enabled'] ?? true) !== false) ? 'checked' : '' ?>><span>Show gallery</span></label>

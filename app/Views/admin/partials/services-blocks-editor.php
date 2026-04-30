@@ -28,7 +28,7 @@ $faqs = isset($f['items']) && is_array($f['items']) ? $f['items'] : [];
 <div class="home-blocks-editor" id="services-blocks-editor">
     <input type="hidden" id="svc-version" value="<?= (int) $ver ?>">
 
-    <details class="home-blocks-editor__details" open>
+    <details id="cms-sec-svc-hero" class="home-blocks-editor__details" open>
         <summary class="home-blocks-editor__summary">Hero</summary>
         <div class="home-blocks-editor__body">
             <label class="home-blocks-editor__check"><input type="checkbox" id="svc-hero-en" <?= $hEn ? 'checked' : '' ?>><span>Use title overrides</span></label>
@@ -40,7 +40,7 @@ $faqs = isset($f['items']) && is_array($f['items']) ? $f['items'] : [];
         </div>
     </details>
 
-    <details class="home-blocks-editor__details" open>
+    <details id="cms-sec-svc-intro" class="home-blocks-editor__details" open>
         <summary class="home-blocks-editor__summary">Intro</summary>
         <div class="home-blocks-editor__body">
             <label class="home-blocks-editor__check"><input type="checkbox" id="svc-in-en" <?= $inEn ? 'checked' : '' ?>><span>Show intro band</span></label>
@@ -52,7 +52,7 @@ $faqs = isset($f['items']) && is_array($f['items']) ? $f['items'] : [];
         </div>
     </details>
 
-    <details class="home-blocks-editor__details" open>
+    <details id="cms-sec-svc-offerings" class="home-blocks-editor__details" open>
         <summary class="home-blocks-editor__summary">Offerings</summary>
         <div class="home-blocks-editor__body">
             <label class="home-blocks-editor__check"><input type="checkbox" id="svc-of-en" <?= $ofEn ? 'checked' : '' ?>><span>Show catalogue on Services page</span></label>
@@ -89,7 +89,7 @@ $faqs = isset($f['items']) && is_array($f['items']) ? $f['items'] : [];
         </div>
     </details>
 
-    <details class="home-blocks-editor__details">
+    <details id="cms-sec-svc-partnership" class="home-blocks-editor__details">
         <summary class="home-blocks-editor__summary">Partnership &amp; signals</summary>
         <div class="home-blocks-editor__body">
             <label class="home-blocks-editor__check"><input type="checkbox" id="svc-pa-en" <?= $paEn ? 'checked' : '' ?>><span>Show block</span></label>
@@ -120,7 +120,7 @@ $faqs = isset($f['items']) && is_array($f['items']) ? $f['items'] : [];
         </div>
     </details>
 
-    <details class="home-blocks-editor__details">
+    <details id="cms-sec-svc-faq" class="home-blocks-editor__details">
         <summary class="home-blocks-editor__summary">FAQ</summary>
         <div class="home-blocks-editor__body">
             <label class="home-blocks-editor__check"><input type="checkbox" id="svc-faq-en" <?= $fEn ? 'checked' : '' ?>><span>Show FAQ</span></label>
@@ -146,7 +146,7 @@ $faqs = isset($f['items']) && is_array($f['items']) ? $f['items'] : [];
         </div>
     </details>
 
-    <details class="home-blocks-editor__details">
+    <details id="cms-sec-svc-newsletter" class="home-blocks-editor__details">
         <summary class="home-blocks-editor__summary">Newsletter</summary>
         <div class="home-blocks-editor__body">
             <label class="home-blocks-editor__check"><input type="checkbox" id="svc-nw-en" <?= $nEn ? 'checked' : '' ?>><span>Show band</span></label>

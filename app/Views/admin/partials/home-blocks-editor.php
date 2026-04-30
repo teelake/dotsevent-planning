@@ -30,7 +30,7 @@ $nwEn = (($nw['enabled'] ?? true) !== false);
 <div class="home-blocks-editor" id="home-blocks-editor" data-hb-editor>
     <input type="hidden" id="hb-version" value="<?= (int) $version ?>">
 
-    <details class="home-blocks-editor__details" open>
+    <details id="cms-sec-hb-confidence" class="home-blocks-editor__details" open>
         <summary class="home-blocks-editor__summary">Confidence &amp; metrics</summary>
         <div class="home-blocks-editor__body">
             <label class="home-blocks-editor__check">
@@ -98,7 +98,7 @@ $nwEn = (($nw['enabled'] ?? true) !== false);
         </div>
     </details>
 
-    <details class="home-blocks-editor__details">
+    <details id="cms-sec-hb-partnership" class="home-blocks-editor__details">
         <summary class="home-blocks-editor__summary">Partnership</summary>
         <div class="home-blocks-editor__body">
             <label class="home-blocks-editor__check">
@@ -136,7 +136,7 @@ $nwEn = (($nw['enabled'] ?? true) !== false);
         </div>
     </details>
 
-    <details class="home-blocks-editor__details">
+    <details id="cms-sec-hb-operating" class="home-blocks-editor__details">
         <summary class="home-blocks-editor__summary">Operating model</summary>
         <div class="home-blocks-editor__body">
             <label class="home-blocks-editor__check">
@@ -185,7 +185,7 @@ $nwEn = (($nw['enabled'] ?? true) !== false);
         </div>
     </details>
 
-    <details class="home-blocks-editor__details">
+    <details id="cms-sec-hb-packages" class="home-blocks-editor__details">
         <summary class="home-blocks-editor__summary">Packages &amp; investment</summary>
         <div class="home-blocks-editor__body">
             <label class="home-blocks-editor__check">
@@ -244,7 +244,7 @@ $nwEn = (($nw['enabled'] ?? true) !== false);
         </div>
     </details>
 
-    <details class="home-blocks-editor__details">
+    <details id="cms-sec-hb-testimonials" class="home-blocks-editor__details">
         <summary class="home-blocks-editor__summary">Testimonials</summary>
         <div class="home-blocks-editor__body">
             <label class="home-blocks-editor__check">
@@ -287,7 +287,7 @@ $nwEn = (($nw['enabled'] ?? true) !== false);
         </div>
     </details>
 
-    <details class="home-blocks-editor__details">
+    <details id="cms-sec-hb-newsletter" class="home-blocks-editor__details">
         <summary class="home-blocks-editor__summary">Newsletter band</summary>
         <div class="home-blocks-editor__body">
             <label class="home-blocks-editor__check">

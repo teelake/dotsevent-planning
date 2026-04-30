@@ -40,93 +40,150 @@ $mergedRentalsBlocks = null;
 if ($slug === 'rentals') {
     $mergedRentalsBlocks = \App\Services\RentalsPageBlocks::merged($storedBlocks);
 }
+
+$cmsHasStructuredBlocks = ($slug === 'home' && $mergedBlocks !== null)
+    || ($slug === 'about' && $mergedAboutBlocks !== null)
+    || ($slug === 'services' && $mergedServicesBlocks !== null)
+    || ($slug === 'contact' && $mergedContactBlocks !== null)
+    || ($slug === 'portfolio' && $mergedPortfolioBlocks !== null)
+    || ($slug === 'rentals' && $mergedRentalsBlocks !== null);
+
+$cmsPageSlugLabel = $slug !== '' ? $slug : 'page';
+$cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
 ?>
 <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet">
-<section class="section--tight" style="padding-top: 0;">
-    <p class="text-muted" style="margin: 0 0 1rem; font-size: 0.9rem;">
-        <a class="text-link" href="<?= e(app_url('admin/cms/pages')) ?>">← Pages &amp; content</a>
-        <span aria-hidden="true"> · </span>
-        <span>Slug: <code><?= e($slug) ?></code></span>
-    </p>
 
-    <div class="card card--folio" style="max-width: none;">
-        <h2 class="card__title" style="margin: 0 0 1rem;">Edit page</h2>
-        <?php if ($slug === 'home'): ?>
-            <p class="text-muted" style="font-size: 0.88rem; margin: 0 0 1rem;">Hero slides: <a class="text-link" href="<?= e(app_url('admin/cms/slides')) ?>">Hero carousel</a>. Edit intro HTML, meta description, and the structured homepage sections below. The <strong>services grid on the homepage</strong> is controlled from <a class="text-link" href="<?= e(app_url('admin/cms/page/services')) ?>">CMS → Pages → Services</a> (Offerings). Changes are saved as relational CMS fields.</p>
-        <?php elseif ($slug === 'about'): ?>
-            <p class="text-muted" style="font-size: 0.88rem; margin: 0 0 1rem;">Structured About page content is saved as relational CMS fields. The rich-text “Body” field remains available for legacy copy; public About uses the modular sections below.</p>
-        <?php elseif ($slug === 'services'): ?>
-            <p class="text-muted" style="font-size: 0.88rem; margin: 0 0 1rem;">Structured Services content is saved as relational CMS fields. The Body field can hold legacy markup; the live Services page uses the sections below.</p>
-        <?php elseif ($slug === 'contact'): ?>
-            <p class="text-muted" style="font-size: 0.88rem; margin: 0 0 1rem;">Structured Contact content is saved as relational CMS fields. The live Contact page reads modular sections and dynamic values from CMS settings.</p>
-        <?php elseif ($slug === 'portfolio'): ?>
-            <p class="text-muted" style="font-size: 0.88rem; margin: 0 0 1rem;">Structured Portfolio content is saved as relational CMS fields. Use items for featured/gallery and keep media paths dynamic via CMS media uploads.</p>
-        <?php elseif ($slug === 'rentals'): ?>
-            <p class="text-muted" style="font-size: 0.88rem; margin: 0 0 1rem;">Rentals page layout blocks are saved as relational CMS fields. Individual products are managed via <a class="text-link" href="<?= e(app_url('admin/products')) ?>">Products</a>.</p>
+<div class="cms-edit">
+    <header class="cms-edit__masthead">
+        <nav class="cms-edit__breadcrumb" aria-label="Breadcrumb">
+            <a class="cms-edit__breadcrumb-link" href="<?= e(app_url('admin/cms/pages')) ?>">Pages &amp; content</a>
+            <span class="cms-edit__breadcrumbsep" aria-hidden="true">/</span>
+            <span class="cms-edit__breadcrumb-current"><?= e($cmsPageSlugLabel) ?></span>
+        </nav>
+        <div class="cms-edit__masthead-row">
+            <div class="cms-edit__masthead-text">
+                <h2 class="cms-edit__title">Edit <?= e(ucfirst(str_replace('-', ' ', $cmsPageSlugLabel))) ?></h2>
+                <p class="cms-edit__slugline">
+                    <span class="cms-edit__chip" title="CMS slug"><?= e($cmsPageSlugLabel) ?></span>
+                    <?php if ($page_title !== '') : ?>
+                        <span class="cms-edit__subtitle"><?= e($page_title) ?></span>
+                    <?php endif; ?>
+                </p>
+            </div>
+            <a class="btn btn--secondary cms-edit__site-link" href="<?= e($cmsViewSiteUrl) ?>" target="_blank" rel="noopener noreferrer">Preview live URL</a>
+        </div>
+
+        <?php if ($slug === 'home') : ?>
+            <div class="cms-edit__hint">Slides: <a class="cms-edit__hint-a" href="<?= e(app_url('admin/cms/slides')) ?>">Hero carousel</a>.
+                Homepage services grid uses <a class="cms-edit__hint-a" href="<?= e(app_url('admin/cms/page/services')) ?>">Services → Offerings</a>.</div>
+        <?php elseif ($slug === 'about') : ?>
+            <div class="cms-edit__hint">Below: modular bands; Body is optional legacy story copy.</div>
+        <?php elseif ($slug === 'services') : ?>
+            <div class="cms-edit__hint">Sections drive the Services page; Offerings independently control the Home teaser.</div>
+        <?php elseif ($slug === 'contact') : ?>
+            <div class="cms-edit__hint">Contact layout + CMS settings feed the live page.</div>
+        <?php elseif ($slug === 'portfolio') : ?>
+            <div class="cms-edit__hint">Featured &amp; gallery use paths under <code>/public</code>.</div>
+        <?php elseif ($slug === 'rentals') : ?>
+            <div class="cms-edit__hint">Inventory lives in <a class="cms-edit__hint-a" href="<?= e(app_url('admin/products')) ?>">Products</a>.</div>
         <?php endif; ?>
+    </header>
 
-        <form class="admin-form" method="post" action="<?= e(app_url('admin/cms/page/' . $slug . '/save')) ?>" id="cms-page-form">
-            <?= csrf_field() ?>
-            <div class="form-row">
-                <label for="cms-page-title">Page title</label>
-                <input class="input" id="cms-page-title" name="title" type="text" value="<?= e($page_title) ?>" placeholder="Optional display title">
+    <form class="cms-edit__form admin-form" method="post" action="<?= e(app_url('admin/cms/page/' . $slug . '/save')) ?>" id="cms-page-form">
+        <?= csrf_field() ?>
+        <input type="hidden" name="content_json" id="cms-content-json" value="">
+
+        <div class="cms-edit__layout">
+            <aside class="cms-edit__aside" aria-label="On this page">
+                <div class="cms-edit__aside-sticky">
+                    <p class="cms-edit__aside-title">Navigate</p>
+                    <nav class="cms-edit__aside-nav">
+                        <ul class="cms-edit__toc" id="cms-edit-toc-list"></ul>
+                    </nav>
+                </div>
+            </aside>
+
+            <div class="cms-edit__main">
+                <section id="cms-section-essentials" class="cms-edit-panel">
+                    <div class="cms-edit-panel__head">
+                        <span class="cms-edit-panel__eyebrow">Step 1</span>
+                        <h3 class="cms-edit-panel__title">Publishing &amp; SEO</h3>
+                        <p class="cms-edit-panel__desc">How this route appears to visitors and search.</p>
+                    </div>
+                    <div class="cms-edit-panel__body">
+                        <div class="form-row">
+                            <label for="cms-page-title">Page title</label>
+                            <input class="input cms-edit-input" id="cms-page-title" name="title" type="text" value="<?= e($page_title) ?>" placeholder="Optional document title">
+                        </div>
+                        <div class="form-row">
+                            <label for="cms-meta-description">Meta description</label>
+                            <textarea class="input input--textarea cms-edit-input" id="cms-meta-description" rows="2" placeholder="Search snippet (~160 chars)"><?= e($meta_description_field) ?></textarea>
+                            <span class="cms-edit-field-help">Shown in Google when set; keep it persuasive and factual.</span>
+                        </div>
+                    </div>
+                </section>
+
+                <?php if ($cmsHasStructuredBlocks) : ?>
+                <section id="cms-section-blocks" class="cms-edit-panel cms-edit-panel--stretch">
+                    <div class="cms-edit-panel__head">
+                        <span class="cms-edit-panel__eyebrow">Step 2</span>
+                        <h3 class="cms-edit-panel__title">Structured sections</h3>
+                        <p class="cms-edit-panel__desc">Composable blocks merged with sane defaults.</p>
+                    </div>
+                    <div class="cms-edit-panel__body cms-edit-panel__body--flush">
+                        <div id="cms-blocks-stage" class="cms-blocks-stage">
+                            <?php if ($slug === 'home' && $mergedBlocks !== null) : ?>
+                                <?php include __DIR__ . '/partials/home-blocks-editor.php'; ?>
+                            <?php elseif ($slug === 'about' && $mergedAboutBlocks !== null) : ?>
+                                <?php include __DIR__ . '/partials/about-blocks-editor.php'; ?>
+                            <?php elseif ($slug === 'services' && $mergedServicesBlocks !== null) : ?>
+                                <?php include __DIR__ . '/partials/services-blocks-editor.php'; ?>
+                            <?php elseif ($slug === 'contact' && $mergedContactBlocks !== null) : ?>
+                                <?php include __DIR__ . '/partials/contact-blocks-editor.php'; ?>
+                            <?php elseif ($slug === 'portfolio' && $mergedPortfolioBlocks !== null) : ?>
+                                <?php include __DIR__ . '/partials/portfolio-blocks-editor.php'; ?>
+                            <?php elseif ($slug === 'rentals' && $mergedRentalsBlocks !== null) : ?>
+                                <?php include __DIR__ . '/partials/rentals-blocks-editor.php'; ?>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </section>
+                <?php endif; ?>
+
+                <section id="cms-section-body" class="cms-edit-panel cms-edit-panel--stretch">
+                    <div class="cms-edit-panel__head">
+                        <span class="cms-edit-panel__eyebrow"><?= $cmsHasStructuredBlocks ? 'Step 3' : 'Step 2' ?></span>
+                        <h3 class="cms-edit-panel__title" id="cms-section-body-label">Rich text body</h3>
+                        <p class="cms-edit-panel__desc">Optional narrative HTML (intro, legal, or legacy copy).</p>
+                    </div>
+                    <div class="cms-edit-panel__body">
+                        <div class="form-row form-row--flush">
+                            <div id="editor" class="cms-edit-quill" role="textbox" aria-labelledby="cms-section-body-label"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <footer id="cms-section-save" class="cms-edit-savebar">
+                    <div class="cms-edit-savebar__inner">
+                        <button class="btn btn--primary cms-edit-savebar__submit" type="submit">Save all changes</button>
+                        <p class="cms-edit-savebar__note">Relational fields and body save together for this slug.</p>
+                    </div>
+                </footer>
             </div>
-            <div class="form-row">
-                <label for="cms-meta-description">Meta description (SEO)</label>
-                <textarea class="input input--textarea" id="cms-meta-description" rows="2" placeholder="Shown in search results when set"><?= e($meta_description_field) ?></textarea>
-                <span class="text-muted" style="font-size:0.85rem;">Stored as page metadata; overrides the default for this route.</span>
-            </div>
-            <?php if ($slug === 'home' && $mergedBlocks !== null): ?>
-            <div class="form-row">
-                <span class="home-blocks-editor__label">Structured homepage</span>
-                <?php include __DIR__ . '/partials/home-blocks-editor.php'; ?>
-            </div>
-        <?php elseif ($slug === 'about' && $mergedAboutBlocks !== null): ?>
-            <div class="form-row">
-                <span class="home-blocks-editor__label">About page sections</span>
-                <?php include __DIR__ . '/partials/about-blocks-editor.php'; ?>
-            </div>
-            <?php elseif ($slug === 'services' && $mergedServicesBlocks !== null): ?>
-            <div class="form-row">
-                <span class="home-blocks-editor__label">Services page sections</span>
-                <?php include __DIR__ . '/partials/services-blocks-editor.php'; ?>
-            </div>
-            <?php elseif ($slug === 'contact' && $mergedContactBlocks !== null): ?>
-            <div class="form-row">
-                <span class="home-blocks-editor__label">Contact page sections</span>
-                <?php include __DIR__ . '/partials/contact-blocks-editor.php'; ?>
-            </div>
-            <?php elseif ($slug === 'portfolio' && $mergedPortfolioBlocks !== null): ?>
-            <div class="form-row">
-                <span class="home-blocks-editor__label">Portfolio page sections</span>
-                <?php include __DIR__ . '/partials/portfolio-blocks-editor.php'; ?>
-            </div>
-            <?php elseif ($slug === 'rentals' && $mergedRentalsBlocks !== null): ?>
-            <div class="form-row">
-                <span class="home-blocks-editor__label">Rentals page sections</span>
-                <?php include __DIR__ . '/partials/rentals-blocks-editor.php'; ?>
-            </div>
-            <?php endif; ?>
-            <div class="form-row">
-                <label for="editor">Body</label>
-                <div id="editor" style="min-height: 280px; background: #fff; border: 1px solid var(--color-line); border-radius: 12px;"></div>
-                <input type="hidden" name="content_json" id="cms-content-json" value="">
-            </div>
-            <button class="btn btn--primary" type="submit">Save page</button>
-        </form>
-    </div>
-</section>
+        </div>
+    </form>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
-<?php if ($slug === 'about'): ?>
+<?php if ($slug === 'about') : ?>
 <script src="<?= e(asset('js/admin-about-blocks.js')) ?>"></script>
-<?php elseif ($slug === 'services'): ?>
+<?php elseif ($slug === 'services') : ?>
 <script src="<?= e(asset('js/admin-services-blocks.js')) ?>"></script>
-<?php elseif ($slug === 'contact'): ?>
+<?php elseif ($slug === 'contact') : ?>
 <script src="<?= e(asset('js/admin-contact-blocks.js')) ?>"></script>
-<?php elseif ($slug === 'portfolio'): ?>
+<?php elseif ($slug === 'portfolio') : ?>
 <script src="<?= e(asset('js/admin-portfolio-blocks.js')) ?>"></script>
-<?php elseif ($slug === 'rentals'): ?>
+<?php elseif ($slug === 'rentals') : ?>
 <script src="<?= e(asset('js/admin-rentals-blocks.js')) ?>"></script>
 <?php endif; ?>
 <script>
@@ -200,6 +257,57 @@ if ($slug === 'rentals') {
   if (pageSlug === 'rentals' && typeof window.dotseRentalsBlocksBind === 'function') {
     window.dotseRentalsBlocksBind();
   }
+
+  function buildCmsToc() {
+    const list = document.getElementById('cms-edit-toc-list');
+    if (!list) return;
+
+    /** @type {{href: string, label: string}[]} */
+    const links = [];
+
+    links.push({ href: '#cms-section-essentials', label: 'Publishing & SEO' });
+
+    const stage = document.getElementById('cms-blocks-stage');
+    if (stage) {
+      const blocks = stage.querySelectorAll(
+        'details.home-blocks-editor__details[id], details.hb-section[id]'
+      );
+      blocks.forEach(function (d) {
+        const id = d.getAttribute('id');
+        const sum = d.querySelector('summary');
+        let label = (sum && sum.textContent) ? sum.textContent.trim() : '';
+        if (!id || label === '') return;
+        links.push({ href: '#' + id, label: label });
+      });
+    }
+
+    links.push({ href: '#cms-section-body', label: 'Rich text body' });
+    links.push({ href: '#cms-section-save', label: 'Save changes' });
+
+    list.innerHTML = '';
+    links.forEach(function (l) {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.className = 'cms-edit__toc-link';
+      a.href = l.href;
+      a.textContent = l.label;
+      a.addEventListener('click', function (e) {
+        const id = l.href.slice(1);
+        const el = document.getElementById(id);
+        if (el) {
+          e.preventDefault();
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          try {
+            history.replaceState(null, '', l.href);
+          } catch (_) {}
+        }
+      });
+      li.appendChild(a);
+      list.appendChild(li);
+    });
+  }
+
+  buildCmsToc();
 
   const metaEl = document.getElementById('cms-meta-description');
   const hbRoot = document.getElementById('home-blocks-editor');

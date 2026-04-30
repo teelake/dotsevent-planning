@@ -9,7 +9,7 @@ $nw = is_array($b['newsletter_cta'] ?? null) ? $b['newsletter_cta'] : [];
 $trust = is_array($b['trust'] ?? null) ? $b['trust'] : [];
 ?>
 <div class="home-blocks-editor" id="contact-blocks-editor">
-    <details class="home-blocks-editor__details" open>
+    <details id="cms-sec-ct-hero" class="home-blocks-editor__details" open>
         <summary class="home-blocks-editor__summary">Hero</summary>
         <div class="home-blocks-editor__body">
             <label class="home-blocks-editor__check"><input type="checkbox" id="ct-hero-en" <?= (($hero['enabled'] ?? true) !== false) ? 'checked' : '' ?>><span>Enable hero overrides</span></label>
@@ -17,7 +17,7 @@ $trust = is_array($b['trust'] ?? null) ? $b['trust'] : [];
             <div class="form-row"><label for="ct-hero-kicker">Kicker</label><input id="ct-hero-kicker" class="input" type="text" value="<?= e((string) ($hero['kicker'] ?? '')) ?>"></div>
         </div>
     </details>
-    <details class="home-blocks-editor__details" open>
+    <details id="cms-sec-ct-intro" class="home-blocks-editor__details" open>
         <summary class="home-blocks-editor__summary">Intro</summary>
         <div class="home-blocks-editor__body">
             <label class="home-blocks-editor__check"><input type="checkbox" id="ct-intro-en" <?= (($intro['enabled'] ?? true) !== false) ? 'checked' : '' ?>><span>Show intro</span></label>
@@ -25,7 +25,7 @@ $trust = is_array($b['trust'] ?? null) ? $b['trust'] : [];
             <div class="form-row"><label for="ct-intro-lead">Lead HTML</label><textarea id="ct-intro-lead" class="input input--textarea" rows="3"><?= e((string) ($intro['lead_html'] ?? '')) ?></textarea></div>
         </div>
     </details>
-    <details class="home-blocks-editor__details">
+    <details id="cms-sec-ct-form" class="home-blocks-editor__details">
         <summary class="home-blocks-editor__summary">Form + newsletter + trust</summary>
         <div class="home-blocks-editor__body">
             <div class="form-row"><label for="ct-form-heading">Form heading</label><input id="ct-form-heading" class="input" type="text" value="<?= e((string) ($form['heading'] ?? '')) ?>"></div>
