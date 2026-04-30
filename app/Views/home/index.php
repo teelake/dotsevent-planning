@@ -4,6 +4,16 @@ declare(strict_types=1);
 $slides = $slides ?? [];
 /** @var array<string, mixed> $home_blocks */
 $home_blocks = isset($home_blocks) && is_array($home_blocks) ? $home_blocks : \App\Services\HomePageBlocks::merged(null);
+/** Services page CMS offerings — shown on Home (single source). */
+/** @var array<string, mixed> $home_services_teaser */
+$home_services_teaser = isset($home_services_teaser) && is_array($home_services_teaser) ? $home_services_teaser : [
+    'enabled' => false,
+    'eyebrow' => '',
+    'title' => '',
+    'link_all_label' => '',
+    'link_all_href' => '',
+    'items' => [],
+];
 $home_intro_html = trim((string) ($home_intro_html ?? ''));
 
 $hEnabled = static function (?array $section): bool {
@@ -16,7 +26,7 @@ $hEnabled = static function (?array $section): bool {
 
 $confidence = is_array($home_blocks['confidence'] ?? null) ? $home_blocks['confidence'] : [];
 $partnership = is_array($home_blocks['partnership'] ?? null) ? $home_blocks['partnership'] : [];
-$clusters = is_array($home_blocks['clusters'] ?? null) ? $home_blocks['clusters'] : [];
+$clusters = $home_services_teaser;
 $operating = is_array($home_blocks['operating_model'] ?? null) ? $home_blocks['operating_model'] : [];
 $packages = is_array($home_blocks['packages'] ?? null) ? $home_blocks['packages'] : [];
 $testimonials = is_array($home_blocks['testimonials'] ?? null) ? $home_blocks['testimonials'] : [];

@@ -30,19 +30,6 @@ return [
         'cta_label' => 'About DOTS',
         'cta_href' => '',
     ],
-    'clusters' => [
-        'enabled' => true,
-        'eyebrow' => 'Capability',
-        'title' => 'Where we concentrate',
-        'link_all_label' => 'Explore services',
-        'link_all_href' => '',
-        'items' => [
-            ['title' => 'Corporate & brand', 'text' => 'Launches, staff nights, and client receptions—run-of-show, AV, and signage that matches the slide deck—not the apology email.', 'accent' => true],
-            ['title' => 'Weddings & social', 'text' => 'Flow that respects your people, vendors who coordinate, and cues you don’t have to announce.'],
-            ['title' => 'Kids parties', 'text' => 'Families-first packages—play zones, sane timelines, décor that survives cake and cousins.'],
-            ['title' => 'Kick-offs & retreats', 'text' => 'Breakouts that start on time, ice that doesn’t cringe, and spaces that reboot your team—not drain them.', 'muted' => true],
-        ],
-    ],
     'operating_model' => [
         'enabled' => true,
         'title' => 'Inside the studio',

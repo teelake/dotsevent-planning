@@ -11,10 +11,6 @@ $metrics = isset($cf['metrics']) && is_array($cf['metrics']) ? $cf['metrics'] : 
 $pa = is_array($b['partnership'] ?? null) ? $b['partnership'] : [];
 $paEn = (($pa['enabled'] ?? true) !== false);
 
-$cl = is_array($b['clusters'] ?? null) ? $b['clusters'] : [];
-$clEn = (($cl['enabled'] ?? true) !== false);
-$clItems = isset($cl['items']) && is_array($cl['items']) ? $cl['items'] : [];
-
 $om = is_array($b['operating_model'] ?? null) ? $b['operating_model'] : [];
 $omEn = (($om['enabled'] ?? true) !== false);
 $omSteps = isset($om['steps']) && is_array($om['steps']) ? $om['steps'] : [];
@@ -137,61 +133,6 @@ $nwEn = (($nw['enabled'] ?? true) !== false);
                     <input class="input" type="text" id="hb-pa-cta-href" value="<?= e((string) ($pa['cta_href'] ?? '')) ?>">
                 </div>
             </div>
-        </div>
-    </details>
-
-    <details class="home-blocks-editor__details">
-        <summary class="home-blocks-editor__summary">Capability clusters</summary>
-        <div class="home-blocks-editor__body">
-            <label class="home-blocks-editor__check">
-                <input type="checkbox" id="hb-cl-enabled" <?= $clEn ? 'checked' : '' ?>>
-                <span>Show this section</span>
-            </label>
-            <div class="home-blocks-editor__grid home-blocks-editor__grid--2">
-                <div class="form-row" style="margin:0;">
-                    <label for="hb-cl-eyebrow">Eyebrow</label>
-                    <input class="input" type="text" id="hb-cl-eyebrow" value="<?= e((string) ($cl['eyebrow'] ?? '')) ?>">
-                </div>
-                <div class="form-row" style="margin:0;">
-                    <label for="hb-cl-title">Title</label>
-                    <input class="input" type="text" id="hb-cl-title" value="<?= e((string) ($cl['title'] ?? '')) ?>">
-                </div>
-            </div>
-            <div class="home-blocks-editor__grid home-blocks-editor__grid--2">
-                <div class="form-row" style="margin:0;">
-                    <label for="hb-cl-link-label">“View all” label</label>
-                    <input class="input" type="text" id="hb-cl-link-label" value="<?= e((string) ($cl['link_all_label'] ?? '')) ?>">
-                </div>
-                <div class="form-row" style="margin:0;">
-                    <label for="hb-cl-link-href">“View all” link (optional)</label>
-                    <input class="input" type="text" id="hb-cl-link-href" value="<?= e((string) ($cl['link_all_href'] ?? '')) ?>">
-                </div>
-            </div>
-            <div id="hb-cluster-rows" class="hb-repeat-list">
-                <?php foreach ($clItems as $it): ?>
-                <?php if (!is_array($it)) { continue; } ?>
-                <div class="hb-cluster-block hb-repeat-row js-hb-cluster-row">
-                    <div class="home-blocks-editor__grid home-blocks-editor__grid--2">
-                        <div class="form-row" style="margin:0;">
-                            <label>Tile title</label>
-                            <input class="input js-cluster-title" type="text" value="<?= e((string) ($it['title'] ?? '')) ?>">
-                        </div>
-                        <div class="form-row hb-cluster-checks">
-                            <label class="home-blocks-editor__check" style="margin-top:1.65rem;"><input type="checkbox" class="js-cluster-accent" <?= !empty($it['accent']) ? 'checked' : '' ?>><span>Accent style</span></label>
-                            <label class="home-blocks-editor__check" style="margin-top:0.35rem;"><input type="checkbox" class="js-cluster-muted" <?= !empty($it['muted']) ? 'checked' : '' ?>><span>Muted style</span></label>
-                        </div>
-                    </div>
-                    <div class="form-row" style="margin-top:0.45rem;">
-                        <label>Body</label>
-                        <textarea class="input input--textarea js-cluster-text" rows="3"><?= e((string) ($it['text'] ?? '')) ?></textarea>
-                    </div>
-                    <button type="button" class="btn btn--ghost hb-row-remove">Remove tile</button>
-                </div>
-                <?php endforeach; ?>
-            </div>
-            <p style="margin-top:0.5rem;">
-                <button type="button" class="btn btn--secondary" id="hb-add-cluster">Add tile</button>
-            </p>
         </div>
     </details>
 
@@ -396,26 +337,6 @@ $nwEn = (($nw['enabled'] ?? true) !== false);
             </div>
         </div>
         <button type="button" class="hb-row-remove hb-row-remove--danger" aria-label="Remove metric">Remove metric</button>
-    </div>
-</template>
-
-<template id="hb-tpl-cluster">
-    <div class="hb-cluster-block hb-repeat-row js-hb-cluster-row">
-        <div class="home-blocks-editor__grid home-blocks-editor__grid--2">
-            <div class="form-row" style="margin:0;">
-                <label>Tile title</label>
-                <input class="input js-cluster-title" type="text" value="">
-            </div>
-            <div class="form-row hb-cluster-checks">
-                <label class="home-blocks-editor__check" style="margin-top:1.65rem;"><input type="checkbox" class="js-cluster-accent"><span>Accent style</span></label>
-                <label class="home-blocks-editor__check" style="margin-top:0.35rem;"><input type="checkbox" class="js-cluster-muted"><span>Muted style</span></label>
-            </div>
-        </div>
-        <div class="form-row" style="margin-top:0.45rem;">
-            <label>Body</label>
-            <textarea class="input input--textarea js-cluster-text" rows="3"></textarea>
-        </div>
-        <button type="button" class="btn btn--ghost hb-row-remove">Remove tile</button>
     </div>
 </template>
 

@@ -95,16 +95,19 @@ final class CmsPublicPage
      *   slides: list<array<string, string>>,
      *   intro_html: string,
      *   meta_description: string,
-     *   home_blocks: array<string, mixed>
+     *   home_blocks: array<string, mixed>,
+     *   home_services_teaser: array{enabled: bool, eyebrow: string, title: string, link_all_label: string, link_all_href: string, items: list<array<string, mixed>>}
      * }
      */
     public static function home(array $defaultSlides, string $defaultMeta): array
     {
+        $servicesMergedCatalog = self::mergedServicesBlocks();
         $out = [
             'slides' => $defaultSlides,
             'intro_html' => '',
             'meta_description' => $defaultMeta,
             'home_blocks' => HomePageBlocks::merged(null),
+            'home_services_teaser' => ServicesPageBlocks::homeTeaserFromOfferings($servicesMergedCatalog),
         ];
 
         $dbSlides = self::slidesFromDatabase();
@@ -150,6 +153,21 @@ final class CmsPublicPage
         $out['home_blocks'] = HomePageBlocks::merged($blocksRaw);
 
         return $out;
+    }
+
+    /** @return array<string, mixed> */
+    private static function mergedServicesBlocks(): array
+    {
+        $row = self::findRow('services');
+        if ($row === null) {
+            return ServicesPageBlocks::merged(null);
+        }
+        $data = self::decodeJson((string) ($row['content_json'] ?? ''));
+        if ($data === null) {
+            return ServicesPageBlocks::merged(null);
+        }
+
+        return ServicesPageBlocks::merged(self::blocksFromContentData($data));
     }
 
     /**
@@ -238,7 +256,7 @@ final class CmsPublicPage
     /**
      * Homepage (and block editors) historically read `content_json.blocks`; relational storage
      * hydrates `blocks.*` keys. Support extra shapes: nested `blocks.blocks`, empty `blocks{}`
-     * with section keys at root, and mis-saved root-level `clusters`/`confidence`/… .
+     * with section keys at root, and mis-saved root-level `confidence`/… .
      *
      * @param array<string, mixed> $data
      * @return array<string, mixed>|null
@@ -257,7 +275,6 @@ final class CmsPublicPage
             'version',
             'confidence',
             'partnership',
-            'clusters',
             'operating_model',
             'packages',
             'testimonials',

@@ -39,13 +39,11 @@ final class HomePageBlocks
         /** @var array<string, mixed> $s */
         $s = self::normalizeStoredHomeBlocks($stored);
         $out = array_replace_recursive($defaults, $s);
+        unset($out['clusters']);
 
         /** Full array replace where partial lists hurt UX (use array_key_exists so [] is intentional) */
         if (!empty($s['confidence']) && is_array($s['confidence']) && array_key_exists('metrics', $s['confidence']) && is_array($s['confidence']['metrics'])) {
             $out['confidence']['metrics'] = $s['confidence']['metrics'];
-        }
-        if (!empty($s['clusters']) && is_array($s['clusters']) && array_key_exists('items', $s['clusters']) && is_array($s['clusters']['items'])) {
-            $out['clusters']['items'] = $s['clusters']['items'];
         }
         if (!empty($s['packages']) && is_array($s['packages']) && array_key_exists('items', $s['packages']) && is_array($s['packages']['items'])) {
             $out['packages']['items'] = $s['packages']['items'];
@@ -78,7 +76,9 @@ final class HomePageBlocks
             $s = array_replace($s, $inner);
         }
 
-        foreach (['confidence', 'partnership', 'clusters', 'operating_model', 'packages', 'testimonials', 'newsletter'] as $root) {
+        unset($s['clusters']);
+
+        foreach (['confidence', 'partnership', 'operating_model', 'packages', 'testimonials', 'newsletter'] as $root) {
             if (!array_key_exists($root, $s)) {
                 continue;
             }
@@ -89,9 +89,6 @@ final class HomePageBlocks
 
         if (isset($s['confidence']) && is_array($s['confidence'])) {
             self::liftNumericListChildren($s['confidence'], 'metrics');
-        }
-        if (isset($s['clusters']) && is_array($s['clusters'])) {
-            self::liftNumericListChildren($s['clusters'], 'items');
         }
         if (isset($s['packages']) && is_array($s['packages'])) {
             self::liftNumericListChildren($s['packages'], 'items');
@@ -105,9 +102,6 @@ final class HomePageBlocks
 
         if (isset($s['confidence']['metrics']) && is_array($s['confidence']['metrics'])) {
             $s['confidence']['metrics'] = array_values($s['confidence']['metrics']);
-        }
-        if (isset($s['clusters']['items']) && is_array($s['clusters']['items'])) {
-            $s['clusters']['items'] = array_values($s['clusters']['items']);
         }
         if (isset($s['packages']['items']) && is_array($s['packages']['items'])) {
             $s['packages']['items'] = array_values($s['packages']['items']);
@@ -123,9 +117,7 @@ final class HomePageBlocks
     }
 
     /**
-     * cms_page_fields keys like blocks.clusters.0.title are siblings of blocks.clusters.title; the public
-     * view expects clusters.items[]. If `items` is missing or stored as empty [] (empty_array marker),
-     * rebuild items from numeric keys. If items is already non-empty, drop stray numeric siblings.
+     * Relational hydrate may put list rows under numeric keys beside the canonical list key.
      *
      * @param array<string, mixed> $section
      */
@@ -206,11 +198,6 @@ final class HomePageBlocks
         $p = &$merged['partnership'];
         if (isset($p['cta_href']) && trim((string) $p['cta_href']) === '') {
             $p['cta_href'] = app_url('about');
-        }
-
-        $c = &$merged['clusters'];
-        if (isset($c['link_all_href']) && trim((string) $c['link_all_href']) === '') {
-            $c['link_all_href'] = app_url('services');
         }
 
         if (isset($merged['packages']['items']) && is_array($merged['packages']['items'])) {

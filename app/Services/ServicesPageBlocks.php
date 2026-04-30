@@ -36,7 +36,7 @@ final class ServicesPageBlocks
         }
 
         /** @var array<string, mixed> $s */
-        $s = $stored;
+        $s = self::normalizeStoredLists($stored);
         $out = array_replace_recursive($defaults, $s);
 
         if (!empty($s['offerings']) && is_array($s['offerings'])) {
@@ -56,6 +56,130 @@ final class ServicesPageBlocks
         }
 
         return self::finalize($out);
+    }
+
+    /**
+     * Shape used by {@see \App\Views\home\index.php} — fed from Services CMS Offerings only.
+     *
+     * @param array<string, mixed> $merged Result of {@see self::merged()}
+     *
+     * @return array{enabled: bool, eyebrow: string, title: string, link_all_label: string, link_all_href: string, items: list<array<string, mixed>>}
+     */
+    public static function homeTeaserFromOfferings(array $merged): array
+    {
+        $off = isset($merged['offerings']) && is_array($merged['offerings']) ? $merged['offerings'] : [];
+        $offEnabled = (($off['enabled'] ?? true) !== false);
+
+        $items = [];
+        if (isset($off['items']) && is_array($off['items'])) {
+            foreach ($off['items'] as $row) {
+                if (!is_array($row)) {
+                    continue;
+                }
+                $title = trim((string) ($row['title'] ?? ''));
+                if ($title === '') {
+                    continue;
+                }
+                $html = isset($row['summary_html']) && is_string($row['summary_html']) ? $row['summary_html'] : '';
+                $text = trim((string) preg_replace('/\s+/u', ' ', strip_tags($html)));
+
+                $items[] = [
+                    'title' => $title,
+                    'text' => $text,
+                    'accent' => !empty($row['accent']),
+                    'muted' => !empty($row['muted']),
+                ];
+            }
+        }
+
+        $servicesUrl = app_url('services');
+        $ctaL = isset($off['home_teaser_cta_label']) ? trim((string) $off['home_teaser_cta_label']) : '';
+        $ctaH = isset($off['home_teaser_cta_href']) ? trim((string) $off['home_teaser_cta_href']) : '';
+
+        return [
+            'enabled' => $offEnabled && $items !== [],
+            'eyebrow' => isset($off['eyebrow']) ? trim((string) $off['eyebrow']) : '',
+            'title' => isset($off['section_title']) ? trim((string) $off['section_title']) : '',
+            'link_all_label' => $ctaL !== '' ? $ctaL : 'Explore services',
+            'link_all_href' => $ctaH !== '' ? $ctaH : $servicesUrl,
+            'items' => array_values($items),
+        ];
+    }
+
+    /** @param array<string, mixed> $stored */
+    private static function normalizeStoredLists(array $stored): array
+    {
+        $s = $stored;
+        for ($i = 0; $i < 10 && isset($s['blocks']) && is_array($s['blocks']); $i++) {
+            $inner = $s['blocks'];
+            unset($s['blocks']);
+            if (!is_array($inner)) {
+                break;
+            }
+            $s = array_replace($s, $inner);
+        }
+
+        if (isset($s['offerings']) && is_array($s['offerings'])) {
+            self::liftNumericListChildren($s['offerings'], 'items');
+        }
+        if (isset($s['partnership']) && is_array($s['partnership'])) {
+            self::liftNumericListChildren($s['partnership'], 'metrics');
+        }
+        if (isset($s['faq']) && is_array($s['faq'])) {
+            self::liftNumericListChildren($s['faq'], 'items');
+        }
+
+        return $s;
+    }
+
+    /**
+     * @see \App\Services\HomePageBlocks (same hydration quirk from cms_page_fields)
+     *
+     * @param array<string, mixed> $section
+     */
+    private static function liftNumericListChildren(array &$section, string $listKey): void
+    {
+        $toUnset = [];
+        $lifted = [];
+        foreach ($section as $k => $v) {
+            if ($k === $listKey || !is_array($v)) {
+                continue;
+            }
+            if (is_int($k)) {
+                $lifted[$k] = $v;
+                $toUnset[] = $k;
+
+                continue;
+            }
+            if (is_string($k) && $k !== '' && ctype_digit($k)) {
+                $lifted[(int) $k] = $v;
+                $toUnset[] = $k;
+            }
+        }
+        if ($lifted === []) {
+            return;
+        }
+        ksort($lifted, SORT_NUMERIC);
+        $mergedList = array_values($lifted);
+
+        $hadListKey = array_key_exists($listKey, $section);
+        $existing = ($hadListKey && is_array($section[$listKey])) ? $section[$listKey] : null;
+
+        $useLifted =
+            !$hadListKey
+            || !is_array($existing)
+            || $existing === [];
+
+        if ($useLifted) {
+            foreach ($toUnset as $k) {
+                unset($section[$k]);
+            }
+            $section[$listKey] = $mergedList;
+        } elseif (is_array($existing) && $existing !== []) {
+            foreach ($toUnset as $k) {
+                unset($section[$k]);
+            }
+        }
     }
 
     /**

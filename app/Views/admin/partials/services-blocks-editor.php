@@ -59,6 +59,11 @@ $faqs = isset($f['items']) && is_array($f['items']) ? $f['items'] : [];
                 <div class="form-row" style="margin:0;"><label for="svc-of-eye">Section eyebrow</label><input class="input" id="svc-of-eye" type="text" value="<?= e((string) ($of['eyebrow'] ?? '')) ?>"></div>
                 <div class="form-row" style="margin:0;"><label for="svc-of-stitle">Section title</label><input class="input" id="svc-of-stitle" type="text" value="<?= e((string) ($of['section_title'] ?? '')) ?>"></div>
             </div>
+            <p class="text-muted" style="font-size:0.85rem; margin:0 0 0.5rem;">Homepage teaser: the same offerings list appears on the home page services grid (heading and CTA configurable below).</p>
+            <div class="home-blocks-editor__grid home-blocks-editor__grid--2">
+                <div class="form-row" style="margin:0;"><label for="svc-of-home-cta-label">Home CTA label</label><input class="input" id="svc-of-home-cta-label" type="text" value="<?= e((string) ($of['home_teaser_cta_label'] ?? '')) ?>" placeholder="Explore services"></div>
+                <div class="form-row" style="margin:0;"><label for="svc-of-home-cta-href">Home CTA URL</label><input class="input" id="svc-of-home-cta-href" type="text" value="<?= e((string) ($of['home_teaser_cta_href'] ?? '')) ?>" placeholder="/services if empty"></div>
+            </div>
             <div id="svc-offer-rows" class="hb-repeat-list">
                 <?php foreach ($offItems as $it): ?>
                 <?php if (!is_array($it)) {

@@ -52,7 +52,7 @@ if ($slug === 'rentals') {
     <div class="card card--folio" style="max-width: none;">
         <h2 class="card__title" style="margin: 0 0 1rem;">Edit page</h2>
         <?php if ($slug === 'home'): ?>
-            <p class="text-muted" style="font-size: 0.88rem; margin: 0 0 1rem;">Hero slides: <a class="text-link" href="<?= e(app_url('admin/cms/slides')) ?>">Hero carousel</a>. Edit intro HTML, meta description, and the structured homepage sections below. Changes are saved as relational CMS fields.</p>
+            <p class="text-muted" style="font-size: 0.88rem; margin: 0 0 1rem;">Hero slides: <a class="text-link" href="<?= e(app_url('admin/cms/slides')) ?>">Hero carousel</a>. Edit intro HTML, meta description, and the structured homepage sections below. The <strong>services grid on the homepage</strong> is controlled from <a class="text-link" href="<?= e(app_url('admin/cms/page/services')) ?>">CMS → Pages → Services</a> (Offerings). Changes are saved as relational CMS fields.</p>
         <?php elseif ($slug === 'about'): ?>
             <p class="text-muted" style="font-size: 0.88rem; margin: 0 0 1rem;">Structured About page content is saved as relational CMS fields. The rich-text “Body” field remains available for legacy copy; public About uses the modular sections below.</p>
         <?php elseif ($slug === 'services'): ?>
@@ -245,25 +245,6 @@ if ($slug === 'rentals') {
       });
     });
 
-    var clusters = [];
-    hbRoot.querySelectorAll('.js-hb-cluster-row').forEach(function (row) {
-      var t = row.querySelector('.js-cluster-title');
-      var x = row.querySelector('.js-cluster-text');
-      var o = {
-        title: t ? t.value.trim() : '',
-        text: x ? x.value.trim() : '',
-      };
-      var ac = row.querySelector('.js-cluster-accent');
-      var mu = row.querySelector('.js-cluster-muted');
-      if (ac && ac.checked) {
-        o.accent = true;
-      }
-      if (mu && mu.checked) {
-        o.muted = true;
-      }
-      clusters.push(o);
-    });
-
     var steps = [];
     hbRoot.querySelectorAll('.js-hb-step-row').forEach(function (row) {
       var st = row.querySelector('.js-step-title');
@@ -336,14 +317,6 @@ if ($slug === 'rentals') {
         cta_label: v('hb-pa-cta-label'),
         cta_href: v('hb-pa-cta-href'),
       },
-      clusters: {
-        enabled: ck('hb-cl-enabled'),
-        eyebrow: v('hb-cl-eyebrow'),
-        title: v('hb-cl-title'),
-        link_all_label: v('hb-cl-link-label'),
-        link_all_href: v('hb-cl-link-href'),
-        items: clusters,
-      },
       operating_model: {
         enabled: ck('hb-om-enabled'),
         title: v('hb-om-title'),
@@ -398,12 +371,6 @@ if ($slug === 'rentals') {
     if (addMetric) {
       addMetric.addEventListener('click', function () {
         hbAppendTemplate('hb-tpl-metric', 'hb-metrics');
-      });
-    }
-    var addCluster = document.getElementById('hb-add-cluster');
-    if (addCluster) {
-      addCluster.addEventListener('click', function () {
-        hbAppendTemplate('hb-tpl-cluster', 'hb-cluster-rows');
       });
     }
     var addStep = document.getElementById('hb-add-step');

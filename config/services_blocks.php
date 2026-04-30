@@ -23,6 +23,8 @@ return [
         'enabled' => true,
         'eyebrow' => 'Capability',
         'section_title' => 'What we configure for you',
+        'home_teaser_cta_label' => '',
+        'home_teaser_cta_href' => '',
         'items' => [
             [
                 'title' => 'Wedding planning',
