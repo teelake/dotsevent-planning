@@ -4,7 +4,7 @@ declare(strict_types=1);
 $siteName = $app['name'] ?? 'DOTS Event Planning';
 $footerLogoPath = trim(site_setting('logo_path', 'assets/images/logo-dots.svg'));
 $social = site_social_urls();
-$hasSocial = ($social['facebook'] ?? '') !== '' || (($social['instagram'] ?? '') !== '') || (($social['youtube'] ?? '') !== '');
+$hasSocial = ($social['facebook'] ?? '') !== '' || (($social['instagram'] ?? '') !== '') || (($social['youtube'] ?? '') !== '') || (($social['whatsapp'] ?? '') !== '');
 $footerEmail = trim(site_setting('email', (string) ($app['email'] ?? 'info@dotseventplanning.com')));
 $footerPhoneDisplay = trim(site_setting('phone_display', (string) ($app['phone_display'] ?? '')));
 $footerPhoneTel = trim(site_setting('phone_tel', (string) ($app['phone_tel'] ?? '')));
@@ -16,6 +16,7 @@ $socialIcons = [
     'facebook' => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.5 8.4V6.7c0-.8.3-1.2 1.3-1.2h1.6V2.8c-.8-.1-1.5-.2-2.3-.2-2.5 0-4.2 1.5-4.2 4.3v1.5H8.1v3h2.8v9.9h3.4v-9.9h2.8l.4-3h-3z"/></svg>',
     'instagram' => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5.1"/><circle cx="12" cy="12" r="4.1"/><circle cx="17.2" cy="6.8" r="1.2"/></svg>',
     'youtube' => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21.6 7.2a3 3 0 0 0-2.1-2.1C17.7 4.6 12 4.6 12 4.6s-5.7 0-7.5.5a3 3 0 0 0-2.1 2.1C2 9 2 12 2 12s0 3 .4 4.8a3 3 0 0 0 2.1 2.1c1.8.5 7.5.5 7.5.5s5.7 0 7.5-.5a3 3 0 0 0 2.1-2.1C22 15 22 12 22 12s0-3-.4-4.8z"/><path d="M10 15.3V8.7l5.8 3.3L10 15.3z"/></svg>',
+    'whatsapp' => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.5 11.8a8.3 8.3 0 0 1-12.2 7.3L3.5 20.5l1.5-4.6a8.3 8.3 0 1 1 15.5-4.1z"/><path d="M8.8 8.1c.2-.5.4-.5.7-.5h.5c.2 0 .4.1.5.4l.7 1.7c.1.3 0 .5-.1.7l-.4.5c-.1.1-.2.3-.1.5.4.8 1 1.5 1.7 2 .5.3.9.5 1.1.6.2.1.4.1.5-.1l.8-.9c.2-.2.4-.2.6-.1l1.8.9c.3.1.4.3.4.5 0 .4-.3 1.2-.9 1.6-.5.4-1.1.5-1.8.4-1.1-.2-2.5-.8-4-2.1-1.8-1.6-2.8-3.5-3-4.6-.1-.5 0-1 .2-1.5z"/></svg>',
 ];
 ?>
 <footer class="app-footer">
@@ -46,6 +47,9 @@ $socialIcons = [
                 <?php endif; ?>
                 <?php if (($social['youtube'] ?? '') !== ''): ?>
                 <li><a class="app-social__link" href="<?= e($social['youtube']) ?>" rel="noopener noreferrer" target="_blank" aria-label="YouTube"><?= $socialIcons['youtube'] ?></a></li>
+                <?php endif; ?>
+                <?php if (($social['whatsapp'] ?? '') !== ''): ?>
+                <li><a class="app-social__link" href="<?= e($social['whatsapp']) ?>" rel="noopener noreferrer" target="_blank" aria-label="Chat on WhatsApp"><?= $socialIcons['whatsapp'] ?></a></li>
                 <?php endif; ?>
             </ul>
             <?php endif; ?>

@@ -347,6 +347,7 @@ final class AdminController extends Controller
             'social_facebook' => trim((string) ($_POST['social_facebook'] ?? '')),
             'social_instagram' => trim((string) ($_POST['social_instagram'] ?? '')),
             'social_youtube' => trim((string) ($_POST['social_youtube'] ?? '')),
+            'social_whatsapp' => trim((string) ($_POST['social_whatsapp'] ?? '')),
             'email' => trim((string) ($_POST['email'] ?? '')),
             'phone_display' => trim((string) ($_POST['phone_display'] ?? '')),
             'phone_tel' => trim((string) ($_POST['phone_tel'] ?? '')),

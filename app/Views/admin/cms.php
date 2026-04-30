@@ -116,6 +116,7 @@ $cfg = app_config();
                     <input class="input" name="social_facebook" type="url" placeholder="Facebook URL" value="<?= e(s($settings, 'social_facebook', (string) ($cfg['social_facebook'] ?? ''))) ?>">
                     <input class="input" name="social_instagram" type="url" placeholder="Instagram URL" value="<?= e(s($settings, 'social_instagram', (string) ($cfg['social_instagram'] ?? ''))) ?>">
                     <input class="input" name="social_youtube" type="url" placeholder="YouTube URL" value="<?= e(s($settings, 'social_youtube', (string) ($cfg['social_youtube'] ?? ''))) ?>">
+                    <input class="input" name="social_whatsapp" type="url" placeholder="WhatsApp chat URL (e.g. https://wa.me/15065550100)" value="<?= e(s($settings, 'social_whatsapp', (string) ($cfg['social_whatsapp'] ?? ''))) ?>">
                 </div>
             </div>
 

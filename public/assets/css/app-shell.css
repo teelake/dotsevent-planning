@@ -228,6 +228,58 @@
   flex-shrink: 0;
 }
 
+.app-topbar-social {
+  display: none;
+  align-items: center;
+  gap: 0.35rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.app-topbar-social__link {
+  width: 2.15rem;
+  height: 2.15rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 239, 180, 0.95);
+  text-decoration: none;
+  transition: border-color 0.2s var(--ease-out), background 0.2s var(--ease-out), transform 0.2s var(--ease-out);
+}
+
+.app-topbar-social__link:hover {
+  border-color: rgba(245, 192, 19, 0.55);
+  background: rgba(245, 192, 19, 0.12);
+  transform: translateY(-1px);
+}
+
+.app-topbar-social__link--whatsapp {
+  color: #8cffbd;
+}
+
+.app-topbar-social__link svg {
+  width: 1.05rem;
+  height: 1.05rem;
+  display: block;
+  fill: currentColor;
+}
+
+.app-topbar-social__link--instagram svg,
+.app-topbar-social__link--whatsapp svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+}
+
+@media (min-width: 960px) {
+  .app-topbar-social {
+    display: inline-flex;
+  }
+}
+
 /* Main pad under fixed shell */
 .app-main {
   position: relative;

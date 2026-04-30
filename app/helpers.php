@@ -130,7 +130,7 @@ function site_map_embed_url(): string
 }
 
 /**
- * @return array{facebook: string, instagram: string, youtube: string}
+ * @return array{facebook: string, instagram: string, youtube: string, whatsapp: string}
  */
 function site_social_urls(): array
 {
@@ -139,6 +139,7 @@ function site_social_urls(): array
         'facebook' => trim(site_setting('social_facebook', (string) ($c['social_facebook'] ?? ''))),
         'instagram' => trim(site_setting('social_instagram', (string) ($c['social_instagram'] ?? ''))),
         'youtube' => trim(site_setting('social_youtube', (string) ($c['social_youtube'] ?? ''))),
+        'whatsapp' => trim(site_setting('social_whatsapp', (string) ($c['social_whatsapp'] ?? ''))),
     ];
 }
 

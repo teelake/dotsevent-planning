@@ -34,6 +34,7 @@ return [
     'social_facebook' => '',
     'social_instagram' => '',
     'social_youtube' => '',
+    'social_whatsapp' => '',
 
     /**
      * Public site URL (no trailing slash) for canonical links, Open Graph, and Twitter.
