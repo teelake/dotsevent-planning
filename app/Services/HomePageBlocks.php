@@ -37,7 +37,7 @@ final class HomePageBlocks
         }
 
         /** @var array<string, mixed> $s */
-        $s = $stored;
+        $s = self::normalizeStoredHomeBlocks($stored);
         $out = array_replace_recursive($defaults, $s);
 
         /** Full array replace where partial lists hurt UX */
@@ -58,6 +58,52 @@ final class HomePageBlocks
         }
 
         return self::finalize($out);
+    }
+
+    /**
+     * Fix accidentally nested payloads (blocks.blocks...) and coerce list shapes after cms_page_fields round-trips.
+     *
+     * @param array<string, mixed> $stored
+     * @return array<string, mixed>
+     */
+    private static function normalizeStoredHomeBlocks(array $stored): array
+    {
+        $s = $stored;
+        for ($i = 0; $i < 10 && isset($s['blocks']) && is_array($s['blocks']); $i++) {
+            $inner = $s['blocks'];
+            unset($s['blocks']);
+            if (!is_array($inner)) {
+                break;
+            }
+            $s = array_replace($s, $inner);
+        }
+
+        foreach (['confidence', 'partnership', 'clusters', 'operating_model', 'packages', 'testimonials', 'newsletter'] as $root) {
+            if (!array_key_exists($root, $s)) {
+                continue;
+            }
+            if ($s[$root] === null || !is_array($s[$root])) {
+                unset($s[$root]);
+            }
+        }
+
+        if (isset($s['confidence']['metrics']) && is_array($s['confidence']['metrics'])) {
+            $s['confidence']['metrics'] = array_values($s['confidence']['metrics']);
+        }
+        if (isset($s['clusters']['items']) && is_array($s['clusters']['items'])) {
+            $s['clusters']['items'] = array_values($s['clusters']['items']);
+        }
+        if (isset($s['packages']['items']) && is_array($s['packages']['items'])) {
+            $s['packages']['items'] = array_values($s['packages']['items']);
+        }
+        if (isset($s['operating_model']['steps']) && is_array($s['operating_model']['steps'])) {
+            $s['operating_model']['steps'] = array_values($s['operating_model']['steps']);
+        }
+        if (isset($s['testimonials']['quotes']) && is_array($s['testimonials']['quotes'])) {
+            $s['testimonials']['quotes'] = array_values($s['testimonials']['quotes']);
+        }
+
+        return $s;
     }
 
     /**

@@ -194,6 +194,14 @@ final class CmsPagesRepository
         if (!is_array($rows)) {
             return [];
         }
+        usort(
+            $rows,
+            static function (array $x, array $y): int {
+                $a = (string) ($x['field_key'] ?? '');
+                $b = (string) ($y['field_key'] ?? '');
+                return self::compareFieldPaths($a, $b);
+            }
+        );
         $out = [];
         foreach ($rows as $row) {
             self::setNestedValue(
@@ -203,6 +211,43 @@ final class CmsPagesRepository
             );
         }
         return $out;
+    }
+
+    /**
+     * ORDER BY field_key ASC breaks list order ("10" before "2"). Sort paths segment-wise with numeric indices.
+     */
+    private static function compareFieldPaths(string $a, string $b): int
+    {
+        $pa = $a === '' ? [] : explode('.', $a);
+        $pb = $b === '' ? [] : explode('.', $b);
+        $n = max(count($pa), count($pb));
+        for ($i = 0; $i < $n; $i++) {
+            $ea = $i >= count($pa);
+            $eb = $i >= count($pb);
+            if ($ea && $eb) {
+                return 0;
+            }
+            if ($ea) {
+                return -1;
+            }
+            if ($eb) {
+                return 1;
+            }
+            $sa = (string) $pa[$i];
+            $sb = (string) $pb[$i];
+            if ($sa === $sb) {
+                continue;
+            }
+            $da = ctype_digit($sa);
+            $db = ctype_digit($sb);
+            if ($da && $db) {
+                return (int) $sa <=> (int) $sb;
+            }
+
+            return strcmp($sa, $sb);
+        }
+
+        return 0;
     }
 
     /**
