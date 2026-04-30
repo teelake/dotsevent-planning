@@ -11,7 +11,7 @@ final class ProductRepository
 {
     private ?PDO $pdo;
 
-    /** Cached per-process: true once the migration has been applied */
+    /** Cached per-process: true once migration-003 columns are present */
     private static ?bool $extendedCols = null;
 
     public function __construct()
@@ -20,8 +20,7 @@ final class ProductRepository
     }
 
     /**
-     * Returns true if the migration-003 columns (price_max_cents etc.) exist.
-     * Result is cached for the lifetime of the PHP process.
+     * Checks whether the migration-003 columns exist (once per PHP process).
      */
     private function hasExtendedCols(): bool
     {
@@ -45,21 +44,21 @@ final class ProductRepository
         return self::$extendedCols;
     }
 
-    /** Columns available before migration-003 */
+    /** Core columns present in the original schema */
     private const COLS_LEGACY = 'id, slug, name, description, price_cents, currency, image_url, stock, has_options';
 
-    /** Full column set after migration-003 */
-    private const COLS_EXTENDED = 'id, slug, name, description, price_cents, price_max_cents, currency, image_url, stock, has_options, category_key, badge_label, meta_json';
+    /** Extended columns added by migration-003 */
+    private const COLS_EXTRA = ', price_max_cents, category_key, badge_label, details, ideal_for, policy_note';
 
-    /** Returns the correct SELECT column list depending on schema state */
     private function catalogCols(): string
     {
-        return $this->hasExtendedCols() ? self::COLS_EXTENDED : self::COLS_LEGACY;
+        return $this->hasExtendedCols()
+            ? self::COLS_LEGACY . self::COLS_EXTRA
+            : self::COLS_LEGACY;
     }
 
     /**
-     * Normalises a raw product row so callers always see the extended keys
-     * (null-filled when the migration hasn't run yet).
+     * Ensures every row has the extended keys (null when migration not yet run).
      *
      * @param array<string, mixed> $row
      * @return array<string, mixed>
@@ -69,7 +68,9 @@ final class ProductRepository
         $row['price_max_cents'] ??= null;
         $row['category_key']    ??= null;
         $row['badge_label']     ??= null;
-        $row['meta_json']       ??= null;
+        $row['details']         ??= null;
+        $row['ideal_for']       ??= null;
+        $row['policy_note']     ??= null;
         return $row;
     }
 
@@ -106,6 +107,32 @@ final class ProductRepository
     }
 
     /**
+     * Fetches all options for a product, ordered by sort_order.
+     * Returns an empty array when the product_options table doesn't exist yet.
+     *
+     * @return list<array{id:int, label:string, price_cents:int, sort_order:int}>
+     */
+    public function findOptions(int $productId): array
+    {
+        if ($this->pdo === null) {
+            return [];
+        }
+        try {
+            $st = $this->pdo->prepare(
+                'SELECT id, label, price_cents, sort_order
+                 FROM product_options
+                 WHERE product_id = :pid
+                 ORDER BY sort_order ASC, id ASC'
+            );
+            $st->execute(['pid' => $productId]);
+            $rows = $st->fetchAll(PDO::FETCH_ASSOC);
+            return is_array($rows) ? $rows : [];
+        } catch (\Throwable) {
+            return [];
+        }
+    }
+
+    /**
      * Returns up to $limit active products in the same category, excluding the current product.
      *
      * @return list<array<string, mixed>>
@@ -116,7 +143,7 @@ final class ProductRepository
             return [];
         }
         $st = $this->pdo->prepare(
-            'SELECT ' . self::COLS_EXTENDED . '
+            'SELECT ' . self::COLS_LEGACY . self::COLS_EXTRA . '
              FROM products
              WHERE is_active = 1 AND category_key = :cat AND id != :id
              ORDER BY sort_order ASC, name ASC
@@ -133,19 +160,16 @@ final class ProductRepository
         return array_map([self::class, 'normalise'], $rows);
     }
 
-    /**
-     * @return list<array<string, mixed>>
-     */
+    /** @return list<array<string, mixed>> */
     public function allForAdmin(): array
     {
         if ($this->pdo === null) {
             return [];
         }
-        $extended = $this->hasExtendedCols()
-            ? ', price_max_cents, category_key, badge_label, meta_json'
-            : '';
+        $extra = $this->hasExtendedCols() ? self::COLS_EXTRA : '';
         $st = $this->pdo->query(
-            'SELECT id, slug, name, description, price_cents' . $extended . ', currency, image_url, stock, has_options, is_active, sort_order, created_at
+            'SELECT id, slug, name, description, price_cents' . $extra . ',
+                    currency, image_url, stock, has_options, is_active, sort_order, created_at
              FROM products ORDER BY sort_order ASC, id ASC'
         );
         if ($st === false) {
@@ -164,11 +188,10 @@ final class ProductRepository
         if ($this->pdo === null) {
             return null;
         }
-        $extended = $this->hasExtendedCols()
-            ? ', price_max_cents, category_key, badge_label, meta_json'
-            : '';
+        $extra = $this->hasExtendedCols() ? self::COLS_EXTRA : '';
         $st = $this->pdo->prepare(
-            'SELECT id, slug, name, description, price_cents' . $extended . ', currency, image_url, stock, has_options, is_active, sort_order, created_at
+            'SELECT id, slug, name, description, price_cents' . $extra . ',
+                    currency, image_url, stock, has_options, is_active, sort_order, created_at
              FROM products WHERE id = :id LIMIT 1'
         );
         $st->execute(['id' => $id]);

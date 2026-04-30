@@ -2,33 +2,36 @@
 declare(strict_types=1);
 /**
  * @var array<string, mixed>       $product
- * @var array<string, mixed>       $meta_json
+ * @var list<array<string, mixed>> $options          Rows from product_options table
  * @var list<array<string, mixed>> $related_products
  */
 $p               = $product          ?? [];
-$metaJson        = $meta_json        ?? [];
+$options         = $options          ?? [];
 $relatedProducts = $related_products ?? [];
 
-$id       = (int)    ($p['id']       ?? 0);
-$name     = (string) ($p['name']     ?? '');
-$cents    = (int)    ($p['price_cents'] ?? 0);
-$maxCents = isset($p['price_max_cents']) && $p['price_max_cents'] !== null ? (int) $p['price_max_cents'] : null;
-$cur      = (string) ($p['currency'] ?? 'CAD');
-$desc     = (string) ($p['description'] ?? '');
-$img      = !empty($p['image_url']) ? (string) $p['image_url'] : null;
-$catKey   = (string) ($p['category_key'] ?? '');
-$badge    = (string) ($p['badge_label']  ?? '');
+$id         = (int)    ($p['id']            ?? 0);
+$name       = (string) ($p['name']          ?? '');
+$cents      = (int)    ($p['price_cents']   ?? 0);
+$maxCents   = isset($p['price_max_cents']) && $p['price_max_cents'] !== null ? (int) $p['price_max_cents'] : null;
+$cur        = (string) ($p['currency']      ?? 'CAD');
+$desc       = (string) ($p['description']   ?? '');
+$img        = !empty($p['image_url']) ? (string) $p['image_url'] : null;
+$catKey     = (string) ($p['category_key']  ?? '');
+$badge      = (string) ($p['badge_label']   ?? '');
+$hasOptions = (bool)   ($p['has_options']   ?? false);
+
+// Plain TEXT columns — split on newline into arrays
+$detailsRaw  = trim((string) ($p['details']     ?? ''));
+$idealForRaw = trim((string) ($p['ideal_for']   ?? ''));
+$policyNote  = trim((string) ($p['policy_note'] ?? ''));
+
+$details = $detailsRaw  !== '' ? array_filter(array_map('trim', explode("\n", $detailsRaw)))  : [];
+$idealFor= $idealForRaw !== '' ? array_filter(array_map('trim', explode("\n", $idealForRaw))) : [];
 
 $priceMin   = money_format_cents($cents, $cur);
 $priceLabel = $maxCents !== null
     ? e($priceMin) . ' – ' . e(money_format_cents($maxCents, $cur))
     : e($priceMin);
-
-$hasOptions  = (bool) ($p['has_options'] ?? false);
-$options     = is_array($metaJson['options'] ?? null)  ? $metaJson['options']  : [];
-$details     = is_array($metaJson['details'] ?? null)  ? $metaJson['details']  : [];
-$idealFor    = is_array($metaJson['ideal_for'] ?? null)? $metaJson['ideal_for']: [];
-$policyNote  = (string) ($metaJson['policy_note'] ?? '');
 
 $catLabel = $catKey !== '' ? ucfirst(str_replace('-', ' ', $catKey)) : 'Rental';
 
@@ -69,7 +72,10 @@ include dirname(__DIR__) . '/partials/page-hero.php';
 
                     <h1 class="product-split__title"><?= e($name) ?></h1>
 
-                    <p class="product-split__price"><?= $priceLabel ?> <span class="product-split__per">per item</span></p>
+                    <p class="product-split__price">
+                        <?= $priceLabel ?>
+                        <span class="product-split__per">per item</span>
+                    </p>
 
                     <?php if ($desc !== ''): ?>
                         <div class="product-split__desc prose"><?= nl2br(e($desc), false) ?></div>
@@ -78,12 +84,13 @@ include dirname(__DIR__) . '/partials/page-hero.php';
                     <?php /* Accordion — Details / Ideal For / Policy */ ?>
                     <?php if ($details !== [] || $idealFor !== [] || $policyNote !== ''): ?>
                     <div class="product-split__accordions">
+
                         <?php if ($details !== []): ?>
                         <details class="product-acc" open>
                             <summary class="product-acc__summary">Details</summary>
                             <ul class="product-acc__list">
-                                <?php foreach ($details as $d): ?>
-                                    <li><?= e((string) $d) ?></li>
+                                <?php foreach ($details as $line): ?>
+                                    <li><?= e($line) ?></li>
                                 <?php endforeach; ?>
                             </ul>
                         </details>
@@ -94,7 +101,7 @@ include dirname(__DIR__) . '/partials/page-hero.php';
                             <summary class="product-acc__summary">Ideal for</summary>
                             <ul class="product-acc__list product-acc__list--tags">
                                 <?php foreach ($idealFor as $use): ?>
-                                    <li><?= e((string) $use) ?></li>
+                                    <li><?= e($use) ?></li>
                                 <?php endforeach; ?>
                             </ul>
                         </details>
@@ -106,10 +113,11 @@ include dirname(__DIR__) . '/partials/page-hero.php';
                             <p class="product-acc__body"><?= e($policyNote) ?></p>
                         </details>
                         <?php endif; ?>
+
                     </div>
                     <?php endif; ?>
 
-                    <?php /* Add to cart / Options */ ?>
+                    <?php /* Add to cart — options table or simple qty */ ?>
                     <?php if ($hasOptions && $options !== []): ?>
                         <form class="add-form product-options-form" method="post" action="<?= e(app_url('cart/add')) ?>">
                             <?= csrf_field() ?>
@@ -124,15 +132,14 @@ include dirname(__DIR__) . '/partials/page-hero.php';
                                 </thead>
                                 <tbody>
                                     <?php foreach ($options as $i => $opt):
-                                        $optId    = (int) ($opt['product_id'] ?? $id);
-                                        $optLabel = (string) ($opt['label'] ?? '');
-                                        $optCents = (int) ($opt['price_cents'] ?? $cents);
-                                        $qtyName  = 'items[' . $i . '][qty]';
-                                        $idName   = 'items[' . $i . '][product_id]';
+                                        $optId    = (int)    ($opt['id']          ?? 0);
+                                        $optLabel = (string) ($opt['label']       ?? '');
+                                        $optCents = (int)    ($opt['price_cents'] ?? $cents);
                                     ?>
                                     <tr class="product-options-table__row">
                                         <td class="product-options-table__label">
-                                            <input type="hidden" name="<?= e($idName) ?>" value="<?= $optId ?>">
+                                            <input type="hidden" name="items[<?= $i ?>][option_id]" value="<?= $optId ?>">
+                                            <input type="hidden" name="items[<?= $i ?>][product_id]" value="<?= $id ?>">
                                             <?= e($optLabel) ?>
                                         </td>
                                         <td class="product-options-table__price">
@@ -142,7 +149,7 @@ include dirname(__DIR__) . '/partials/page-hero.php';
                                             <input
                                                 class="input input--num"
                                                 type="number"
-                                                name="<?= e($qtyName) ?>"
+                                                name="items[<?= $i ?>][qty]"
                                                 min="0"
                                                 value="0"
                                                 aria-label="Quantity for <?= e($optLabel) ?>"
@@ -184,13 +191,13 @@ include dirname(__DIR__) . '/partials/page-hero.php';
                 <h2 class="product-related__title">You might also need</h2>
                 <ul class="product-strip">
                     <?php foreach ($relatedProducts as $rp):
-                        $rpId      = (int)    $rp['id'];
-                        $rpName    = (string) $rp['name'];
-                        $rpCents   = (int)    $rp['price_cents'];
-                        $rpMax     = isset($rp['price_max_cents']) && $rp['price_max_cents'] !== null ? (int) $rp['price_max_cents'] : null;
-                        $rpCur     = (string) ($rp['currency'] ?? 'CAD');
-                        $rpImg     = !empty($rp['image_url']) ? (string) $rp['image_url'] : null;
-                        $rpPrice   = $rpMax !== null
+                        $rpId    = (int)    $rp['id'];
+                        $rpName  = (string) $rp['name'];
+                        $rpCents = (int)    $rp['price_cents'];
+                        $rpMax   = isset($rp['price_max_cents']) && $rp['price_max_cents'] !== null ? (int) $rp['price_max_cents'] : null;
+                        $rpCur   = (string) ($rp['currency'] ?? 'CAD');
+                        $rpImg   = !empty($rp['image_url']) ? (string) $rp['image_url'] : null;
+                        $rpPrice = $rpMax !== null
                             ? e(money_format_cents($rpCents, $rpCur)) . ' – ' . e(money_format_cents($rpMax, $rpCur))
                             : e(money_format_cents($rpCents, $rpCur));
                     ?>

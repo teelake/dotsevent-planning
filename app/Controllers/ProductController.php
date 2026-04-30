@@ -24,15 +24,8 @@ final class ProductController extends Controller
             ? (function_exists('mb_substr') ? mb_substr($rawDesc, 0, 160) : substr($rawDesc, 0, 160))
             : 'Rent ' . (string) $product['name'] . ' from DOTS Event Planning — event decor and inventory in Saint John, NB with online checkout.';
 
-        // Parse meta_json for structured product data
-        $metaJson   = [];
-        $metaRaw    = (string) ($product['meta_json'] ?? '');
-        if ($metaRaw !== '') {
-            $decoded = json_decode($metaRaw, true);
-            if (is_array($decoded)) {
-                $metaJson = $decoded;
-            }
-        }
+        // Fetch per-product options from the product_options table
+        $options = $repo->findOptions($id);
 
         // Related products (same category, excluding self)
         $categoryKey     = (string) ($product['category_key'] ?? '');
@@ -45,7 +38,7 @@ final class ProductController extends Controller
             'active_nav'       => 'rentals',
             'body_class'       => 'page-product',
             'product'          => $product,
-            'meta_json'        => $metaJson,
+            'options'          => $options,
             'related_products' => $relatedProducts,
             'meta_description' => $metaDescription,
             'crumb_current'    => (string) $product['name'],
