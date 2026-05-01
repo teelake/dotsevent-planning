@@ -54,10 +54,6 @@
   object-position: 28% center;
 }
 
-.hero__slide--align-right .hero__img {
-  object-position: 72% center;
-}
-
 /* Cinematic drift on active slide — premium hero treatment */
 @keyframes hero-ken {
   from {
@@ -111,26 +107,7 @@
     max-width: min(52rem, 92vw);
     margin-left: clamp(var(--space-lg), 5vw, 3.5rem);
     margin-right: auto;
-  }
-
-  .hero--slider .hero__slide--align-right .hero__content {
-    max-width: min(52rem, 92vw);
-    margin-left: auto;
-    margin-right: clamp(var(--space-lg), 5vw, 3.5rem);
-    text-align: right;
-  }
-
-  .hero--slider .hero__slide--align-right .hero__title,
-  .hero--slider .hero__slide--align-right .hero__subtitle {
-    margin-left: auto;
-  }
-
-  .hero--slider .hero__slide--align-right .hero__actions {
-    justify-content: flex-end;
-  }
-
-  .hero--slider .hero__slide--align-right .hero__eyebrow {
-    flex-direction: row-reverse;
+    text-align: left;
   }
 }
 
@@ -341,26 +318,19 @@
     align-items: center;
   }
 
-  .hero--slider .hero__slide--align-left .hero__content,
-  .hero--slider .hero__slide--align-right .hero__content {
-    max-width: var(--max-w-wide);
-    margin-left: auto;
+  .hero--slider .hero__slide--align-left .hero__content {
+    max-width: min(52rem, 92vw);
+    margin-left: clamp(var(--space-md), 4vw, 2rem);
     margin-right: auto;
-    text-align: center;
+    text-align: left;
   }
 
-  .hero--slider .hero__slide--align-right .hero__title,
-  .hero--slider .hero__slide--align-right .hero__subtitle {
-    margin-left: 0;
+  .hero--slider .hero__slide--align-left .hero__actions {
+    justify-content: flex-start;
   }
 
-  .hero--slider .hero__slide--align-right .hero__actions {
-    justify-content: center;
-  }
-
-  .hero__slide--align-left .hero__img,
-  .hero__slide--align-right .hero__img {
-    object-position: center;
+  .hero--slider .hero__slide--align-left .hero__img {
+    object-position: 28% center;
   }
 
   .hero__content {
