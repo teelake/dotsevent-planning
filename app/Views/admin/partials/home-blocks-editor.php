@@ -14,6 +14,7 @@ $paEn = (($pa['enabled'] ?? true) !== false);
 $om = is_array($b['operating_model'] ?? null) ? $b['operating_model'] : [];
 $omEn = (($om['enabled'] ?? true) !== false);
 $omSteps = isset($om['steps']) && is_array($om['steps']) ? $om['steps'] : [];
+$omImages = isset($om['images']) && is_array($om['images']) ? $om['images'] : [];
 $hl = is_array($om['highlight'] ?? null) ? $om['highlight'] : [];
 
 $pk = is_array($b['packages'] ?? null) ? $b['packages'] : [];
@@ -145,14 +146,45 @@ $nwEn = (($nw['enabled'] ?? true) !== false);
             </label>
             <div class="home-blocks-editor__grid home-blocks-editor__grid--2">
                 <div class="form-row" style="margin:0;">
+                    <label for="hb-om-eyebrow">Eyebrow (gold line above title)</label>
+                    <input class="input" type="text" id="hb-om-eyebrow" value="<?= e((string) ($om['eyebrow'] ?? '')) ?>" placeholder="Discover what sets us apart">
+                </div>
+                <div class="form-row" style="margin:0;">
                     <label for="hb-om-title">Title</label>
                     <input class="input" type="text" id="hb-om-title" value="<?= e((string) ($om['title'] ?? '')) ?>">
                 </div>
-                <div class="form-row" style="margin:0;">
-                    <label for="hb-om-subtitle">Subtitle</label>
-                    <input class="input" type="text" id="hb-om-subtitle" value="<?= e((string) ($om['subtitle'] ?? '')) ?>">
-                </div>
             </div>
+            <div class="form-row" style="margin-top:0.65rem;">
+                <label for="hb-om-lead">Intro paragraph</label>
+                <textarea class="input input--textarea" id="hb-om-lead" rows="3" placeholder="Short philosophy line under the title"><?= e((string) ($om['lead'] ?? '')) ?></textarea>
+            </div>
+            <div class="form-row" style="margin-top:0.5rem;">
+                <label for="hb-om-subtitle">Legacy subtitle (optional)</label>
+                <input class="input" type="text" id="hb-om-subtitle" value="<?= e((string) ($om['subtitle'] ?? '')) ?>" placeholder="Used only if eyebrow is empty">
+            </div>
+            <p class="text-muted" style="font-size:0.85rem; margin:0.85rem 0 0.35rem;">Approach photos (up to 3 — tall hero + two tiles)</p>
+            <div id="hb-om-images" class="hb-repeat-list">
+                <?php foreach ($omImages as $shot): ?>
+                <?php if (!is_array($shot)) { continue; } ?>
+                <div class="hb-repeat-row js-hb-om-image-row">
+                    <div class="home-blocks-editor__grid home-blocks-editor__grid--2">
+                        <div class="form-row" style="margin:0;">
+                            <label>Image URL</label>
+                            <input class="input js-om-img-src" type="text" value="<?= e((string) ($shot['image'] ?? '')) ?>" placeholder="https://…">
+                        </div>
+                        <div class="form-row" style="margin:0;">
+                            <label>Alt text</label>
+                            <input class="input js-om-img-alt" type="text" value="<?= e((string) ($shot['alt'] ?? '')) ?>">
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn--ghost hb-row-remove">Remove image</button>
+                </div>
+                <?php endforeach; ?>
+            </div>
+            <p style="margin-top:0.5rem;">
+                <button type="button" class="btn btn--secondary" id="hb-add-om-image">Add image</button>
+                <span class="text-muted" style="font-size:0.82rem; margin-left:0.5rem;">First = large column; next two = stacked.</span>
+            </p>
             <p class="text-muted" style="font-size:0.85rem;">Steps</p>
             <div id="hb-om-steps" class="hb-repeat-list">
                 <?php foreach ($omSteps as $st): ?>
@@ -373,6 +405,22 @@ $nwEn = (($nw['enabled'] ?? true) !== false);
             </div>
         </div>
         <button type="button" class="hb-row-remove hb-row-remove--danger" aria-label="Remove metric">Remove metric</button>
+    </div>
+</template>
+
+<template id="hb-tpl-om-image">
+    <div class="hb-repeat-row js-hb-om-image-row">
+        <div class="home-blocks-editor__grid home-blocks-editor__grid--2">
+            <div class="form-row" style="margin:0;">
+                <label>Image URL</label>
+                <input class="input js-om-img-src" type="text" value="" placeholder="https://…">
+            </div>
+            <div class="form-row" style="margin:0;">
+                <label>Alt text</label>
+                <input class="input js-om-img-alt" type="text" value="">
+            </div>
+        </div>
+        <button type="button" class="btn btn--ghost hb-row-remove">Remove image</button>
     </div>
 </template>
 

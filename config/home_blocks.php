@@ -32,16 +32,34 @@ return [
     ],
     'operating_model' => [
         'enabled' => true,
-        'title' => 'Inside the studio',
-        'subtitle' => 'No mystery process—three beats we repeat.',
+        'eyebrow' => 'Discover What Sets Us Apart',
+        'title' => 'Our Approach',
+        /** Kept for older CMS payloads; rendered after lead when eyebrow is empty. */
+        'subtitle' => '',
+        'lead' => 'We blend creativity with strategic precision—floor plans beside mood boards—so signage, timelines, and guest flow feel effortless. From intimate gatherings to marquee productions, every detail is engineered for lasting impressions.',
+        /** Up to three URLs used in the visual mosaic (hero + supporting frames). */
+        'images' => [
+            [
+                'image' => 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=1200&q=80',
+                'alt' => 'Banquet hall setup with linens and uplighting',
+            ],
+            [
+                'image' => 'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=900&q=80',
+                'alt' => 'Wedding reception florals and candlelight',
+            ],
+            [
+                'image' => 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=900&q=80',
+                'alt' => 'Corporate event stage lighting',
+            ],
+        ],
         'steps' => [
             ['title' => 'Align', 'text' => 'Budget, vibe, venues, and contingency in plain language—you sign off early.'],
             ['title' => 'Design & source', 'text' => 'Look, furnishings, staffing, rentals—woven into one run sheet.'],
             ['title' => 'Show up locked in', 'text' => 'On-site command, headset calm, receipts handled—photos optional.'],
         ],
         'highlight' => [
-            'title' => 'Expert planning',
-            'body' => 'Dedicated lead across vendors, timelines, and the stuff nobody Instagrams—the extension cords, cue lights, rain plan.',
+            'title' => 'Expert Event Planning',
+            'body' => 'Dedicated leads across vendors, timelines, and the logistics nobody Instagrams—extensions, cues, rain plans—so your night reads effortless.',
         ],
     ],
     'packages' => [

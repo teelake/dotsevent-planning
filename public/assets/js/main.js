@@ -241,6 +241,34 @@
     }
   }
 
+  /** Home “Our approach” mosaic: staggered photo entrance when section scrolls into view (no JS / reduced motion = visible immediately). */
+  var opsSection = document.querySelector("section[data-home-ops]");
+  var opsMosaic = opsSection ? opsSection.querySelector("[data-ops-mosaic]") : null;
+  if (opsSection && opsMosaic) {
+    function opsMosaicReveal() {
+      opsSection.classList.add("home-blocks-ops--mosaic-shown");
+    }
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      opsMosaicReveal();
+    } else if (!("IntersectionObserver" in window)) {
+      opsMosaicReveal();
+    } else {
+      opsSection.classList.add("home-blocks-ops--mosaic-armed");
+      var opsIo = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              opsMosaicReveal();
+              opsIo.disconnect();
+            }
+          });
+        },
+        { root: null, rootMargin: "0px 0px -10% 0px", threshold: 0.12 }
+      );
+      opsIo.observe(opsMosaic);
+    }
+  }
+
   /** Home intro metrics: count-up when strip scrolls into view (respects reduced motion). */
   var metricStrip = document.querySelector("[data-metric-strip]");
   var metricNodes = metricStrip ? metricStrip.querySelectorAll("[data-metric-count]") : [];

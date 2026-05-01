@@ -51,6 +51,9 @@ final class HomePageBlocks
         if (!empty($s['operating_model']) && is_array($s['operating_model']) && array_key_exists('steps', $s['operating_model']) && is_array($s['operating_model']['steps'])) {
             $out['operating_model']['steps'] = $s['operating_model']['steps'];
         }
+        if (!empty($s['operating_model']) && is_array($s['operating_model']) && array_key_exists('images', $s['operating_model']) && is_array($s['operating_model']['images'])) {
+            $out['operating_model']['images'] = $s['operating_model']['images'];
+        }
         if (!empty($s['testimonials']) && is_array($s['testimonials']) && array_key_exists('quotes', $s['testimonials']) && is_array($s['testimonials']['quotes'])) {
             $out['testimonials']['quotes'] = $s['testimonials']['quotes'];
         }
@@ -95,6 +98,7 @@ final class HomePageBlocks
         }
         if (isset($s['operating_model']) && is_array($s['operating_model'])) {
             self::liftNumericListChildren($s['operating_model'], 'steps');
+            self::liftNumericListChildren($s['operating_model'], 'images');
         }
         if (isset($s['testimonials']) && is_array($s['testimonials'])) {
             self::liftNumericListChildren($s['testimonials'], 'quotes');
@@ -108,6 +112,9 @@ final class HomePageBlocks
         }
         if (isset($s['operating_model']['steps']) && is_array($s['operating_model']['steps'])) {
             $s['operating_model']['steps'] = array_values($s['operating_model']['steps']);
+        }
+        if (isset($s['operating_model']['images']) && is_array($s['operating_model']['images'])) {
+            $s['operating_model']['images'] = array_values($s['operating_model']['images']);
         }
         if (isset($s['testimonials']['quotes']) && is_array($s['testimonials']['quotes'])) {
             $s['testimonials']['quotes'] = array_values($s['testimonials']['quotes']);
@@ -198,6 +205,30 @@ final class HomePageBlocks
         $p = &$merged['partnership'];
         if (isset($p['cta_href']) && trim((string) $p['cta_href']) === '') {
             $p['cta_href'] = app_url('about');
+        }
+
+        if (isset($merged['operating_model']) && is_array($merged['operating_model'])) {
+            $imgs = isset($merged['operating_model']['images']) && is_array($merged['operating_model']['images'])
+                ? $merged['operating_model']['images']
+                : [];
+            $clean = [];
+            foreach ($imgs as $row) {
+                if (! is_array($row)) {
+                    continue;
+                }
+                $src = trim((string) ($row['image'] ?? ''));
+                if ($src === '') {
+                    continue;
+                }
+                $clean[] = [
+                    'image' => $src,
+                    'alt' => trim((string) ($row['alt'] ?? '')),
+                ];
+                if (count($clean) >= 3) {
+                    break;
+                }
+            }
+            $merged['operating_model']['images'] = $clean;
         }
 
         if (isset($merged['packages']['items']) && is_array($merged['packages']['items'])) {
