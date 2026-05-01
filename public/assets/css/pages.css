@@ -1817,6 +1817,20 @@
   max-width: none;
 }
 
+/* Services page: newsletter sits above footer — no extra shell/footer gutter (removes cream “dead band”) */
+.page-services .app-shell {
+  padding-bottom: 0;
+}
+
+.page-services .app-footer {
+  margin-top: 0;
+}
+
+.page-services .services-modern__newsletter.app-band--newsletter {
+  padding-top: clamp(2.35rem, 5.5vw, 3.5rem);
+  padding-bottom: clamp(2.65rem, 6vw, 4rem);
+}
+
 .services-modern__faq--distinct {
   position: relative;
   overflow: hidden;
