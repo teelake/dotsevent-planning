@@ -22,6 +22,11 @@ $float = is_array($b['floating_widget'] ?? null) ? $b['floating_widget'] : [];
 $introLeadHtml = isset($intro['lead_html']) && is_string($intro['lead_html']) ? trim($intro['lead_html']) : '';
 $introLeadPlain = $introLeadHtml === '' ? '' : trim(preg_replace('/\s+/u', ' ', strip_tags($introLeadHtml)));
 $showIntroLead = $introLeadPlain !== '' && mb_strlen($introLeadPlain) >= 2;
+$locEnabled = ($loc['enabled'] ?? true) !== false;
+
+$iconEmail = '<svg class="contact-channel-card__icon-svg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>';
+$iconOffice = '<svg class="contact-channel-card__icon-svg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12h12"/><path d="M6 16h12"/><path d="M6 8h12"/><path d="M10 22v-4h4v4"/></svg>';
+$iconPhone = '<svg class="contact-channel-card__icon-svg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>';
 ?>
 
 <?php if (($intro['enabled'] ?? true) !== false && trim((string) ($intro['title'] ?? '')) !== ''): ?>
@@ -42,9 +47,19 @@ $showIntroLead = $introLeadPlain !== '' && mb_strlen($introLeadPlain) >= 2;
                 'phone' => 'contact-channel-card--phone',
                 default => 'contact-channel-card--neutral',
             };
+            $channelIcon = match ($type) {
+                'email' => $iconEmail,
+                'office' => $iconOffice,
+                'phone' => $iconPhone,
+                default => $iconOffice,
+            };
+            $__chLabel = (string) ($it['label'] ?? '');
         ?>
         <article class="contact-channel-card <?= e($cardMod) ?>">
-            <h3 class="contact-channel-card__title"><?= e((string) ($it['label'] ?? '')) ?></h3>
+            <h3 class="contact-channel-card__heading">
+                <span class="contact-channel-card__icon"><?= $channelIcon ?></span>
+                <?php if ($__chLabel !== ''): ?><span class="visually-hidden"><?= e($__chLabel) ?></span><?php endif; ?>
+            </h3>
             <?php if ($type === 'email' && $contactEmail !== ''): ?>
                 <p class="contact-channel-card__primary"><a href="mailto:<?= e($contactEmail) ?>"><?= e($contactEmail) ?></a></p>
             <?php elseif ($type === 'phone' && $phoneDisplay !== ''): ?>
@@ -61,7 +76,7 @@ $showIntroLead = $introLeadPlain !== '' && mb_strlen($introLeadPlain) >= 2;
 </section>
 <?php endif; ?>
 
-<div class="section__split contact-page__split" style="margin-top:1.25rem;" data-reveal>
+<div class="section__split contact-page__split<?= $locEnabled ? '' : ' contact-page__split--solo' ?>" style="margin-top:1.25rem;" data-reveal>
     <div class="contact-page__form-wrap">
         <?php if (($form['enabled'] ?? true) !== false): ?>
         <h2 class="section__title contact-form__heading"><?= e((string) ($form['heading'] ?? 'We will reach out to you')) ?></h2>
@@ -117,19 +132,18 @@ $showIntroLead = $introLeadPlain !== '' && mb_strlen($introLeadPlain) >= 2;
         <?php endif; ?>
     </div>
 
-    <aside class="contact-page__aside app-panel app-panel--rail">
-        <?php if (($loc['enabled'] ?? true) !== false): ?>
-        <h2 class="contact-page__aside-title"><?= e((string) ($loc['aside_title'] ?? 'Visit or call')) ?></h2>
-        <?php if ($addr1 !== ''): ?><p class="contact-page__address"><?= e($addr1) ?></p><?php endif; ?>
-        <?php if ($addr2 !== ''): ?><p class="contact-page__address"><?= e($addr2) ?></p><?php endif; ?>
-        <?php if ($contactEmail !== ''): ?><p class="contact-page__email"><a href="mailto:<?= e($contactEmail) ?>"><?= e($contactEmail) ?></a></p><?php endif; ?>
-        <?php if ($phoneDisplay !== ''): ?><p class="contact-page__phone"><a href="tel:<?= e(preg_replace('/\s+/', '', $phoneTel)) ?>"><?= e($phoneDisplay) ?></a></p><?php endif; ?>
-        <div class="map-embed map-embed--contact contact-page__map">
+    <?php if ($locEnabled): ?>
+    <aside class="contact-page__map-aside">
+        <div class="map-embed map-embed--contact contact-page__map" role="region" aria-label="<?= e((string) ($loc['map_title'] ?? 'Our location')) ?>">
             <iframe class="map-embed__frame" title="<?= e((string) ($loc['map_title'] ?? 'Our location')) ?>" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="<?= e($mapUrl) ?>"></iframe>
         </div>
-        <?php if ($mapOpen !== ''): ?><p style="margin-top:.7rem;"><a class="text-link" href="<?= e($mapOpen) ?>" target="_blank" rel="noopener noreferrer"><?= e((string) ($loc['open_in_maps_label'] ?? 'Open in Maps')) ?></a></p><?php endif; ?>
+        <?php if ($mapOpen !== ''): ?>
+        <p class="contact-page__map-external">
+            <a class="btn btn--secondary contact-page__map-external-btn" href="<?= e($mapOpen) ?>" target="_blank" rel="noopener noreferrer"><?= e((string) ($loc['open_in_maps_label'] ?? 'Open in Maps')) ?></a>
+        </p>
         <?php endif; ?>
     </aside>
+    <?php endif; ?>
 </div>
 
 <?php if (($nw['enabled'] ?? true) !== false && trim((string) ($nw['title'] ?? '')) !== ''): ?>

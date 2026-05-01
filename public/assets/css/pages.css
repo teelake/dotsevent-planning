@@ -768,6 +768,51 @@
   align-items: start;
 }
 
+.contact-page a:not(.btn) {
+  text-decoration: none;
+  border-bottom: 0;
+}
+
+.contact-page .prose a:hover {
+  border-bottom: 0;
+  opacity: 0.88;
+}
+
+.contact-page .contact-channel-card__primary a:hover {
+  opacity: 0.88;
+}
+
+.contact-page__split--solo {
+  grid-template-columns: 1fr !important;
+}
+
+@media (min-width: 900px) {
+  .contact-page__split--solo {
+    grid-template-columns: 1fr !important;
+    align-items: start;
+  }
+}
+
+.contact-page__map-aside {
+  position: sticky;
+  top: calc(var(--app-topbar-h) + 1rem);
+  min-width: 0;
+}
+
+.contact-page__map-aside .contact-page__map {
+  margin-top: 0;
+}
+
+.contact-page__map-external {
+  margin: 0.75rem 0 0;
+}
+
+.contact-page__map-external-btn {
+  width: 100%;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
 .contact-channels {
   margin-top: 1rem;
 }
@@ -797,12 +842,37 @@
   min-height: 100%;
 }
 
-.contact-channel-card__title {
-  margin: 0;
-  font-size: 1.05rem;
-  font-family: var(--font-display);
-  font-weight: 700;
+.contact-channel-card__heading {
+  margin: 0 0 0.35rem;
+  display: flex;
+  align-items: center;
+}
+
+.contact-channel-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.85rem;
+  height: 2.85rem;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--color-ink) 7%, transparent);
+  color: var(--color-gold-deep);
+}
+
+.contact-channel-card--phone .contact-channel-card__icon {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-gold-light);
+}
+
+.contact-channel-card--office .contact-channel-card__icon {
   color: var(--color-ink);
+}
+
+.contact-channel-card__icon-svg {
+  width: 1.4rem;
+  height: 1.4rem;
+  display: block;
 }
 
 .contact-channel-card__primary {
@@ -813,7 +883,8 @@
 
 .contact-channel-card__primary a {
   color: var(--color-gold-deep);
-  text-underline-offset: 3px;
+  text-decoration: none;
+  border-bottom: 0;
 }
 
 .contact-channel-card__meta {
@@ -842,10 +913,6 @@
   background: linear-gradient(155deg, #2f2a22 0%, #1a1814 100%);
   border-color: rgba(245, 192, 19, 0.28);
   color: #f6f3ee;
-}
-
-.contact-channel-card--phone .contact-channel-card__title {
-  color: #fdfbf7;
 }
 
 .contact-channel-card--phone .contact-channel-card__primary {

@@ -23,11 +23,11 @@ include dirname(__DIR__) . '/partials/page-hero.php';
 <div class="app-shell">
     <div class="app-shell__main">
         <?php if ($showContactCmsBody): ?>
-        <div class="shell shell--wide page-pad prose cms-page-body" data-reveal>
+        <div class="shell shell--wide page-pad prose cms-page-body contact-page" data-reveal>
         <?= $cms['body_html'] ?>
         </div>
         <?php endif; ?>
-        <div class="shell shell--wide page-pad" data-reveal>
+        <div class="shell shell--wide page-pad contact-page" data-reveal>
             <?php include __DIR__ . '/partials/contact-structured.php'; ?>
         </div>
     </div>
