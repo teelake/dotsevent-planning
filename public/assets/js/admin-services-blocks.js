@@ -44,7 +44,6 @@
     });
     var pairs = [
       ["svc-add-offer", "svc-tpl-offer", "svc-offer-rows"],
-      ["svc-add-metric", "svc-tpl-metric", "svc-metrics"],
       ["svc-add-faq", "svc-tpl-faq", "svc-faq-rows"],
     ];
     pairs.forEach(function (p) {
@@ -87,24 +86,6 @@
       return out;
     }
 
-    function metrics() {
-      var out = [];
-      root.querySelectorAll(".js-svc-metric-row").forEach(function (row) {
-        var label = row.querySelector(".js-scm-label");
-        var display = row.querySelector(".js-scm-display");
-        var targetEl = row.querySelector(".js-scm-target");
-        var suf = row.querySelector(".js-scm-suffix");
-        var tn = parseInt(targetEl && targetEl.value ? targetEl.value : "0", 10);
-        out.push({
-          label: label ? label.value.trim() : "",
-          display: display ? display.value.trim() : "",
-          target: isNaN(tn) ? 0 : tn,
-          suffix: suf && suf.value.trim() !== "" ? suf.value.trim() : "+",
-        });
-      });
-      return out;
-    }
-
     function faqItems() {
       var out = [];
       root.querySelectorAll(".js-svc-faq-row").forEach(function (row) {
@@ -138,14 +119,6 @@
         home_teaser_cta_label: v("svc-of-home-cta-label"),
         home_teaser_cta_href: v("svc-of-home-cta-href"),
         items: offerings(),
-      },
-      partnership: {
-        enabled: c("svc-pa-en"),
-        title: v("svc-pa-title"),
-        lead_html: v("svc-pa-lead"),
-        cta_label: v("svc-pa-cta"),
-        cta_href: v("svc-pa-href"),
-        metrics: metrics(),
       },
       faq: {
         enabled: c("svc-faq-en"),

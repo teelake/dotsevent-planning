@@ -1741,63 +1741,6 @@
   font-size: 0.9rem;
 }
 
-.services-partner-grid {
-  display: grid;
-  gap: 2rem;
-  align-items: start;
-  overflow: visible;
-}
-
-@media (min-width: 960px) {
-  .services-partner-grid {
-    grid-template-columns: minmax(0, 1.05fr) minmax(260px, 0.92fr);
-    gap: clamp(2rem, 4vw, 3.5rem);
-    align-items: stretch;
-  }
-}
-
-@media (min-width: 640px) {
-  .services-partner-grid__figures .tile-metric-strip {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-.services-partner-grid__story .section__title {
-  line-height: 1.12;
-}
-
-/* Consistent 2×2 metric rhythm (fourth tile matches system, not a one-off bordered cell) */
-.services-partner__strip.tile-metric-strip {
-  border: 1px solid rgba(1, 1, 1, 0.14);
-}
-
-.services-partner__strip > .tile-metric:nth-child(4) {
-  background: #fffefb;
-}
-
-.services-partner__strip > .tile-metric:nth-child(4) .tile-metric__value {
-  color: var(--color-brand-black);
-}
-
-.services-partner__strip > .tile-metric:nth-child(4) .tile-metric__label {
-  color: rgba(1, 1, 1, 0.45);
-}
-
-@media (min-width: 640px) {
-  .services-partner__strip > .tile-metric:nth-child(2) {
-    border-right: 1px solid rgba(1, 1, 1, 0.08);
-  }
-
-  .services-partner__strip > .tile-metric:nth-child(1) {
-    border-right: 1px solid rgba(1, 1, 1, 0.08);
-  }
-
-  .services-partner__strip > .tile-metric:nth-child(3) {
-    border-right: 1px solid rgba(255, 253, 245, 0.07);
-  }
-}
-
 /* Services: FAQ + newsletter escape centered `.app-shell` — fluid edge-to-edge bands */
 .services-modern__band--fluid {
   width: 100vw;

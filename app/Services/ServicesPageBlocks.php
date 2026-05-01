@@ -45,16 +45,13 @@ final class ServicesPageBlocks
                 $out['offerings']['items'] = array_values($s['offerings']['items']);
             }
         }
-        if (!empty($s['partnership']) && is_array($s['partnership'])) {
-            if (array_key_exists('metrics', $s['partnership']) && is_array($s['partnership']['metrics'])) {
-                $out['partnership']['metrics'] = array_values($s['partnership']['metrics']);
-            }
-        }
         if (!empty($s['faq']) && is_array($s['faq'])) {
             if (array_key_exists('items', $s['faq']) && is_array($s['faq']['items'])) {
                 $out['faq']['items'] = array_values($s['faq']['items']);
             }
         }
+
+        unset($out['partnership']);
 
         return self::finalize($out);
     }
@@ -122,9 +119,6 @@ final class ServicesPageBlocks
 
         if (isset($s['offerings']) && is_array($s['offerings'])) {
             self::liftNumericListChildren($s['offerings'], 'items');
-        }
-        if (isset($s['partnership']) && is_array($s['partnership'])) {
-            self::liftNumericListChildren($s['partnership'], 'metrics');
         }
         if (isset($s['faq']) && is_array($s['faq'])) {
             self::liftNumericListChildren($s['faq'], 'items');
@@ -208,32 +202,7 @@ final class ServicesPageBlocks
             }
         }
 
-        $p = &$merged['partnership'];
-        if (isset($p['lead_html']) && is_string($p['lead_html'])) {
-            $p['lead_html'] = CmsHtmlSanitizer::sanitize($p['lead_html']);
-        }
-        $href = isset($p['cta_href']) ? trim((string) $p['cta_href']) : '';
-        if ($href === '') {
-            $p['cta_href'] = app_url('about');
-        } else {
-            $p['cta_href'] = $href;
-        }
-
-        if (isset($p['metrics']) && is_array($p['metrics'])) {
-            foreach ($p['metrics'] as $mi => $m) {
-                if (!is_array($m)) {
-                    continue;
-                }
-                $merged['partnership']['metrics'][$mi]['suffix'] = isset($m['suffix']) ? (string) $m['suffix'] : '+';
-                $t = isset($m['target']) ? (int) $m['target'] : null;
-                if ($t !== null && $t >= 0) {
-                    $merged['partnership']['metrics'][$mi]['target'] = $t;
-                }
-                if (!isset($m['display']) || (string) $m['display'] === '') {
-                    $merged['partnership']['metrics'][$mi]['display'] = self::guessMetricDisplay($m);
-                }
-            }
-        }
+        unset($merged['partnership']);
 
         $f = &$merged['faq'];
         if (isset($f['lead_html']) && is_string($f['lead_html'])) {
@@ -256,19 +225,5 @@ final class ServicesPageBlocks
         }
 
         return $merged;
-    }
-
-    /**
-     * @param mixed $metric
-     */
-    private static function guessMetricDisplay($metric): string
-    {
-        if (!is_array($metric)) {
-            return '—';
-        }
-        $t = isset($metric['target']) ? (int) $metric['target'] : 0;
-        $suf = isset($metric['suffix']) ? (string) $metric['suffix'] : '+';
-
-        return $t >= 0 ? ((string) $t . ($suf === '°' ? '°' : $suf)) : '—';
     }
 }

@@ -67,19 +67,6 @@ return [
             ],
         ],
     ],
-    'partnership' => [
-        'enabled' => true,
-        'title' => 'Your premiere partner—from scope to applause',
-        'lead_html' => '<p>Lobby activations through annual conferences—we map enterprise stakeholders, municipality constraints, sponsor visibility, and the micro-moments that keep nights on tempo. Based in Saint John, plugged into planners across Atlantic Canada.</p>',
-        'cta_label' => 'Read more',
-        'cta_href' => '',
-        'metrics' => [
-            ['label' => 'Events produced', 'display' => '11+', 'target' => 11, 'suffix' => '+'],
-            ['label' => 'Audience reached', 'display' => '1M', 'target' => 1, 'suffix' => 'M'],
-            ['label' => 'Instagram followers', 'display' => '71+', 'target' => 71, 'suffix' => '+'],
-            ['label' => 'Programs planned', 'display' => '9+', 'target' => 9, 'suffix' => '+'],
-        ],
-    ],
     'faq' => [
         'enabled' => true,
         'eyebrow' => 'FAQ',

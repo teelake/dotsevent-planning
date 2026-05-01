@@ -6,7 +6,6 @@ $ver = isset($b['version']) ? (int) $b['version'] : 1;
 $h = is_array($b['hero'] ?? null) ? $b['hero'] : [];
 $in = is_array($b['intro'] ?? null) ? $b['intro'] : [];
 $of = is_array($b['offerings'] ?? null) ? $b['offerings'] : [];
-$pa = is_array($b['partnership'] ?? null) ? $b['partnership'] : [];
 $f = is_array($b['faq'] ?? null) ? $b['faq'] : [];
 $nw = is_array($b['newsletter_cta'] ?? null) ? $b['newsletter_cta'] : [];
 
@@ -15,13 +14,11 @@ $bc = !isset($h['show_breadcrumbs']) || $h['show_breadcrumbs'] !== false;
 $inEn = (($in['enabled'] ?? true) !== false);
 $ofEn = (($of['enabled'] ?? true) !== false);
 $ofHomeTeaser = (($of['home_teaser_enabled'] ?? true) !== false);
-$paEn = (($pa['enabled'] ?? true) !== false);
 $fEn = (($f['enabled'] ?? true) !== false);
 $nEn = (($nw['enabled'] ?? true) !== false);
 $faqOpenFirst = !empty($f['open_first']);
 
 $offItems = isset($of['items']) && is_array($of['items']) ? $of['items'] : [];
-$metrics = isset($pa['metrics']) && is_array($pa['metrics']) ? $pa['metrics'] : [];
 $faqs = isset($f['items']) && is_array($f['items']) ? $f['items'] : [];
 ?>
 
@@ -90,37 +87,6 @@ $faqs = isset($f['items']) && is_array($f['items']) ? $f['items'] : [];
         </div>
     </details>
 
-    <details id="cms-sec-svc-partnership" class="home-blocks-editor__details">
-        <summary class="home-blocks-editor__summary">Partnership &amp; signals</summary>
-        <div class="home-blocks-editor__body">
-            <label class="home-blocks-editor__check"><input type="checkbox" id="svc-pa-en" <?= $paEn ? 'checked' : '' ?>><span>Show block</span></label>
-            <div class="form-row"><label for="svc-pa-title">Title</label><input class="input" id="svc-pa-title" type="text" value="<?= e((string) ($pa['title'] ?? '')) ?>"></div>
-            <div class="form-row"><label for="svc-pa-lead">Body HTML</label><textarea class="input input--textarea" id="svc-pa-lead" rows="6"><?= e((string) ($pa['lead_html'] ?? '')) ?></textarea></div>
-            <div class="home-blocks-editor__grid home-blocks-editor__grid--2">
-                <div class="form-row" style="margin:0;"><label for="svc-pa-cta">CTA label</label><input class="input" id="svc-pa-cta" type="text" value="<?= e((string) ($pa['cta_label'] ?? '')) ?>"></div>
-                <div class="form-row" style="margin:0;"><label for="svc-pa-href">CTA URL (empty = About)</label><input class="input" id="svc-pa-href" type="text" value="<?= e((string) ($pa['cta_href'] ?? '')) ?>" placeholder="leave blank for /about"></div>
-            </div>
-            <p class="text-muted" style="font-size:0.85rem;">Metrics (count-up when target &gt; 0)</p>
-            <div id="svc-metrics" class="hb-repeat-list">
-                <?php foreach ($metrics as $m): ?>
-                <?php if (!is_array($m)) {
-                    continue;
-                } ?>
-                <div class="hb-repeat-row svc-repeat-row js-svc-metric-row">
-                    <div class="home-blocks-editor__grid home-blocks-editor__grid--4">
-                        <div class="form-row" style="margin:0;"><label>Label</label><input type="text" class="input js-scm-label" value="<?= e((string) ($m['label'] ?? '')) ?>"></div>
-                        <div class="form-row" style="margin:0;"><label>Display</label><input type="text" class="input js-scm-display" value="<?= e((string) ($m['display'] ?? '')) ?>"></div>
-                        <div class="form-row" style="margin:0;"><label>Target</label><input type="text" class="input js-scm-target" inputmode="numeric" value="<?= isset($m['target']) ? (string) (int) $m['target'] : '' ?>"></div>
-                        <div class="form-row" style="margin:0;"><label>Suffix</label><input type="text" class="input js-scm-suffix" value="<?= e((string) ($m['suffix'] ?? '+')) ?>"></div>
-                    </div>
-                    <button type="button" class="btn btn--ghost svc-row-remove">Remove</button>
-                </div>
-                <?php endforeach; ?>
-            </div>
-            <p><button type="button" class="btn btn--secondary" id="svc-add-metric">Add metric</button></p>
-        </div>
-    </details>
-
     <details id="cms-sec-svc-faq" class="home-blocks-editor__details">
         <summary class="home-blocks-editor__summary">FAQ</summary>
         <div class="home-blocks-editor__body">
@@ -171,18 +137,6 @@ $faqs = isset($f['items']) && is_array($f['items']) ? $f['items'] : [];
                 <label class="home-blocks-editor__check"><input type="checkbox" class="js-svc-off-accent"><span>Accent</span></label>
                 <label class="home-blocks-editor__check"><input type="checkbox" class="js-svc-off-muted"><span>Muted</span></label>
             </div>
-        </div>
-        <button type="button" class="btn btn--ghost svc-row-remove">Remove</button>
-    </div>
-</template>
-
-<template id="svc-tpl-metric">
-    <div class="hb-repeat-row svc-repeat-row js-svc-metric-row">
-        <div class="home-blocks-editor__grid home-blocks-editor__grid--4">
-            <div class="form-row" style="margin:0;"><label>Label</label><input type="text" class="input js-scm-label" value=""></div>
-            <div class="form-row" style="margin:0;"><label>Display</label><input type="text" class="input js-scm-display" value=""></div>
-            <div class="form-row" style="margin:0;"><label>Target</label><input type="text" class="input js-scm-target" inputmode="numeric" value=""></div>
-            <div class="form-row" style="margin:0;"><label>Suffix</label><input type="text" class="input js-scm-suffix" value="+"></div>
         </div>
         <button type="button" class="btn btn--ghost svc-row-remove">Remove</button>
     </div>

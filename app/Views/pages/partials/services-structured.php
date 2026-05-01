@@ -92,65 +92,6 @@ $nwa = is_array($svc['newsletter_cta'] ?? null) ? $svc['newsletter_cta'] : [];
 </section>
 <?php endif; ?>
 
-<?php if ($on($partner)): ?>
-<section class="app-band app-band--surface section services-modern__partner" aria-labelledby="services-partner-heading" data-reveal>
-    <div class="shell shell--wide">
-        <div class="services-partner-grid">
-            <div class="services-partner-grid__story">
-                <?php $pt = trim((string) ($partner['title'] ?? '')); ?>
-                <?php if ($pt !== ''): ?>
-                <h2 id="services-partner-heading" class="section__title"><?= e($pt) ?></h2>
-                <?php endif; ?>
-                <?php $pl = isset($partner['lead_html']) && is_string($partner['lead_html']) ? $partner['lead_html'] : ''; ?>
-                <?php if ($pl !== '') { ?>
-                <div class="services-modern-prose prose"><?= $pl ?></div>
-                <?php } ?>
-                <?php
-                $pcta = trim((string) ($partner['cta_label'] ?? ''));
-                $phrf = trim((string) ($partner['cta_href'] ?? ''));
-                ?>
-                <?php if ($pcta !== '' && $phrf !== ''): ?>
-                <p style="margin-top: 1rem;">
-                    <a class="btn btn--secondary" href="<?= e($phrf) ?>"><?= e($pcta) ?></a>
-                </p>
-                <?php endif; ?>
-            </div>
-            <?php $met = isset($partner['metrics']) && is_array($partner['metrics']) ? $partner['metrics'] : []; ?>
-            <?php if ($met !== []): ?>
-            <aside class="services-partner-grid__figures" aria-label="Signals">
-                <div class="tile-metric-strip services-partner__strip" data-metric-strip role="list">
-                    <?php foreach ($met as $m): ?>
-                    <?php if (!is_array($m)) {
-                        continue;
-                    } ?>
-                    <?php
-                        $ml = trim((string) ($m['label'] ?? ''));
-                        $md = trim((string) ($m['display'] ?? ''));
-                        $mt = isset($m['target']) ? (int) $m['target'] : 0;
-                        $mf = (string) ($m['suffix'] ?? '+');
-                        $doAnim = $mt > 0;
-                        ?>
-                    <div class="tile-metric tile-metric--services" role="listitem">
-                        <span class="tile-metric__value">
-                            <?php if ($doAnim): ?>
-                            <span class="tile-metric__num" data-metric-count data-target="<?= (int) $mt ?>" data-suffix="<?= e($mf) ?>"><?= e($md !== '' ? $md : (string) $mt . $mf) ?></span>
-                            <?php else: ?>
-                            <span class="tile-metric__num"><?= e($md !== '' ? $md : '—') ?></span>
-                            <?php endif; ?>
-                        </span>
-                        <?php if ($ml !== ''): ?>
-                        <span class="tile-metric__label"><?= e($ml) ?></span>
-                        <?php endif; ?>
-                    </div>
-                    <?php endforeach; ?>
-                </div>
-            </aside>
-            <?php endif; ?>
-        </div>
-    </div>
-</section>
-<?php endif; ?>
-
 <?php if ($on($faq)): ?>
 <section class="app-band section services-modern__faq services-modern__faq--distinct services-modern__band--fluid" aria-labelledby="services-faq-heading" data-reveal>
     <div class="shell shell--fluid">
