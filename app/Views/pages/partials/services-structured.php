@@ -153,40 +153,52 @@ $nwa = is_array($svc['newsletter_cta'] ?? null) ? $svc['newsletter_cta'] : [];
 <?php endif; ?>
 
 <?php if ($on($faq)): ?>
-<section class="app-band section services-modern__faq" aria-labelledby="services-faq-heading" data-reveal>
+<section class="app-band section services-modern__faq services-modern__faq--distinct" aria-labelledby="services-faq-heading" data-reveal>
     <div class="shell shell--wide">
-        <?php $fe = trim((string) ($faq['eyebrow'] ?? '')); ?>
-        <?php if ($fe !== ''): ?>
-        <p class="eyebrow"><?= e($fe) ?></p>
-        <?php endif; ?>
-        <?php $ft = trim((string) ($faq['title'] ?? '')); ?>
-        <?php if ($ft !== ''): ?>
-        <h2 id="services-faq-heading" class="section__title"><?= e($ft) ?></h2>
-        <?php endif; ?>
-        <?php $fl = isset($faq['lead_html']) && is_string($faq['lead_html']) ? $faq['lead_html'] : ''; ?>
-        <?php if ($fl !== '') { ?>
-        <div class="services-faq-intro prose"><?= $fl ?></div>
-        <?php } ?>
+        <header class="services-faq-panel__intro">
+            <?php $fe = trim((string) ($faq['eyebrow'] ?? '')); ?>
+            <?php if ($fe !== ''): ?>
+            <p class="eyebrow services-faq-panel__eyebrow"><?= e($fe) ?></p>
+            <?php endif; ?>
+            <?php $ft = trim((string) ($faq['title'] ?? '')); ?>
+            <?php if ($ft !== ''): ?>
+            <h2 id="services-faq-heading" class="section__title services-faq-panel__title"><?= e($ft) ?></h2>
+            <?php endif; ?>
+            <?php $fl = isset($faq['lead_html']) && is_string($faq['lead_html']) ? $faq['lead_html'] : ''; ?>
+            <?php if ($fl !== '') { ?>
+            <div class="services-faq-intro prose services-faq-panel__lead"><?= $fl ?></div>
+            <?php } ?>
+        </header>
 
         <?php $fitems = isset($faq['items']) && is_array($faq['items']) ? $faq['items'] : []; ?>
         <?php $openFirst = ! empty($faq['open_first']); ?>
         <?php if ($fitems !== []): ?>
-        <div class="services-faq-list">
-            <?php foreach ($fitems as $fi => $q): ?>
-            <?php if (!is_array($q)) {
-                continue;
-            } ?>
+        <div class="services-faq-panel">
+            <div class="services-faq-list">
             <?php
+            $faqRow = 0;
+            foreach ($fitems as $fi => $q):
+                if (!is_array($q)) {
+                    continue;
+                }
                 $fq = trim((string) ($q['question'] ?? ''));
                 $ans = isset($q['answer_html']) && is_string($q['answer_html']) ? $q['answer_html'] : '';
+                if ($fq === '' && $ans === '') {
+                    continue;
+                }
+                $faqRow++;
+                $idxPad = str_pad((string) $faqRow, 2, '0', STR_PAD_LEFT);
                 ?>
-            <?php if ($fq !== '' || $ans !== ''): ?>
-            <details class="services-faq-item"<?= $openFirst && $fi === 0 ? ' open' : '' ?>>
-                <summary class="services-faq-item__summary"><?= e($fq !== '' ? $fq : 'Question') ?></summary>
+            <details class="services-faq-item"<?= $openFirst && $faqRow === 1 ? ' open' : '' ?>>
+                <summary class="services-faq-item__summary">
+                    <span class="services-faq-item__idx" aria-hidden="true"><?= e($idxPad) ?></span>
+                    <span class="services-faq-item__question"><?= e($fq !== '' ? $fq : 'Question') ?></span>
+                    <span class="services-faq-item__toggle" aria-hidden="true"></span>
+                </summary>
                 <div class="services-faq-item__answer prose"><?= $ans ?></div>
             </details>
-            <?php endif; ?>
             <?php endforeach; ?>
+            </div>
         </div>
         <?php endif; ?>
     </div>
