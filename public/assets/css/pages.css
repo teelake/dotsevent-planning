@@ -4,11 +4,13 @@
 }
 
 /**
- * Full-viewport hero keeps the first band below the fold. Scroll-reveal defaults to
- * opacity:0 until intersection, which reads as a large blank strip above the confidence block.
- * Show the first stacked section immediately so the fold flows into editorial bands.
+ * Full-viewport hero keeps editorial bands below the fold. Scroll-reveal defaults to opacity:0
+ * until intersection (`main.js` treats “already visible” as intersecting the viewport window,
+ * which excludes content sitting flush under a 100vh hero). Only forcing `:first-of-type` left
+ * later bands invisible when an optional intro band is first — a blank strip until scroll.
+ * Disable reveal hiding for every stacked band under home main so the hero flows directly into CMS sections.
  */
-.page-home .app-shell__main > section[data-reveal]:first-of-type {
+.page-home .app-shell__main > section[data-reveal] {
   opacity: 1;
   transform: none;
   transition: none;

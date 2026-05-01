@@ -209,6 +209,15 @@
         var vh = window.innerHeight || document.documentElement.clientHeight || 0;
         return r.bottom > 40 && r.top < vh - 40;
       }
+      /** Home: stacked CMS bands sit flush under a full-viewport hero; IO “visibility” excludes them until scroll (blank strip). Mark those sections revealed immediately (CSS in pages.css aligns). */
+      function isHomeMainReveal(el) {
+        return (
+          document.body &&
+          document.body.classList.contains("page-home") &&
+          typeof el.matches === "function" &&
+          el.matches(".app-shell__main > section[data-reveal]")
+        );
+      }
       var revealIo = new IntersectionObserver(
         function (entries) {
           entries.forEach(function (entry) {
@@ -221,7 +230,7 @@
         { root: null, rootMargin: "0px 0px -6% 0px", threshold: 0.06 }
       );
       revealNodes.forEach(function (el) {
-        if (revealAlreadyVisible(el)) {
+        if (isHomeMainReveal(el) || revealAlreadyVisible(el)) {
           el.classList.add("is-inview");
         } else {
           revealIo.observe(el);
