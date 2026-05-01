@@ -76,6 +76,32 @@
     path: pathOnly(window.location.pathname + window.location.search),
   });
 
+  window.addEventListener('error', function (ev) {
+    var msg = ev && ev.message ? String(ev.message) : 'error';
+    var src =
+      ev && ev.filename
+        ? String(ev.filename).slice(0, 200) + ':' + (ev.lineno || 0) + ':' + (ev.colno || 0)
+        : '';
+    enqueue('js.error', (msg + (src ? '|' + src : '')).slice(0, 400), {
+      path: pathOnly(window.location.pathname + window.location.search),
+    });
+    flushSoon();
+  });
+
+  window.addEventListener('unhandledrejection', function (ev) {
+    var r = ev.reason;
+    var msg =
+      typeof r === 'string'
+        ? r
+        : r && typeof r.message === 'string'
+          ? r.message
+          : String(r);
+    enqueue('js.unhandledrejection', msg.slice(0, 400), {
+      path: pathOnly(window.location.pathname + window.location.search),
+    });
+    flushSoon();
+  });
+
   document.addEventListener(
     'click',
     function (ev) {

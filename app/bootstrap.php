@@ -49,3 +49,16 @@ ini_set('display_errors', $debug ? '1' : '0');
 ini_set('display_startup_errors', $debug ? '1' : '0');
 
 \App\Core\ErrorHandler::register();
+
+// Ensure every PHP error_log() line has a concrete file (some hosts leave ini empty).
+$iniErrLog = ini_get('error_log');
+if (!is_string($iniErrLog) || $iniErrLog === '') {
+    $resolved = \App\Core\ErrorHandler::logFilePath();
+    $dir = dirname($resolved);
+    if (!is_dir($dir)) {
+        @mkdir($dir, 0755, true);
+    }
+    if ((is_dir($dir) && is_writable($dir)) || (is_file($resolved) && is_writable($resolved)) || @touch($resolved)) {
+        ini_set('error_log', $resolved);
+    }
+}

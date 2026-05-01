@@ -79,6 +79,17 @@ final class ActionLogController extends Controller
                 'browser.' . (string) $entry['type'],
                 ['browser' => $entry]
             );
+            $evType = (string) ($entry['type'] ?? '');
+            if ($evType !== '' && str_starts_with($evType, 'js.')) {
+                error_log(sprintf(
+                    "[%s] [frontend-js] type=%s surface=%s path=%s detail=%s\n",
+                    date('Y-m-d H:i:s T'),
+                    $evType,
+                    substr((string) ($entry['surface'] ?? ''), 0, 24),
+                    substr((string) ($entry['path'] ?? ''), 0, 260),
+                    substr((string) ($entry['detail'] ?? ''), 0, 500)
+                ));
+            }
         }
 
         http_response_code(204);
