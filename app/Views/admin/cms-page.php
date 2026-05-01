@@ -529,6 +529,11 @@ $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
       if (rawHtml !== '') {
         pkg.features_html = rawHtml;
       }
+      var bkEl = row.querySelector('.js-pkg-booking');
+      var bk = bkEl && bkEl.value ? bkEl.value.trim() : '';
+      if (bk !== '') {
+        pkg.booking_package = bk;
+      }
       pkgs.push(pkg);
     });
 

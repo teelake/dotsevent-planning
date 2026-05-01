@@ -392,6 +392,8 @@ $newsletterBk = is_array($home_blocks['newsletter'] ?? null) ? $home_blocks['new
                     $pfeat = isset($pkg['features']) && is_array($pkg['features']) ? $pkg['features'] : [];
                     $pCta = trim((string) ($pkg['cta_label'] ?? ''));
                     $pHref = trim((string) ($pkg['cta_href'] ?? ''));
+                    $pBookingSlug = normalize_booking_package_slug($pkg['booking_package'] ?? null);
+                    $pHrefOut = $pHref !== '' ? href_with_book_package_preselect($pHref, $pBookingSlug) : '';
                     $featured = !empty($pkg['featured']);
                     ?>
                     <article class="home-package-card<?= $featured ? ' home-package-card--featured' : '' ?>">
@@ -418,9 +420,9 @@ $newsletterBk = is_array($home_blocks['newsletter'] ?? null) ? $home_blocks['new
                                 <?php endforeach; ?>
                             </ul>
                             <?php endif; ?>
-                            <?php if ($pCta !== '' && $pHref !== ''): ?>
+                            <?php if ($pCta !== '' && $pHrefOut !== ''): ?>
                             <div class="home-package-card__foot">
-                                <a class="<?= $featured ? 'btn btn--primary home-package-card__cta home-package-card__cta--featured' : 'btn btn--secondary home-package-card__cta' ?>" href="<?= e($pHref) ?>"><?= e($pCta) ?></a>
+                                <a class="<?= $featured ? 'btn btn--primary home-package-card__cta home-package-card__cta--featured' : 'btn btn--secondary home-package-card__cta' ?>" href="<?= e($pHrefOut) ?>"><?= e($pCta) ?></a>
                             </div>
                             <?php endif; ?>
                         </div>

@@ -210,6 +210,13 @@ final class HomePageBlocks
                     $merged['packages']['items'][$i]['cta_href'] = app_url('book');
                 }
 
+                $bpkg = normalize_booking_package_slug($pkg['booking_package'] ?? null);
+                if ($bpkg !== null) {
+                    $merged['packages']['items'][$i]['booking_package'] = $bpkg;
+                } else {
+                    unset($merged['packages']['items'][$i]['booking_package']);
+                }
+
                 $featHtml = isset($pkg['features_html']) ? trim((string) $pkg['features_html']) : '';
                 if ($featHtml !== '') {
                     $merged['packages']['items'][$i]['features_html'] = CmsHtmlSanitizer::sanitize($featHtml);

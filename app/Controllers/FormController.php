@@ -164,18 +164,14 @@ final class FormController extends Controller
         $name = trim((string) ($_POST['name'] ?? ''));
         $email = trim((string) ($_POST['email'] ?? ''));
         $phone = trim((string) ($_POST['phone'] ?? ''));
-        $package = trim((string) ($_POST['package'] ?? ''));
+        $package = normalize_booking_package_slug(trim((string) ($_POST['package'] ?? ''))) ?? 'not_sure';
         $eventDate = trim((string) ($_POST['event_date'] ?? ''));
         $guests = trim((string) ($_POST['guest_count'] ?? ''));
         $venue = trim((string) ($_POST['venue_city'] ?? ''));
         $message = trim((string) ($_POST['message'] ?? ''));
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             Flash::set(Flash::ERROR, 'Please enter a valid email.');
-            $this->redirect('book');
-        }
-        $allowedP = ['basic', 'premium', 'vip', 'not_sure'];
-        if (!in_array($package, $allowedP, true)) {
-            $package = 'not_sure';
+            $this->redirect(book_redirect_preserving_package($package));
         }
         $msg = $message;
         if ($msg === '' && $eventDate . $venue . $guests !== '') {
@@ -199,6 +195,7 @@ final class FormController extends Controller
         } else {
             action_log('forms', 'lead.persist_failed', ['type' => 'booking']);
             Flash::set(Flash::ERROR, 'Could not save your request. Please try again or email us.');
+            $this->redirect(book_redirect_preserving_package($package));
         }
         $this->redirect('book');
     }

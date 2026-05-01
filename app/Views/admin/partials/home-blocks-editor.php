@@ -253,6 +253,20 @@ $nwEn = (($nw['enabled'] ?? true) !== false);
                             <input class="input js-pkg-cta-h" type="text" value="<?= e((string) ($pkg['cta_href'] ?? '')) ?>">
                         </div>
                     </div>
+                    <?php
+                    $bpSel = normalize_booking_package_slug($pkg['booking_package'] ?? null);
+                    ?>
+                    <div class="form-row" style="margin:0;">
+                        <label>Book form tier</label>
+                        <select class="input js-pkg-booking">
+                            <option value=""<?= $bpSel === null ? ' selected' : '' ?>>None (visitor chooses)</option>
+                            <option value="basic"<?= $bpSel === 'basic' ? ' selected' : '' ?>>Basic</option>
+                            <option value="premium"<?= $bpSel === 'premium' ? ' selected' : '' ?>>Premium</option>
+                            <option value="vip"<?= $bpSel === 'vip' ? ' selected' : '' ?>>VIP</option>
+                            <option value="not_sure"<?= $bpSel === 'not_sure' ? ' selected' : '' ?>>Not sure yet</option>
+                        </select>
+                        <span class="text-muted" style="font-size:0.82rem;display:block;margin-top:0.35rem;">When the CTA targets the booking page, we append <code>?package=…</code> so this tier pre-selects.</span>
+                    </div>
                     <div class="form-row hb-pkg-feats-editor-wrap">
                         <label>Features</label>
                         <textarea class="js-pkg-feats-html" rows="1" hidden aria-hidden="true"><?= htmlspecialchars($pkgFeatSeedHtml, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></textarea>
@@ -398,6 +412,17 @@ $nwEn = (($nw['enabled'] ?? true) !== false);
                 <label>CTA link (optional)</label>
                 <input class="input js-pkg-cta-h" type="text" value="">
             </div>
+        </div>
+        <div class="form-row" style="margin:0;">
+            <label>Book form tier</label>
+            <select class="input js-pkg-booking">
+                <option value="" selected>None (visitor chooses)</option>
+                <option value="basic">Basic</option>
+                <option value="premium">Premium</option>
+                <option value="vip">VIP</option>
+                <option value="not_sure">Not sure yet</option>
+            </select>
+            <span class="text-muted" style="font-size:0.82rem;display:block;margin-top:0.35rem;">When the CTA targets the booking page, we append <code>?package=…</code> so this tier pre-selects.</span>
         </div>
         <div class="form-row hb-pkg-feats-editor-wrap">
             <label>Features</label>

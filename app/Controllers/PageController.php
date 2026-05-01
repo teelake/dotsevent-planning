@@ -84,8 +84,7 @@ final class PageController extends Controller
     public function bookYourEvent(): void
     {
         $raw = (string) ($_GET['package'] ?? '');
-        $allowed = ['basic', 'premium', 'vip', 'not_sure'];
-        $preselect = in_array($raw, $allowed, true) ? $raw : null;
+        $preselect = normalize_booking_package_slug($raw);
         $cms = cms_public_page(
             'book',
             'Book',

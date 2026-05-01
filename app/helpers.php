@@ -60,6 +60,121 @@ function app_url(string $path = ''): string
     return $p === '' ? $base . '/' : $base . '/' . $p;
 }
 
+/** @return list<string> Slugs accepted by the book-your-event form. */
+function book_form_package_slugs(): array
+{
+    return ['basic', 'premium', 'vip', 'not_sure'];
+}
+
+function normalize_booking_package_slug(?string $raw): ?string
+{
+    $s = strtolower(trim((string) $raw));
+
+    return in_array($s, book_form_package_slugs(), true) ? $s : null;
+}
+
+/** Canonical URL paths for GET routes that render the booking form (respects subdirectory installs). */
+function book_route_paths_normalized(): array
+{
+    static $cache = null;
+    if ($cache !== null) {
+        return $cache;
+    }
+    $paths = [];
+    foreach (['book', 'book-your-event'] as $seg) {
+        $full = app_url($seg);
+        $path = parse_url($full, PHP_URL_PATH);
+        if ($path !== null && $path !== '') {
+            $paths[] = rtrim($path, '/') ?: '/';
+        }
+    }
+    $cache = array_values(array_unique($paths));
+
+    return $cache;
+}
+
+function href_normalize_request_path(string $href): string
+{
+    $href = trim($href);
+    if ($href === '') {
+        return '';
+    }
+    if (preg_match('#^https?://#i', $href)) {
+        $path = parse_url($href, PHP_URL_PATH);
+
+        return $path !== null && $path !== '' ? $path : '';
+    }
+    $path = parse_url($href, PHP_URL_PATH);
+    if ($path !== null && $path !== '') {
+        return $path;
+    }
+    $first = preg_split('/[?#]/', $href, 2)[0];
+    $first = '/' . ltrim((string) $first, '/');
+
+    return $first === '//' ? '/' : $first;
+}
+
+function href_targets_book_route(string $href): bool
+{
+    $pathTrim = rtrim(href_normalize_request_path($href), '/') ?: '/';
+    if ($pathTrim === '/' || $pathTrim === '') {
+        return false;
+    }
+    foreach (book_route_paths_normalized() as $bp) {
+        $bpTrim = rtrim($bp, '/') ?: '/';
+        if ($pathTrim === $bpTrim) {
+            return true;
+        }
+    }
+    $base = basename($pathTrim);
+
+    return $base === 'book' || $base === 'book-your-event';
+}
+
+/**
+ * Adds or replaces package= on URLs that target the booking page so the tier pre-selects on load.
+ */
+function href_with_book_package_preselect(string $href, ?string $bookingPackageSlug): string
+{
+    $slug = normalize_booking_package_slug($bookingPackageSlug);
+    if ($slug === null || trim($href) === '') {
+        return $href;
+    }
+    if (!href_targets_book_route($href)) {
+        return $href;
+    }
+    $parts = parse_url($href);
+    if ($parts === false) {
+        return $href;
+    }
+    $path = $parts['path'] ?? '';
+    $query = [];
+    if (!empty($parts['query'])) {
+        parse_str($parts['query'], $query);
+    }
+    $query['package'] = $slug;
+    $qs = http_build_query($query);
+    $fragment = isset($parts['fragment']) ? '#' . $parts['fragment'] : '';
+    $scheme = $parts['scheme'] ?? '';
+    $host = $parts['host'] ?? '';
+    $port = isset($parts['port']) ? ':' . $parts['port'] : '';
+    if ($scheme !== '' && $host !== '') {
+        return $scheme . '://' . $host . $port . $path . '?' . $qs . $fragment;
+    }
+    if ($host !== '') {
+        return '//' . $host . $port . $path . '?' . $qs . $fragment;
+    }
+
+    return $path . '?' . $qs . $fragment;
+}
+
+function book_redirect_preserving_package(?string $slug): string
+{
+    $s = normalize_booking_package_slug($slug);
+
+    return $s === null ? 'book' : 'book?package=' . rawurlencode($s);
+}
+
 /**
  * Browser URL for a file under /public. Accepts paths like uploads/x.jpg or already-absolute http(s) URLs.
  */

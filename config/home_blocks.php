@@ -54,6 +54,7 @@ return [
                 'name' => 'Essential',
                 'price_display' => 'Starting at CAD $1,500',
                 'featured' => false,
+                'booking_package' => 'basic',
                 'cta_label' => 'Discuss Essential',
                 'cta_href' => '',
                 'features' => [
@@ -67,6 +68,7 @@ return [
                 'name' => 'Signature',
                 'price_display' => 'Starting at CAD $2,500',
                 'featured' => true,
+                'booking_package' => 'premium',
                 'cta_label' => 'Reserve Signature',
                 'cta_href' => '',
                 'features' => [
@@ -81,6 +83,7 @@ return [
                 'name' => 'Elevate',
                 'price_display' => 'Starting at CAD $4,000',
                 'featured' => false,
+                'booking_package' => 'vip',
                 'cta_label' => 'Plan Elevate',
                 'cta_href' => '',
                 'features' => [
