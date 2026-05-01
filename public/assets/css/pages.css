@@ -1631,7 +1631,7 @@
 
 /* ── Services page (structured `services_blocks`) ── */
 
-/* Services catalogue: fluid columns, row height follows content (no forced full-width hero card). */
+/* Services catalogue: 3 columns on large screens (equal tracks), tighter grids below. */
 .services-dossiers {
   display: grid;
   gap: 1rem;
@@ -1642,13 +1642,14 @@
 
 @media (min-width: 640px) {
   .services-dossiers {
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17.5rem), 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.1rem;
   }
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1024px) {
   .services-dossiers {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1.2rem;
   }
 }
