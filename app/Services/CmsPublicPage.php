@@ -258,6 +258,9 @@ final class CmsPublicPage
      * hydrates `blocks.*` keys. Support extra shapes: nested `blocks.blocks`, empty `blocks{}`
      * with section keys at root, and mis-saved root-level `confidence`/… .
      *
+     * Services pages may also accumulate duplicate trees (`offerings.*` at JSON root plus
+     * `blocks.offerings.*`). Readers must reconcile so catalogue rows are not dropped.
+     *
      * @param array<string, mixed> $data
      * @return array<string, mixed>|null
      */
@@ -268,7 +271,18 @@ final class CmsPublicPage
             $b = $b['blocks'];
         }
         if (is_array($b) && $b !== []) {
-            return $b;
+            return self::hydrateServicesBlocksFromLegacyRoot($b, $data);
+        }
+
+        $servicesMarkers = ['version', 'hero', 'offerings', 'faq', 'newsletter_cta'];
+        $fromServices = [];
+        foreach ($servicesMarkers as $k) {
+            if (array_key_exists($k, $data)) {
+                $fromServices[$k] = $data[$k];
+            }
+        }
+        if ($fromServices !== []) {
+            return self::hydrateServicesBlocksFromLegacyRoot($fromServices, $data);
         }
 
         $markers = [
@@ -288,6 +302,44 @@ final class CmsPublicPage
         }
 
         return $fromRoot === [] ? null : $fromRoot;
+    }
+
+    /**
+     * When CMS JSON has both `blocks.offerings` (section fields) and root `offerings` (list rows),
+     * merge missing `items` from the legacy root into `blocks` so Services + Home teaser stay in sync.
+     *
+     * @param array<string, mixed> $blocks
+     * @param array<string, mixed> $data Full decoded page payload (same as blocksFromContentData input).
+     *
+     * @return array<string, mixed>
+     */
+    private static function hydrateServicesBlocksFromLegacyRoot(array $blocks, array $data): array
+    {
+        foreach (['offerings', 'faq'] as $sec) {
+            if (!isset($data[$sec]) || !is_array($data[$sec])) {
+                continue;
+            }
+            $rootSec = $data[$sec];
+            if (!isset($blocks[$sec]) || !is_array($blocks[$sec])) {
+                $blocks[$sec] = $rootSec;
+
+                continue;
+            }
+            $blk = &$blocks[$sec];
+            $blkList = isset($blk['items']) && is_array($blk['items']) ? $blk['items'] : [];
+            $rootList = isset($rootSec['items']) && is_array($rootSec['items']) ? $rootSec['items'] : [];
+            if ($blkList === [] && $rootList !== []) {
+                $blk['items'] = $rootList;
+            }
+        }
+
+        foreach (['hero', 'newsletter_cta'] as $sec) {
+            if ((!isset($blocks[$sec]) || !is_array($blocks[$sec])) && isset($data[$sec]) && is_array($data[$sec])) {
+                $blocks[$sec] = $data[$sec];
+            }
+        }
+
+        return $blocks;
     }
 
     /**

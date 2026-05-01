@@ -534,6 +534,17 @@ final class AdminController extends Controller
             }
         }
         $merged = array_merge($old, $incoming);
+
+        /*
+         * Prevent duplicate Services block trees at the JSON root (legacy merges + relational rows).
+         * Only `blocks.*` should carry structured sections — root copies hide catalogue rows from readers.
+         */
+        if ($slug === 'services' && isset($merged['blocks']) && is_array($merged['blocks'])) {
+            foreach (['hero', 'offerings', 'faq', 'newsletter_cta', 'version'] as $dupRootKey) {
+                unset($merged[$dupRootKey]);
+            }
+        }
+
         $flags = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES;
         if (\defined('JSON_INVALID_UTF8_SUBSTITUTE')) {
             $flags |= \JSON_INVALID_UTF8_SUBSTITUTE;
