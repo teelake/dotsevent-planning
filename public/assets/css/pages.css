@@ -1745,6 +1745,7 @@
   display: grid;
   gap: 2rem;
   align-items: start;
+  overflow: visible;
 }
 
 @media (min-width: 960px) {
@@ -1760,10 +1761,6 @@
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-}
-
-.services-partner-grid {
-  overflow: visible;
 }
 
 .services-partner-grid__story .section__title {
@@ -1813,7 +1810,8 @@
     radial-gradient(90% 60% at 100% 40%, rgba(80, 68, 40, 0.35), transparent 55%),
     linear-gradient(175deg, #151311 0%, #0a0908 48%, #060605 100%);
   color: rgba(253, 248, 236, 0.94);
-  padding-block: clamp(2.75rem, 6vw, 4.25rem);
+  padding-top: clamp(2.75rem, 6vw, 4.25rem);
+  padding-bottom: clamp(3.25rem, 7vw, 5rem);
   border-block: 1px solid rgba(245, 192, 19, 0.12);
 }
 
@@ -1869,15 +1867,18 @@
 .services-modern__faq--distinct .services-faq-panel__title {
   color: #fffdf8;
   text-shadow: 0 2px 28px rgba(0, 0, 0, 0.35);
+  font-size: clamp(1.95rem, 3.2vw, 2.65rem);
+  letter-spacing: -0.032em;
+  line-height: 1.12;
 }
 
 .services-faq-intro {
   max-width: 58ch;
-  margin: 1rem 0 0;
+  margin: 0.85rem 0 0;
 }
 
 .services-modern__faq--distinct .services-faq-panel__lead {
-  margin-top: 1rem;
+  margin-top: 0.65rem;
   margin-bottom: 0;
   color: rgba(235, 226, 208, 0.88);
   font-size: 1.05rem;
@@ -1897,22 +1898,27 @@
   color: #fce567;
 }
 
-/* Elevated accordion tray — reads as its own surface vs dossier grid above */
+/* Elevated accordion tray — lighter lift + stronger rim so it separates from band */
 .services-faq-panel {
   position: relative;
   z-index: 1;
-  margin-top: clamp(1.75rem, 4vw, 2.5rem);
-  padding: clamp(1.15rem, 2.8vw, 1.65rem);
+  width: 100%;
+  max-width: min(52rem, 100%);
+  margin-top: clamp(1rem, 2.8vw, 1.65rem);
+  margin-left: 0;
+  margin-right: auto;
+  padding: clamp(1.15rem, 2.8vw, 1.85rem);
   border-radius: 18px;
   background:
-    linear-gradient(165deg, rgba(255, 252, 245, 0.06) 0%, transparent 42%),
-    rgba(4, 4, 3, 0.72);
-  border: 1px solid rgba(245, 192, 19, 0.22);
+    linear-gradient(155deg, rgba(255, 252, 245, 0.1) 0%, transparent 38%),
+    linear-gradient(180deg, rgba(18, 16, 14, 0.95) 0%, rgba(8, 7, 6, 0.92) 100%);
+  border: 1px solid rgba(245, 192, 19, 0.38);
   box-shadow:
-    0 4px 1px rgba(245, 192, 19, 0.06),
-    0 28px 56px rgba(0, 0, 0, 0.42);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+    0 1px 0 rgba(255, 252, 245, 0.07) inset,
+    0 4px 0 rgba(245, 192, 19, 0.12),
+    0 28px 64px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .services-faq-list {
@@ -1937,8 +1943,9 @@
 }
 
 .services-faq-item:hover {
-  border-color: rgba(245, 192, 19, 0.22);
-  background: rgba(12, 11, 9, 0.55);
+  border-color: rgba(245, 192, 19, 0.32);
+  background: rgba(16, 14, 12, 0.68);
+  box-shadow: 0 0 0 1px rgba(245, 192, 19, 0.06);
 }
 
 .services-faq-item[open] {
@@ -2086,8 +2093,12 @@
   }
 }
 
-.services-modern__newsletter .newsletter__text p {
-  margin: 0;
+.services-modern__faq--distinct + .services-modern__newsletter.app-band--newsletter {
+  border-top: 2px solid rgba(1, 1, 1, 0.24);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    0 -20px 40px rgba(0, 0, 0, 0.18);
+  padding-top: calc(var(--space-xl) + 0.35rem);
 }
 
 /* ── Rentals page ───────────────────────────────────────────────────── */
