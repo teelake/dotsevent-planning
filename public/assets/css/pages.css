@@ -888,6 +888,23 @@ body.page-portfolio main .shell.shell--wide.page-pad:has(.portfolio-page__newsle
   border: 1px solid #bbf7d0;
 }
 
+.contact-page__contact-flash {
+  margin-bottom: clamp(1rem, 2vw, 1.35rem);
+}
+
+.contact-page__contact-flash.contact-form-feedback {
+  padding: 0.65rem 0.85rem;
+  border-radius: clamp(12px, 2vw, 16px);
+}
+
+.contact-page__contact-flash.flash--error {
+  border: 1px solid #fecaca;
+}
+
+.contact-page__contact-flash.flash--success {
+  border: 1px solid #bbf7d0;
+}
+
 .contact-form.contact-form--premium {
   gap: 1rem;
   position: relative;
