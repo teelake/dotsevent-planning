@@ -7,28 +7,87 @@ namespace App\Controllers;
 use App\Core\Controller;
 use App\Core\Csrf;
 use App\Core\Flash;
+use App\Core\Session;
 use App\Models\LeadRepository;
 
 final class FormController extends Controller
 {
     public function contactSubmit(): void
     {
+        Session::start();
+
         if (!$this->isPost() || !Csrf::validate($_POST['_csrf'] ?? null)) {
             action_log('forms', 'contact.rejected', ['reason' => 'method_or_csrf']);
             Flash::set(Flash::ERROR, 'Invalid session. Please reload the page.');
             $this->redirect('/contact');
         }
+
+        /* Honeypot — leave blank; bots often auto-fill every visible/name-like field */
+        if (trim((string) ($_POST['website'] ?? '')) !== '') {
+            action_log('forms', 'contact.rejected', ['reason' => 'honeypot']);
+
+            Flash::set(Flash::SUCCESS, 'Thanks — we will get back to you shortly.');
+            $this->redirect('/contact');
+        }
+
+        $now = time();
+        $last = (int) ($_SESSION['lead_contact_ts'] ?? 0);
+        if ($last > 0 && ($now - $last) < 45) {
+            action_log('forms', 'contact.rejected', ['reason' => 'rate_limit']);
+            Flash::set(Flash::ERROR, 'Please wait a moment before sending another message.');
+            $this->redirect('/contact');
+        }
+
         $name = trim((string) ($_POST['name'] ?? ''));
         $email = trim((string) ($_POST['email'] ?? ''));
         $phone = trim((string) ($_POST['phone'] ?? ''));
         $subject = trim((string) ($_POST['subject'] ?? ''));
         $message = trim((string) ($_POST['message'] ?? ''));
+
+        if ($name === '') {
+            Flash::set(Flash::ERROR, 'Please enter your name.');
+            $this->redirect('/contact');
+        }
+        if (mb_strlen($name) > 200) {
+            Flash::set(Flash::ERROR, 'Name is too long.');
+            $this->redirect('/contact');
+        }
+
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             Flash::set(Flash::ERROR, 'Please enter a valid email.');
             $this->redirect('/contact');
         }
+
+        if ($subject === '') {
+            Flash::set(Flash::ERROR, 'Please enter a subject.');
+            $this->redirect('/contact');
+        }
+        if (mb_strlen($subject) > 400) {
+            Flash::set(Flash::ERROR, 'Subject is too long.');
+            $this->redirect('/contact');
+        }
+
+        if ($message === '') {
+            Flash::set(Flash::ERROR, 'Please enter a message.');
+            $this->redirect('/contact');
+        }
+        if (mb_strlen($message) < 12) {
+            Flash::set(Flash::ERROR, 'Please add a bit more detail to your message (at least a short sentence).');
+            $this->redirect('/contact');
+        }
+        if (mb_strlen($message) > 15000) {
+            Flash::set(Flash::ERROR, 'Message is too long.');
+            $this->redirect('/contact');
+        }
+
+        if (mb_strlen($phone) > 80) {
+            Flash::set(Flash::ERROR, 'Phone number is too long.');
+            $this->redirect('/contact');
+        }
+
         $repo = new LeadRepository();
-        if ($repo->create('contact', $email, $name !== '' ? $name : null, $phone !== '' ? $phone : null, $message !== '' ? $message : null, $subject !== '' ? $subject : null)) {
+        if ($repo->create('contact', $email, $name, $phone !== '' ? $phone : null, $message, $subject)) {
+            $_SESSION['lead_contact_ts'] = $now;
             action_log('forms', 'lead.created', ['type' => 'contact']);
             Flash::set(Flash::SUCCESS, 'Thanks — we will get back to you shortly.');
         } else {

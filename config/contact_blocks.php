@@ -27,10 +27,10 @@ return [
         'heading' => 'We will reach out to you',
         'submit_label' => 'Send',
         'fields' => [
-            'name' => ['label' => 'Name', 'placeholder' => 'Name', 'required' => false],
+            'name' => ['label' => 'Name', 'placeholder' => 'Name', 'required' => true],
             'email' => ['label' => 'Email', 'placeholder' => 'Email', 'required' => true],
             'phone' => ['label' => 'Phone', 'placeholder' => 'Phone', 'required' => false],
-            'subject' => ['label' => 'Subject', 'placeholder' => 'Subject', 'required' => false],
+            'subject' => ['label' => 'Subject', 'placeholder' => 'Subject', 'required' => true],
             'message' => ['label' => 'Message', 'placeholder' => 'Message', 'required' => true],
         ],
         'intent_subjects' => [

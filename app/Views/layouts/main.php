@@ -71,8 +71,14 @@ $whatsappIcon = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><
 
 <main id="main" class="app-main" tabindex="-1">
     <?php
-    $flashErr = \App\Core\Flash::get(\App\Core\Flash::ERROR);
-    $flashOk = \App\Core\Flash::get(\App\Core\Flash::SUCCESS);
+    $deferContactFormFlash = ($bodyClass === 'page-contact');
+    if ($deferContactFormFlash) {
+        $flashErr = null;
+        $flashOk = null;
+    } else {
+        $flashErr = \App\Core\Flash::get(\App\Core\Flash::ERROR);
+        $flashOk = \App\Core\Flash::get(\App\Core\Flash::SUCCESS);
+    }
     $flashNote = \App\Core\Flash::get(\App\Core\Flash::NOTICE);
     ?>
     <?php if ($flashErr !== null): ?>

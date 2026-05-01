@@ -50,7 +50,31 @@ final class ContactPageBlocks
             $merged['trust']['star_count'] = 5;
         }
 
+        self::enforceContactFormRequirements($merged);
+
         return $merged;
+    }
+
+    /**
+     * Name, email, subject, and message are always required server-side (spam UX baseline).
+     *
+     * @param array<string, mixed> $merged
+     */
+    private static function enforceContactFormRequirements(array &$merged): void
+    {
+        if (!isset($merged['contact_form']) || !is_array($merged['contact_form'])) {
+            return;
+        }
+        $form = &$merged['contact_form'];
+        if (!isset($form['fields']) || !is_array($form['fields'])) {
+            return;
+        }
+        foreach (['name', 'email', 'subject', 'message'] as $key) {
+            if (!isset($form['fields'][$key]) || !is_array($form['fields'][$key])) {
+                continue;
+            }
+            $form['fields'][$key]['required'] = true;
+        }
     }
 }
 

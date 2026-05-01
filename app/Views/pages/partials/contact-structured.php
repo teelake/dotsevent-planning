@@ -18,6 +18,9 @@ $loc = is_array($b['location'] ?? null) ? $b['location'] : [];
 $nw = is_array($b['newsletter_cta'] ?? null) ? $b['newsletter_cta'] : [];
 $float = is_array($b['floating_widget'] ?? null) ? $b['floating_widget'] : [];
 
+$contactFlashErr = \App\Core\Flash::get(\App\Core\Flash::ERROR);
+$contactFlashOk = \App\Core\Flash::get(\App\Core\Flash::SUCCESS);
+
 $introLeadHtml = isset($intro['lead_html']) && is_string($intro['lead_html']) ? trim($intro['lead_html']) : '';
 $introLeadPlain = $introLeadHtml === '' ? '' : trim(preg_replace('/\s+/u', ' ', strip_tags($introLeadHtml)));
 $showIntroLead = $introLeadPlain !== '' && mb_strlen($introLeadPlain) >= 2;
@@ -77,11 +80,43 @@ $iconPhone = '<svg class="contact-channel-card__icon-svg" xmlns="http://www.w3.o
 
 <div class="section__split contact-page__split<?= $locEnabled ? '' : ' contact-page__split--solo' ?>" style="margin-top:1.25rem;" data-reveal>
     <div class="contact-page__form-wrap">
+        <?php if (($form['enabled'] ?? true) === false): ?>
+            <?php if ($contactFlashErr !== null): ?>
+            <div class="contact-page__contact-flash contact-form-feedback flash flash--error" role="alert" data-flash>
+                <div class="flash__inner">
+                    <span class="flash__text"><?= e($contactFlashErr) ?></span>
+                    <button type="button" class="flash__dismiss" aria-label="Dismiss message" data-flash-dismiss>&times;</button>
+                </div>
+            </div>
+            <?php elseif ($contactFlashOk !== null): ?>
+            <div class="contact-page__contact-flash contact-form-feedback flash flash--success" role="status" data-flash>
+                <div class="flash__inner">
+                    <span class="flash__text"><?= e($contactFlashOk) ?></span>
+                    <button type="button" class="flash__dismiss" aria-label="Dismiss message" data-flash-dismiss>&times;</button>
+                </div>
+            </div>
+            <?php endif; ?>
+        <?php endif; ?>
         <?php if (($form['enabled'] ?? true) !== false): ?>
         <div class="contact-form-panel">
             <div class="contact-form-panel__intro">
                 <h2 class="section__title contact-form__heading"><?= e((string) ($form['heading'] ?? 'We will reach out to you')) ?></h2>
                 <p class="contact-form-panel__hint">Tell us what you’re planning—we reply within one business day.</p>
+                <?php if ($contactFlashErr !== null): ?>
+                <div class="contact-form-feedback flash flash--error" role="alert" data-flash>
+                    <div class="flash__inner">
+                        <span class="flash__text"><?= e($contactFlashErr) ?></span>
+                        <button type="button" class="flash__dismiss" aria-label="Dismiss message" data-flash-dismiss>&times;</button>
+                    </div>
+                </div>
+                <?php elseif ($contactFlashOk !== null): ?>
+                <div class="contact-form-feedback flash flash--success" role="status" data-flash>
+                    <div class="flash__inner">
+                        <span class="flash__text"><?= e($contactFlashOk) ?></span>
+                        <button type="button" class="flash__dismiss" aria-label="Dismiss message" data-flash-dismiss>&times;</button>
+                    </div>
+                </div>
+                <?php endif; ?>
             </div>
         <?php
             $fields = is_array($form['fields'] ?? null) ? $form['fields'] : [];
@@ -94,20 +129,24 @@ $iconPhone = '<svg class="contact-channel-card__icon-svg" xmlns="http://www.w3.o
         ?>
         <form class="contact-form contact-form--premium" method="post" action="<?= e(app_url('contact')) ?>">
             <?= csrf_field() ?>
+            <div class="contact-form__hp" aria-hidden="true">
+                <label for="c-website-hp">Company website</label>
+                <input id="c-website-hp" type="text" name="website" tabindex="-1" autocomplete="off" value="">
+            </div>
             <div class="contact-form__grid contact-form__grid--half">
                 <div class="contact-form__field">
-                    <label class="contact-form__label" for="c-name"><?= e((string) ($nameF['label'] ?? 'Name')) ?></label>
-                    <input id="c-name" class="input contact-form__control" type="text" name="name" placeholder="<?= e((string) ($nameF['placeholder'] ?? 'Name')) ?>" autocomplete="name" <?= !empty($nameF['required']) ? 'required' : '' ?>>
+                    <label class="contact-form__label" for="c-name"><?= e((string) ($nameF['label'] ?? 'Name')) ?><?php if (!empty($nameF['required'])): ?><span class="contact-form__req" aria-hidden="true">*</span><?php endif; ?></label>
+                    <input id="c-name" class="input contact-form__control" type="text" name="name" placeholder="<?= e((string) ($nameF['placeholder'] ?? 'Name')) ?>" autocomplete="name" <?= !empty($nameF['required']) ? 'required' : '' ?> minlength="1" maxlength="200">
                 </div>
                 <div class="contact-form__field">
                     <label class="contact-form__label" for="c-email"><?= e((string) ($emailF['label'] ?? 'Email')) ?><?php if (!isset($emailF['required']) || !empty($emailF['required'])): ?><span class="contact-form__req" aria-hidden="true">*</span><?php endif; ?></label>
-                    <input id="c-email" class="input contact-form__control" type="email" name="email" placeholder="<?= e((string) ($emailF['placeholder'] ?? 'Email')) ?>" autocomplete="email" <?= !isset($emailF['required']) || !empty($emailF['required']) ? 'required' : '' ?>>
+                    <input id="c-email" class="input contact-form__control" type="email" name="email" placeholder="<?= e((string) ($emailF['placeholder'] ?? 'Email')) ?>" autocomplete="email" <?= !isset($emailF['required']) || !empty($emailF['required']) ? 'required' : '' ?> maxlength="254">
                 </div>
             </div>
             <div class="contact-form__grid contact-form__grid--half">
                 <div class="contact-form__field">
                     <label class="contact-form__label" for="c-phone"><?= e((string) ($phoneF['label'] ?? 'Phone')) ?></label>
-                    <input id="c-phone" class="input contact-form__control" type="tel" name="phone" placeholder="<?= e((string) ($phoneF['placeholder'] ?? 'Phone')) ?>" autocomplete="tel" <?= !empty($phoneF['required']) ? 'required' : '' ?>>
+                    <input id="c-phone" class="input contact-form__control" type="tel" name="phone" placeholder="<?= e((string) ($phoneF['placeholder'] ?? 'Phone')) ?>" autocomplete="tel" <?= !empty($phoneF['required']) ? 'required' : '' ?> maxlength="80">
                 </div>
                 <?php if ($intents !== []): ?>
                 <div class="contact-form__field">
@@ -122,13 +161,13 @@ $iconPhone = '<svg class="contact-channel-card__icon-svg" xmlns="http://www.w3.o
             </div>
 
             <div class="contact-form__field">
-                <label class="contact-form__label" for="c-subject"><?= e((string) ($subjectF['label'] ?? 'Subject')) ?></label>
-                <input id="c-subject" class="input contact-form__control" type="text" name="subject" placeholder="<?= e((string) ($subjectF['placeholder'] ?? 'Subject')) ?>" <?= !empty($subjectF['required']) ? 'required' : '' ?>>
+                <label class="contact-form__label" for="c-subject"><?= e((string) ($subjectF['label'] ?? 'Subject')) ?><?php if (!empty($subjectF['required'])): ?><span class="contact-form__req" aria-hidden="true">*</span><?php endif; ?></label>
+                <input id="c-subject" class="input contact-form__control" type="text" name="subject" placeholder="<?= e((string) ($subjectF['placeholder'] ?? 'Subject')) ?>" <?= !empty($subjectF['required']) ? 'required' : '' ?> minlength="1" maxlength="400">
             </div>
 
             <div class="contact-form__field">
                 <label class="contact-form__label" for="c-msg"><?= e((string) ($messageF['label'] ?? 'Message')) ?><?php if (!isset($messageF['required']) || !empty($messageF['required'])): ?><span class="contact-form__req" aria-hidden="true">*</span><?php endif; ?></label>
-                <textarea id="c-msg" class="input input--textarea contact-form__control" name="message" rows="6" placeholder="<?= e((string) ($messageF['placeholder'] ?? 'Message')) ?>" <?= !isset($messageF['required']) || !empty($messageF['required']) ? 'required' : '' ?>></textarea>
+                <textarea id="c-msg" class="input input--textarea contact-form__control" name="message" rows="6" placeholder="<?= e((string) ($messageF['placeholder'] ?? 'Message')) ?>" <?= !isset($messageF['required']) || !empty($messageF['required']) ? 'required' : '' ?> minlength="12" maxlength="15000"></textarea>
             </div>
 
             <div class="contact-form__actions">
