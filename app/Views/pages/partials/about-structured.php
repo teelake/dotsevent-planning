@@ -245,8 +245,8 @@ $nw = is_array($ab['newsletter_cta'] ?? null) ? $ab['newsletter_cta'] : [];
     $ph = trim((string) ($nw['placeholder'] ?? 'Your email'));
 $nhtml = isset($nw['text_html']) && is_string($nw['text_html']) ? $nw['text_html'] : '';
 ?>
-<section class="app-band app-band--newsletter about-modern__newsletter" aria-labelledby="about-nw-heading" data-reveal>
-    <div class="shell shell--wide newsletter-app">
+<section class="app-band app-band--newsletter about-modern__newsletter services-modern__band--fluid" aria-labelledby="about-nw-heading" data-reveal>
+    <div class="shell shell--fluid newsletter-app">
         <div>
             <?php if ($ntl !== ''): ?>
             <h2 id="about-nw-heading" class="newsletter__title"><?= e($ntl) ?></h2>

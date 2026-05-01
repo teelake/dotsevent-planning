@@ -763,6 +763,22 @@
   outline-color: rgba(1, 1, 1, 0.35);
 }
 
+/*
+ * Newsletter strip is normally the last band before <footer>.
+ * Avoid stacking .app-shell bottom padding + .app-footer margin-top (cream “dead band”).
+ */
+body:has(main .app-band--newsletter) .app-shell {
+  padding-bottom: 0;
+}
+
+body:has(main .app-band--newsletter) .app-shell__below {
+  padding-bottom: 0;
+}
+
+body:has(main .app-band--newsletter) .app-footer {
+  margin-top: 0;
+}
+
 /* Footer */
 .app-footer {
   margin-top: clamp(2.5rem, 5vw, 4rem);

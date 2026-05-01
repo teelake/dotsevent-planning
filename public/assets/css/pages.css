@@ -1747,21 +1747,13 @@
   max-width: none;
 }
 
-/* Services page: newsletter sits above footer — no extra shell/footer gutter (removes cream “dead band”) */
-.page-services .app-shell {
-  padding-bottom: 0;
-}
-
+/* Services page: tighten hero → first section spacing; newsletter vertical rhythm */
 .page-services .app-page-hero {
   margin-bottom: clamp(0.65rem, 1.8vw, 1.25rem);
 }
 
 .page-services .services-modern > section.section:first-of-type {
   padding-top: clamp(1rem, 2.8vw, 2rem);
-}
-
-.page-services .app-footer {
-  margin-top: 0;
 }
 
 .page-services .services-modern__newsletter.app-band--newsletter {

@@ -485,8 +485,8 @@ $newsletterBk = is_array($home_blocks['newsletter'] ?? null) ? $home_blocks['new
             $nwPh = 'Your email';
         }
         ?>
-        <section class="app-band app-band--newsletter home-blocks-newsletter" aria-labelledby="home-newsletter-heading" data-reveal>
-            <div class="shell shell--wide newsletter-app">
+        <section class="app-band app-band--newsletter home-blocks-newsletter services-modern__band--fluid" aria-labelledby="home-newsletter-heading" data-reveal>
+            <div class="shell shell--fluid newsletter-app">
                 <div>
                     <?php if ($nwTitle !== ''): ?>
                     <h2 id="home-newsletter-heading" class="newsletter__title"><?= e($nwTitle) ?></h2>
