@@ -10,6 +10,10 @@ final class Flash
     public const ERROR = 'error';
     public const NOTICE = 'notice';
 
+    /** Shown only inside the newsletter band on pages that render it (see newsletter-band-flash.php). */
+    public const NEWSLETTER_SUCCESS = 'newsletter_success';
+    public const NEWSLETTER_ERROR = 'newsletter_error';
+
     public static function set(string $key, string $message): void
     {
         Session::start();

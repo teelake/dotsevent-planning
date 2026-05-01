@@ -100,6 +100,12 @@ $whatsappIcon = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><
         </div>
     <?php endif; ?>
     <?= $content ?>
+    <?php
+    if (empty($GLOBALS['__dots_newsletter_strip_present'] ?? null)) {
+        \App\Core\Flash::get(\App\Core\Flash::NEWSLETTER_ERROR);
+        \App\Core\Flash::get(\App\Core\Flash::NEWSLETTER_SUCCESS);
+    }
+    ?>
 </main>
 
 <?php include dirname(__DIR__) . '/partials/footer-status.php'; ?>

@@ -739,6 +739,14 @@
   padding: 0.55rem 0.75rem;
 }
 
+.newsletter-app__feedback--success {
+  color: #0d3d24;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(13, 61, 36, 0.35);
+  border-radius: 12px;
+  padding: 0.55rem 0.75rem;
+}
+
 .app-band--newsletter .input {
   background: #fffefb;
   color: var(--color-brand-black);

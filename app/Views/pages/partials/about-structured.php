@@ -255,6 +255,7 @@ $nhtml = isset($nw['text_html']) && is_string($nw['text_html']) ? $nw['text_html
             <div class="newsletter__text prose"><?= $nhtml ?></div>
             <?php } ?>
         </div>
+        <?php include dirname(__DIR__, 2) . '/partials/newsletter-band-flash.php'; ?>
         <form class="newsletter__form newsletter-app__form" method="post" action="<?= e(app_url('newsletter')) ?>" novalidate data-newsletter-form>
             <?= csrf_field() ?>
             <input type="hidden" name="_newsletter_return" value="about">

@@ -128,6 +128,7 @@ $float = is_array($b['floating_widget'] ?? null) ? $b['floating_widget'] : [];
       <h2 id="contact-news-title" class="newsletter__title"><?= e((string) $nw['title']) ?></h2>
       <?php if (!empty($nw['description_html'])): ?><div class="newsletter__text prose"><?= (string) $nw['description_html'] ?></div><?php endif; ?>
     </div>
+    <?php include dirname(__DIR__, 2) . '/partials/newsletter-band-flash.php'; ?>
     <form class="newsletter__form newsletter-app__form" method="post" action="<?= e(app_url('newsletter')) ?>" novalidate data-newsletter-form>
       <?= csrf_field() ?>
       <input type="hidden" name="_newsletter_return" value="contact">

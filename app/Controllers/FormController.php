@@ -44,21 +44,21 @@ final class FormController extends Controller
 
         if (!$this->isPost() || !Csrf::validate($_POST['_csrf'] ?? null)) {
             action_log('forms', 'newsletter.rejected', ['reason' => 'method_or_csrf']);
-            Flash::set(Flash::ERROR, 'Something went wrong. Please try again.');
+            Flash::set(Flash::NEWSLETTER_ERROR, 'Something went wrong. Please try again.');
             $this->redirectAbsolute($returnUrl);
         }
         $email = trim((string) ($_POST['email'] ?? ''));
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            Flash::set(Flash::ERROR, 'Please enter a valid email.');
+            Flash::set(Flash::NEWSLETTER_ERROR, 'Please enter a valid email.');
             $this->redirectAbsolute($returnUrl);
         }
         $repo = new LeadRepository();
         if ($repo->create('newsletter', $email, null, null, null, null)) {
             action_log('forms', 'lead.created', ['type' => 'newsletter']);
-            Flash::set(Flash::SUCCESS, 'You are on the list.');
+            Flash::set(Flash::NEWSLETTER_SUCCESS, 'You are on the list.');
         } else {
             action_log('forms', 'lead.persist_failed', ['type' => 'newsletter']);
-            Flash::set(Flash::ERROR, 'Could not subscribe right now. Please try again later.');
+            Flash::set(Flash::NEWSLETTER_ERROR, 'Could not subscribe right now. Please try again later.');
         }
         $this->redirectAbsolute($returnUrl);
     }

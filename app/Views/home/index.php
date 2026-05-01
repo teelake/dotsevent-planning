@@ -493,6 +493,7 @@ $newsletterBk = is_array($home_blocks['newsletter'] ?? null) ? $home_blocks['new
                     <p class="newsletter__text"><?= e($nwText) ?></p>
                     <?php endif; ?>
                 </div>
+                <?php include dirname(__DIR__) . '/partials/newsletter-band-flash.php'; ?>
                 <form class="newsletter__form newsletter-app__form" method="post" action="<?= e(app_url('newsletter')) ?>" novalidate data-newsletter-form>
                     <?= csrf_field() ?>
                     <input type="hidden" name="_newsletter_return" value="home">

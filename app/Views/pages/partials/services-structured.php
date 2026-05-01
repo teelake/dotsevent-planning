@@ -13,7 +13,6 @@ $on = static function (?array $sec): bool {
 
 $intro = is_array($svc['intro'] ?? null) ? $svc['intro'] : [];
 $off = is_array($svc['offerings'] ?? null) ? $svc['offerings'] : [];
-$partner = is_array($svc['partnership'] ?? null) ? $svc['partnership'] : [];
 $faq = is_array($svc['faq'] ?? null) ? $svc['faq'] : [];
 $nwa = is_array($svc['newsletter_cta'] ?? null) ? $svc['newsletter_cta'] : [];
 ?>
@@ -222,6 +221,7 @@ $nth = isset($nwa['text_html']) && is_string($nwa['text_html']) ? $nwa['text_htm
             <div class="newsletter__text prose"><?= $nth ?></div>
             <?php } ?>
         </div>
+        <?php include dirname(__DIR__, 2) . '/partials/newsletter-band-flash.php'; ?>
         <form class="newsletter__form newsletter-app__form" method="post" action="<?= e(app_url('newsletter')) ?>" novalidate data-newsletter-form>
             <?= csrf_field() ?>
             <input type="hidden" name="_newsletter_return" value="services">
