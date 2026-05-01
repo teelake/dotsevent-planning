@@ -388,6 +388,7 @@ $newsletterBk = is_array($home_blocks['newsletter'] ?? null) ? $home_blocks['new
                     }
                     $pname = trim((string) ($pkg['name'] ?? ''));
                     $pprice = trim((string) ($pkg['price_display'] ?? ''));
+                    $pfeatHtml = isset($pkg['features_html']) && is_string($pkg['features_html']) ? trim($pkg['features_html']) : '';
                     $pfeat = isset($pkg['features']) && is_array($pkg['features']) ? $pkg['features'] : [];
                     $pCta = trim((string) ($pkg['cta_label'] ?? ''));
                     $pHref = trim((string) ($pkg['cta_href'] ?? ''));
@@ -406,7 +407,9 @@ $newsletterBk = is_array($home_blocks['newsletter'] ?? null) ? $home_blocks['new
                                 <p class="home-package-card__price"><?= e($pprice) ?></p>
                                 <?php endif; ?>
                             </header>
-                            <?php if ($pfeat !== []): ?>
+                            <?php if ($pfeatHtml !== ''): ?>
+                            <div class="home-package-card__features home-package-card__features--rich prose"><?= $pfeatHtml ?></div>
+                            <?php elseif ($pfeat !== []): ?>
                             <ul class="home-package-card__features">
                                 <?php foreach ($pfeat as $line): ?>
                                 <?php if (is_string($line) && trim($line) !== ''): ?>

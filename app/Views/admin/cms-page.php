@@ -279,6 +279,9 @@ $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
     window.dotseRentalsBlocksBind();
   }
 
+  const metaEl = document.getElementById('cms-meta-description');
+  const hbRoot = document.getElementById('home-blocks-editor');
+
   function populateBlocksAnchors() {
     var list = document.getElementById('cms-edit-blocks-toc-list');
     var wrap = document.getElementById('cms-edit-blocks-toc-wrap');
@@ -348,6 +351,9 @@ $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
       if (tabs[i].id === 'cms-tab-body' && typeof onBodyShown === 'function') {
         onBodyShown();
       }
+      if (tabs[i].id === 'cms-tab-blocks') {
+        hbMountAllPkgFeatEditors();
+      }
     }
 
     tabs.forEach(function (tab, ix) {
@@ -389,9 +395,6 @@ $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
   populateBlocksAnchors();
   initCmsTabs(initQuill);
 
-  const metaEl = document.getElementById('cms-meta-description');
-  const hbRoot = document.getElementById('home-blocks-editor');
-
   function hbAppendTemplate(tplId, containerId) {
     const tpl = document.getElementById(tplId);
     const c = document.getElementById(containerId);
@@ -399,6 +402,71 @@ $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
       return;
     }
     c.appendChild(document.importNode(tpl.content, true));
+  }
+
+  function hbPkgFeatHtmlIsEmpty(html) {
+    var d = document.createElement('div');
+    d.innerHTML = html || '';
+    var t = (d.textContent || '').replace(/\u00a0/g, ' ').trim();
+    return t === '';
+  }
+
+  function hbSyncPkgFeatEditorsToHidden() {
+    if (!hbRoot || typeof Quill === 'undefined') {
+      return;
+    }
+    hbRoot.querySelectorAll('.js-hb-pkg-row').forEach(function (row) {
+      var ta = row.querySelector('.js-pkg-feats-html');
+      var mount = row.querySelector('.js-pkg-feats-quill');
+      if (!ta || !mount) {
+        return;
+      }
+      try {
+        var q = Quill.find(mount);
+        if (q) {
+          ta.value = q.root.innerHTML;
+        }
+      } catch (e) {}
+    });
+  }
+
+  function hbMountPkgFeatEditor(row) {
+    if (!row || typeof Quill === 'undefined') {
+      return;
+    }
+    var ta = row.querySelector('.js-pkg-feats-html');
+    var mount = row.querySelector('.js-pkg-feats-quill');
+    if (!ta || !mount || mount.getAttribute('data-hb-pkg-feats-mounted') === '1') {
+      return;
+    }
+    mount.setAttribute('data-hb-pkg-feats-mounted', '1');
+    var q = new Quill(mount, {
+      theme: 'snow',
+      modules: {
+        toolbar: [
+          [{ header: [false, 3, 4] }],
+          ['bold', 'italic', 'underline'],
+          [{ list: 'ordered' }, { list: 'bullet' }],
+          ['link'],
+          ['clean'],
+        ],
+      },
+    });
+    var seed = ta.value != null ? String(ta.value).trim() : '';
+    if (seed !== '') {
+      q.root.innerHTML = seed;
+    }
+    q.on('text-change', function () {
+      ta.value = q.root.innerHTML;
+    });
+    ta.value = q.root.innerHTML;
+  }
+
+  function hbMountAllPkgFeatEditors() {
+    if (!hbRoot || typeof Quill === 'undefined') {
+      return;
+    }
+    hbRoot.querySelectorAll('.js-hb-pkg-row').forEach(hbMountPkgFeatEditor);
   }
 
   function collectHomeBlocks() {
@@ -445,15 +513,10 @@ $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
 
     var pkgs = [];
     hbRoot.querySelectorAll('.js-hb-pkg-row').forEach(function (row) {
-      var featsEl = row.querySelector('.js-pkg-feats');
-      var feats = [];
-      if (featsEl && featsEl.value) {
-        featsEl.value.split(/\r?\n/).forEach(function (line) {
-          var t = line.trim();
-          if (t !== '') {
-            feats.push(t);
-          }
-        });
+      var ta = row.querySelector('.js-pkg-feats-html');
+      var rawHtml = ta ? String(ta.value || '').trim() : '';
+      if (hbPkgFeatHtmlIsEmpty(rawHtml)) {
+        rawHtml = '';
       }
       var fp = row.querySelector('.js-pkg-featured');
       var pkg = {
@@ -462,8 +525,10 @@ $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
         featured: fp ? fp.checked : false,
         cta_label: row.querySelector('.js-pkg-cta-l') ? row.querySelector('.js-pkg-cta-l').value.trim() : '',
         cta_href: row.querySelector('.js-pkg-cta-h') ? row.querySelector('.js-pkg-cta-h').value.trim() : '',
-        features: feats,
       };
+      if (rawHtml !== '') {
+        pkg.features_html = rawHtml;
+      }
       pkgs.push(pkg);
     });
 
@@ -571,6 +636,21 @@ $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
     if (addPkg) {
       addPkg.addEventListener('click', function () {
         hbAppendTemplate('hb-tpl-pkg', 'hb-pk-items');
+        var list = document.getElementById('hb-pk-items');
+        var rows = list ? list.querySelectorAll('.js-hb-pkg-row') : [];
+        var last = rows.length ? rows[rows.length - 1] : null;
+        if (last) {
+          hbMountPkgFeatEditor(last);
+        }
+      });
+    }
+    hbMountAllPkgFeatEditors();
+    var pkDetails = document.getElementById('cms-sec-hb-packages');
+    if (pkDetails) {
+      pkDetails.addEventListener('toggle', function () {
+        if (pkDetails.open) {
+          hbMountAllPkgFeatEditors();
+        }
       });
     }
     var addQuote = document.getElementById('hb-add-quote');
@@ -587,6 +667,7 @@ $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
       payload.meta_description = metaEl.value.trim();
     }
     if (pageSlug === 'home' && hbRoot) {
+      hbSyncPkgFeatEditorsToHidden();
       payload.blocks = collectHomeBlocks();
     }
     if (pageSlug === 'about' && typeof window.dotseAboutBlocksCollect === 'function') {

@@ -1843,6 +1843,50 @@ body.page-portfolio main .shell.shell--wide.page-pad:has(.portfolio-page__newsle
   opacity: 0.82;
 }
 
+.home-package-card__features--rich.prose {
+  flex: 1;
+  margin: 0;
+  font-size: 0.905rem;
+  line-height: 1.55;
+  color: var(--color-ink-muted);
+}
+
+.home-package-card__features--rich.prose > *:first-child {
+  margin-top: 0;
+}
+
+.home-package-card__features--rich.prose ul,
+.home-package-card__features--rich.prose ol {
+  margin: 0;
+  padding-left: 1.15rem;
+}
+
+.home-package-card__features--rich.prose li {
+  margin: 0.35rem 0 0;
+  padding-left: 0;
+}
+
+.home-package-card__features--rich.prose li:first-child {
+  margin-top: 0;
+}
+
+.home-package-card__features--rich.prose p {
+  margin: 0.35rem 0 0;
+}
+
+.home-package-card__features--rich.prose p:first-child {
+  margin-top: 0;
+}
+
+.home-package-card__features--rich.prose a {
+  color: var(--color-gold-deep);
+  font-weight: 600;
+}
+
+.home-package-card__features--rich.prose strong {
+  color: var(--color-ink);
+}
+
 .home-package-card__foot {
   margin-top: auto;
   padding-top: clamp(0.85rem, 2vw, 1.05rem);

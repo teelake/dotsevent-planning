@@ -210,6 +210,27 @@ $nwEn = (($nw['enabled'] ?? true) !== false);
                 <?php foreach ($pkItems as $pkg): ?>
                 <?php if (!is_array($pkg)) { continue; } ?>
                 <?php $feats = isset($pkg['features']) && is_array($pkg['features']) ? $pkg['features'] : []; ?>
+                <?php
+                $pkgFeatSeedHtml = '';
+                if (isset($pkg['features_html']) && is_string($pkg['features_html']) && trim($pkg['features_html']) !== '') {
+                    $pkgFeatSeedHtml = $pkg['features_html'];
+                } elseif ($feats !== []) {
+                    $lis = [];
+                    foreach ($feats as $line) {
+                        if (! is_string($line)) {
+                            continue;
+                        }
+                        $t = trim($line);
+                        if ($t === '') {
+                            continue;
+                        }
+                        $lis[] = '<li>' . htmlspecialchars($t, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</li>';
+                    }
+                    if ($lis !== []) {
+                        $pkgFeatSeedHtml = '<ul>' . implode('', $lis) . '</ul>';
+                    }
+                }
+                ?>
                 <div class="hb-pkg-card hb-repeat-row js-hb-pkg-row">
                     <label class="home-blocks-editor__check" style="margin-bottom:0.5rem;"><input type="checkbox" class="js-pkg-featured" <?= !empty($pkg['featured']) ? 'checked' : '' ?>><span>Featured tier</span></label>
                     <div class="home-blocks-editor__grid home-blocks-editor__grid--2">
@@ -232,9 +253,10 @@ $nwEn = (($nw['enabled'] ?? true) !== false);
                             <input class="input js-pkg-cta-h" type="text" value="<?= e((string) ($pkg['cta_href'] ?? '')) ?>">
                         </div>
                     </div>
-                    <div class="form-row">
-                        <label>Features (one per line)</label>
-                        <textarea class="input input--textarea js-pkg-feats" rows="5"><?= e(implode("\n", array_map(static fn ($x) => (string) $x, $feats))) ?></textarea>
+                    <div class="form-row hb-pkg-feats-editor-wrap">
+                        <label>Features</label>
+                        <textarea class="js-pkg-feats-html" rows="1" hidden aria-hidden="true"><?= htmlspecialchars($pkgFeatSeedHtml, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></textarea>
+                        <div class="cms-edit-quill hb-pkg-feats-quill js-pkg-feats-quill" aria-label="Package features editor"></div>
                     </div>
                     <button type="button" class="btn btn--ghost hb-row-remove">Remove package</button>
                 </div>
@@ -377,9 +399,10 @@ $nwEn = (($nw['enabled'] ?? true) !== false);
                 <input class="input js-pkg-cta-h" type="text" value="">
             </div>
         </div>
-        <div class="form-row">
-            <label>Features (one per line)</label>
-            <textarea class="input input--textarea js-pkg-feats" rows="5"></textarea>
+        <div class="form-row hb-pkg-feats-editor-wrap">
+            <label>Features</label>
+            <textarea class="js-pkg-feats-html" rows="1" hidden aria-hidden="true"></textarea>
+            <div class="cms-edit-quill hb-pkg-feats-quill js-pkg-feats-quill" aria-label="Package features editor"></div>
         </div>
         <button type="button" class="btn btn--ghost hb-row-remove">Remove package</button>
     </div>

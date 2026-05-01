@@ -209,6 +209,26 @@ final class HomePageBlocks
                 if ($href === '') {
                     $merged['packages']['items'][$i]['cta_href'] = app_url('book');
                 }
+
+                $featHtml = isset($pkg['features_html']) ? trim((string) $pkg['features_html']) : '';
+                if ($featHtml !== '') {
+                    $merged['packages']['items'][$i]['features_html'] = CmsHtmlSanitizer::sanitize($featHtml);
+                    unset($merged['packages']['items'][$i]['features']);
+                } else {
+                    unset($merged['packages']['items'][$i]['features_html']);
+                    $feats = isset($pkg['features']) && is_array($pkg['features']) ? $pkg['features'] : [];
+                    $clean = [];
+                    foreach ($feats as $line) {
+                        if (! is_string($line)) {
+                            continue;
+                        }
+                        $t = trim($line);
+                        if ($t !== '') {
+                            $clean[] = $t;
+                        }
+                    }
+                    $merged['packages']['items'][$i]['features'] = $clean;
+                }
             }
         }
 

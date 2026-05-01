@@ -2104,6 +2104,14 @@ body.admin-sidebar-open .admin-backdrop {
   min-height: 14rem;
 }
 
+.hb-pkg-feats-editor-wrap .hb-pkg-feats-quill {
+  margin-top: 0.35rem;
+}
+
+.hb-pkg-feats-editor-wrap .hb-pkg-feats-quill .ql-container.ql-snow {
+  min-height: 9rem;
+}
+
 .cms-edit-savebar {
   position: sticky;
   bottom: 0;
