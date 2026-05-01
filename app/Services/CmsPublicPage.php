@@ -289,7 +289,6 @@ final class CmsPublicPage
             'version',
             'confidence',
             'partnership',
-            'operating_model',
             'packages',
             'testimonials',
             'newsletter',

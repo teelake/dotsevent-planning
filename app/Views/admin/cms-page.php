@@ -501,30 +501,6 @@ $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
       });
     });
 
-    var steps = [];
-    hbRoot.querySelectorAll('.js-hb-step-row').forEach(function (row) {
-      var st = row.querySelector('.js-step-title');
-      var sx = row.querySelector('.js-step-text');
-      steps.push({
-        title: st ? st.value.trim() : '',
-        text: sx ? sx.value.trim() : '',
-      });
-    });
-
-    var omImages = [];
-    hbRoot.querySelectorAll('.js-hb-om-image-row').forEach(function (row) {
-      var srcEl = row.querySelector('.js-om-img-src');
-      var altEl = row.querySelector('.js-om-img-alt');
-      var u = srcEl ? srcEl.value.trim() : '';
-      if (u === '') {
-        return;
-      }
-      omImages.push({
-        image: u,
-        alt: altEl ? altEl.value.trim() : '',
-      });
-    });
-
     var pkgs = [];
     hbRoot.querySelectorAll('.js-hb-pkg-row').forEach(function (row) {
       var ta = row.querySelector('.js-pkg-feats-html');
@@ -589,19 +565,6 @@ $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
         cta_label: v('hb-pa-cta-label'),
         cta_href: v('hb-pa-cta-href'),
       },
-      operating_model: {
-        enabled: ck('hb-om-enabled'),
-        eyebrow: v('hb-om-eyebrow'),
-        title: v('hb-om-title'),
-        subtitle: v('hb-om-subtitle'),
-        lead: v('hb-om-lead'),
-        images: omImages.slice(0, 3),
-        steps: steps,
-        highlight: {
-          title: v('hb-om-hl-title'),
-          body: v('hb-om-hl-body'),
-        },
-      },
       packages: {
         enabled: ck('hb-pk-enabled'),
         eyebrow: v('hb-pk-eyebrow'),
@@ -646,24 +609,6 @@ $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
     if (addMetric) {
       addMetric.addEventListener('click', function () {
         hbAppendTemplate('hb-tpl-metric', 'hb-metrics');
-      });
-    }
-    var addStep = document.getElementById('hb-add-step');
-    if (addStep) {
-      addStep.addEventListener('click', function () {
-        hbAppendTemplate('hb-tpl-step', 'hb-om-steps');
-      });
-    }
-    var addOmImage = document.getElementById('hb-add-om-image');
-    if (addOmImage) {
-      addOmImage.addEventListener('click', function () {
-        var list = document.getElementById('hb-om-images');
-        var n = list ? list.querySelectorAll('.js-hb-om-image-row').length : 0;
-        if (n >= 3) {
-          window.alert('You can add up to three approach photos. Remove one to add another.');
-          return;
-        }
-        hbAppendTemplate('hb-tpl-om-image', 'hb-om-images');
       });
     }
     var addPkg = document.getElementById('hb-add-pkg');

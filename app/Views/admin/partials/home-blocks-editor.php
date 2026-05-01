@@ -11,12 +11,6 @@ $metrics = isset($cf['metrics']) && is_array($cf['metrics']) ? $cf['metrics'] : 
 $pa = is_array($b['partnership'] ?? null) ? $b['partnership'] : [];
 $paEn = (($pa['enabled'] ?? true) !== false);
 
-$om = is_array($b['operating_model'] ?? null) ? $b['operating_model'] : [];
-$omEn = (($om['enabled'] ?? true) !== false);
-$omSteps = isset($om['steps']) && is_array($om['steps']) ? $om['steps'] : [];
-$omImages = isset($om['images']) && is_array($om['images']) ? $om['images'] : [];
-$hl = is_array($om['highlight'] ?? null) ? $om['highlight'] : [];
-
 $pk = is_array($b['packages'] ?? null) ? $b['packages'] : [];
 $pkEn = (($pk['enabled'] ?? true) !== false);
 $pkItems = isset($pk['items']) && is_array($pk['items']) ? $pk['items'] : [];
@@ -132,86 +126,6 @@ $nwEn = (($nw['enabled'] ?? true) !== false);
                 <div class="form-row" style="margin:0;">
                     <label for="hb-pa-cta-href">CTA link (optional)</label>
                     <input class="input" type="text" id="hb-pa-cta-href" value="<?= e((string) ($pa['cta_href'] ?? '')) ?>">
-                </div>
-            </div>
-        </div>
-    </details>
-
-    <details id="cms-sec-hb-operating" class="home-blocks-editor__details">
-        <summary class="home-blocks-editor__summary">Operating model</summary>
-        <div class="home-blocks-editor__body">
-            <label class="home-blocks-editor__check">
-                <input type="checkbox" id="hb-om-enabled" <?= $omEn ? 'checked' : '' ?>>
-                <span>Show this section</span>
-            </label>
-            <div class="home-blocks-editor__grid home-blocks-editor__grid--2">
-                <div class="form-row" style="margin:0;">
-                    <label for="hb-om-eyebrow">Eyebrow (gold line above title)</label>
-                    <input class="input" type="text" id="hb-om-eyebrow" value="<?= e((string) ($om['eyebrow'] ?? '')) ?>" placeholder="Discover what sets us apart">
-                </div>
-                <div class="form-row" style="margin:0;">
-                    <label for="hb-om-title">Title</label>
-                    <input class="input" type="text" id="hb-om-title" value="<?= e((string) ($om['title'] ?? '')) ?>">
-                </div>
-            </div>
-            <div class="form-row" style="margin-top:0.65rem;">
-                <label for="hb-om-lead">Intro paragraph</label>
-                <textarea class="input input--textarea" id="hb-om-lead" rows="3" placeholder="Short philosophy line under the title"><?= e((string) ($om['lead'] ?? '')) ?></textarea>
-            </div>
-            <div class="form-row" style="margin-top:0.5rem;">
-                <label for="hb-om-subtitle">Legacy subtitle (optional)</label>
-                <input class="input" type="text" id="hb-om-subtitle" value="<?= e((string) ($om['subtitle'] ?? '')) ?>" placeholder="Used only if eyebrow is empty">
-            </div>
-            <p class="text-muted" style="font-size:0.85rem; margin:0.85rem 0 0.35rem;">Approach photos (up to 3 — tall hero + two tiles)</p>
-            <div id="hb-om-images" class="hb-repeat-list">
-                <?php foreach ($omImages as $shot): ?>
-                <?php if (!is_array($shot)) { continue; } ?>
-                <div class="hb-repeat-row js-hb-om-image-row">
-                    <div class="home-blocks-editor__grid home-blocks-editor__grid--2">
-                        <div class="form-row" style="margin:0;">
-                            <label>Image URL</label>
-                            <input class="input js-om-img-src" type="text" value="<?= e((string) ($shot['image'] ?? '')) ?>" placeholder="https://…">
-                        </div>
-                        <div class="form-row" style="margin:0;">
-                            <label>Alt text</label>
-                            <input class="input js-om-img-alt" type="text" value="<?= e((string) ($shot['alt'] ?? '')) ?>">
-                        </div>
-                    </div>
-                    <button type="button" class="btn btn--ghost hb-row-remove">Remove image</button>
-                </div>
-                <?php endforeach; ?>
-            </div>
-            <p style="margin-top:0.5rem;">
-                <button type="button" class="btn btn--secondary" id="hb-add-om-image">Add image</button>
-                <span class="text-muted" style="font-size:0.82rem; margin-left:0.5rem;">First = large column; next two = stacked.</span>
-            </p>
-            <p class="text-muted" style="font-size:0.85rem;">Steps</p>
-            <div id="hb-om-steps" class="hb-repeat-list">
-                <?php foreach ($omSteps as $st): ?>
-                <?php if (!is_array($st)) { continue; } ?>
-                <div class="hb-repeat-row js-hb-step-row">
-                    <div class="form-row">
-                        <label>Step title</label>
-                        <input class="input js-step-title" type="text" value="<?= e((string) ($st['title'] ?? '')) ?>">
-                    </div>
-                    <div class="form-row">
-                        <label>Step text</label>
-                        <textarea class="input input--textarea js-step-text" rows="2"><?= e((string) ($st['text'] ?? '')) ?></textarea>
-                    </div>
-                    <button type="button" class="btn btn--ghost hb-row-remove">Remove step</button>
-                </div>
-                <?php endforeach; ?>
-            </div>
-            <p><button type="button" class="btn btn--secondary" id="hb-add-step">Add step</button></p>
-            <div class="home-blocks-editor__hilite-box">
-                <p class="text-muted" style="font-size:0.85rem; margin:0 0 0.35rem;">Highlight card</p>
-                <div class="form-row" style="margin:0;">
-                    <label for="hb-om-hl-title">Title</label>
-                    <input class="input" type="text" id="hb-om-hl-title" value="<?= e((string) ($hl['title'] ?? '')) ?>">
-                </div>
-                <div class="form-row">
-                    <label for="hb-om-hl-body">Body</label>
-                    <textarea class="input input--textarea" id="hb-om-hl-body" rows="3"><?= e((string) ($hl['body'] ?? '')) ?></textarea>
                 </div>
             </div>
         </div>
@@ -405,36 +319,6 @@ $nwEn = (($nw['enabled'] ?? true) !== false);
             </div>
         </div>
         <button type="button" class="hb-row-remove hb-row-remove--danger" aria-label="Remove metric">Remove metric</button>
-    </div>
-</template>
-
-<template id="hb-tpl-om-image">
-    <div class="hb-repeat-row js-hb-om-image-row">
-        <div class="home-blocks-editor__grid home-blocks-editor__grid--2">
-            <div class="form-row" style="margin:0;">
-                <label>Image URL</label>
-                <input class="input js-om-img-src" type="text" value="" placeholder="https://…">
-            </div>
-            <div class="form-row" style="margin:0;">
-                <label>Alt text</label>
-                <input class="input js-om-img-alt" type="text" value="">
-            </div>
-        </div>
-        <button type="button" class="btn btn--ghost hb-row-remove">Remove image</button>
-    </div>
-</template>
-
-<template id="hb-tpl-step">
-    <div class="hb-repeat-row js-hb-step-row">
-        <div class="form-row">
-            <label>Step title</label>
-            <input class="input js-step-title" type="text" value="">
-        </div>
-        <div class="form-row">
-            <label>Step text</label>
-            <textarea class="input input--textarea js-step-text" rows="2"></textarea>
-        </div>
-        <button type="button" class="btn btn--ghost hb-row-remove">Remove step</button>
     </div>
 </template>
 
