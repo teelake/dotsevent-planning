@@ -276,11 +276,12 @@
     width: 100%;
   }
 
+  /* Home main stack only — full-width bands; inner `.shell` handles horizontal inset */
   .app-shell__below {
-    max-width: 1320px;
-    margin: 0 auto;
-    padding-left: var(--shell-pad-x);
-    padding-right: var(--shell-pad-x);
+    max-width: none;
+    margin: 0;
+    padding-left: 0;
+    padding-right: 0;
     padding-bottom: clamp(2rem, 5vw, 3rem);
   }
 }
@@ -490,6 +491,21 @@
     grid-template-columns: minmax(0, 1fr) minmax(360px, 0.82fr);
     gap: clamp(2rem, 5vw, 4.25rem);
   }
+}
+
+/* Full-width home confidence: gradient & treatment live on `.home-blocks-confidence` */
+.home-confidence-panel.home-confidence-panel--fluid {
+  border-radius: 0;
+  border: 0;
+  box-shadow: none;
+  padding: clamp(0.35rem, 1.25vw, 0.85rem) 0;
+  min-height: 0;
+  background: transparent;
+}
+
+.home-confidence-panel.home-confidence-panel--fluid::before,
+.home-confidence-panel.home-confidence-panel--fluid::after {
+  display: none;
 }
 
 .tile-metric-strip {

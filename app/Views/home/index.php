@@ -136,8 +136,8 @@ $newsletterBk = is_array($home_blocks['newsletter'] ?? null) ? $home_blocks['new
         <div class="app-shell__below">
             <div class="app-shell__main">
         <?php if ($home_intro_html !== ''): ?>
-        <section class="app-band app-band--surface section--tight" data-reveal>
-            <div class="shell shell--wide prose cms-home-intro">
+        <section class="app-band app-band--surface section--tight home-intro-band" data-reveal>
+            <div class="shell shell--fluid prose cms-home-intro">
                 <?= $home_intro_html ?>
             </div>
         </section>
@@ -152,9 +152,9 @@ $newsletterBk = is_array($home_blocks['newsletter'] ?? null) ? $home_blocks['new
         $confCta = trim((string) ($confidence['cta_label'] ?? ''));
         $confHref = trim((string) ($confidence['cta_href'] ?? ''));
         ?>
-        <section id="confidence" class="app-band app-band--surface section--tight home-blocks-confidence" aria-labelledby="home-confidence-heading" data-reveal>
-            <div class="shell shell--wide">
-                <div class="home-intro-grid home-confidence-panel">
+        <section id="confidence" class="app-band section section--tight home-blocks-confidence" aria-labelledby="home-confidence-heading" data-reveal>
+            <div class="shell shell--fluid">
+                <div class="home-intro-grid home-confidence-panel home-confidence-panel--fluid">
                     <div class="home-intro-grid__copy">
                         <?php if ($confEyebrow !== ''): ?>
                         <p class="eyebrow"><?= e($confEyebrow) ?></p>
@@ -214,9 +214,10 @@ $newsletterBk = is_array($home_blocks['newsletter'] ?? null) ? $home_blocks['new
         $pCta = trim((string) ($partnership['cta_label'] ?? ''));
         $pHref = trim((string) ($partnership['cta_href'] ?? ''));
         ?>
-        <section class="app-band section home-blocks-partnership" aria-labelledby="home-partnership-heading" data-reveal>
-            <div class="shell shell--wide home-blocks-partnership__layout">
-                <div class="home-blocks-partnership__main">
+        <section class="app-band section home-blocks-partnership home-blocks-partnership--wash" aria-labelledby="home-partnership-heading" data-reveal>
+            <div class="shell shell--fluid">
+                <div class="home-blocks-partnership__layout">
+                    <div class="home-blocks-partnership__main">
                     <?php if ($pkt !== ''): ?>
                     <p class="eyebrow"><?= e($pkt) ?></p>
                     <?php endif; ?>
@@ -237,6 +238,7 @@ $newsletterBk = is_array($home_blocks['newsletter'] ?? null) ? $home_blocks['new
                     <p><?= e($pq) ?></p>
                 </blockquote>
                 <?php endif; ?>
+                </div>
             </div>
         </section>
         <?php endif; ?>
@@ -249,8 +251,8 @@ $newsletterBk = is_array($home_blocks['newsletter'] ?? null) ? $home_blocks['new
         $cHref = trim((string) ($clusters['link_all_href'] ?? ''));
         $cItems = isset($clusters['items']) && is_array($clusters['items']) ? $clusters['items'] : [];
         ?>
-        <section class="app-band app-band--surface section home-blocks-clusters" aria-labelledby="home-clusters-heading" data-reveal>
-            <div class="shell shell--wide">
+        <section class="app-band section home-blocks-clusters home-blocks-clusters--wash" aria-labelledby="home-clusters-heading" data-reveal>
+            <div class="shell shell--fluid">
                 <div class="section__head">
                     <?php if ($cEyebrow !== ''): ?>
                     <p class="eyebrow"><?= e($cEyebrow) ?></p>
@@ -307,8 +309,8 @@ $newsletterBk = is_array($home_blocks['newsletter'] ?? null) ? $home_blocks['new
         $hlTitle = trim((string) ($hl['title'] ?? ''));
         $hlBody = trim((string) ($hl['body'] ?? ''));
         ?>
-        <section class="app-band section home-blocks-ops" aria-labelledby="home-ops-heading" data-reveal>
-            <div class="shell shell--wide">
+        <section class="app-band section home-blocks-ops home-blocks-ops--wash" aria-labelledby="home-ops-heading" data-reveal>
+            <div class="shell shell--fluid">
                 <div class="section__head">
                     <?php if ($omTitle !== ''): ?>
                     <h2 id="home-ops-heading" class="section__title"><?= e($omTitle) ?></h2>
@@ -364,8 +366,8 @@ $newsletterBk = is_array($home_blocks['newsletter'] ?? null) ? $home_blocks['new
         $pkgSub = trim((string) ($packages['subtitle'] ?? ''));
         $pkgItems = isset($packages['items']) && is_array($packages['items']) ? $packages['items'] : [];
         ?>
-        <section id="investment" class="app-band app-band--surface section home-blocks-packages" aria-labelledby="home-packages-heading" data-reveal>
-            <div class="shell shell--wide">
+        <section id="investment" class="app-band section home-blocks-packages home-blocks-packages--wash" aria-labelledby="home-packages-heading" data-reveal>
+            <div class="shell shell--fluid">
                 <div class="section__head">
                     <?php if ($pkgEyebrow !== ''): ?>
                     <p class="eyebrow"><?= e($pkgEyebrow) ?></p>
@@ -429,8 +431,8 @@ $newsletterBk = is_array($home_blocks['newsletter'] ?? null) ? $home_blocks['new
         $tstSub = trim((string) ($testimonials['subtitle'] ?? ''));
         $quotes = isset($testimonials['quotes']) && is_array($testimonials['quotes']) ? $testimonials['quotes'] : [];
         ?>
-        <section class="app-band section home-blocks-testimonials" aria-labelledby="home-testimonials-heading" data-reveal>
-            <div class="shell shell--wide">
+        <section class="app-band section home-blocks-testimonials home-blocks-testimonials--wash" aria-labelledby="home-testimonials-heading" data-reveal>
+            <div class="shell shell--fluid">
                 <div class="section__head">
                     <?php if ($tstTitle !== ''): ?>
                     <h2 id="home-testimonials-heading" class="section__title"><?= e($tstTitle) ?></h2>
