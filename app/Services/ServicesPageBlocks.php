@@ -39,13 +39,24 @@ final class ServicesPageBlocks
         $s = self::normalizeStoredLists($stored);
         $out = array_replace_recursive($defaults, $s);
 
-        if (!empty($s['offerings']) && is_array($s['offerings'])) {
-            /* array_replace_recursive keeps stale default rows when saved list is shorter or empty */
+        /*
+         * array_replace_recursive does not replace a subtree when the incoming value is [] —
+         * defaults leak through (e.g. stale catalogue rows after deleting entries).
+         */
+        if (array_key_exists('offerings', $s) && $s['offerings'] === []) {
+            $out['offerings'] = is_array($defaults['offerings'] ?? null)
+                ? $defaults['offerings']
+                : [];
+        } elseif (isset($s['offerings']) && is_array($s['offerings'])) {
+            /* Same recursive-merge leak when saved list is shorter or empty */
             if (array_key_exists('items', $s['offerings']) && is_array($s['offerings']['items'])) {
                 $out['offerings']['items'] = array_values($s['offerings']['items']);
             }
         }
-        if (!empty($s['faq']) && is_array($s['faq'])) {
+
+        if (array_key_exists('faq', $s) && $s['faq'] === []) {
+            $out['faq'] = is_array($defaults['faq'] ?? null) ? $defaults['faq'] : [];
+        } elseif (isset($s['faq']) && is_array($s['faq'])) {
             if (array_key_exists('items', $s['faq']) && is_array($s['faq']['items'])) {
                 $out['faq']['items'] = array_values($s['faq']['items']);
             }

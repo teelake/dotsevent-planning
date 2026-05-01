@@ -581,7 +581,7 @@ $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
     }
   }
 
-  document.getElementById('cms-page-form').addEventListener('submit', function () {
+  document.getElementById('cms-page-form').addEventListener('submit', function (ev) {
     var payload = { html: initQuill().root.innerHTML };
     if (metaEl) {
       payload.meta_description = metaEl.value.trim();
@@ -592,7 +592,17 @@ $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
     if (pageSlug === 'about' && typeof window.dotseAboutBlocksCollect === 'function') {
       payload.blocks = window.dotseAboutBlocksCollect();
     }
-    if (pageSlug === 'services' && typeof window.dotseServicesBlocksCollect === 'function') {
+    if (pageSlug === 'services') {
+      if (typeof window.dotseServicesBlocksCollect !== 'function') {
+        ev.preventDefault();
+        alert('Services editor script failed to load. Refresh this page and try again.');
+        return;
+      }
+      if (!document.getElementById('services-blocks-editor')) {
+        ev.preventDefault();
+        alert('Services structured sections are missing from the page. Refresh and try again.');
+        return;
+      }
       payload.blocks = window.dotseServicesBlocksCollect();
     }
     if (pageSlug === 'contact' && typeof window.dotseContactBlocksCollect === 'function') {

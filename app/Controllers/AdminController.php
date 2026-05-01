@@ -513,6 +513,17 @@ final class AdminController extends Controller
         }
         unset($incoming['_csrf']);
 
+        if ($slug === 'services') {
+            $svcBlocks = $incoming['blocks'] ?? null;
+            if (!is_array($svcBlocks) || $svcBlocks === []) {
+                Flash::set(
+                    Flash::ERROR,
+                    'Structured Services data was missing from this save. Refresh the editor page and try again.'
+                );
+                $this->redirect('/admin/cms/page/' . $slug);
+            }
+        }
+
         $repo = new CmsPagesRepository();
         $oldRow = $repo->findBySlug($slug);
         $old = [];
