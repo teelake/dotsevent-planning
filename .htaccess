@@ -9,6 +9,8 @@
 
     RewriteRule ^index\.php$ - [L]
     RewriteRule ^assets/(.*)$ public/assets/$1 [L]
+    # Uploads are stored under public/uploads/ (PHP writes there); expose them at /new/uploads/…
+    RewriteRule ^uploads/(.*)$ public/uploads/$1 [L]
 
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
