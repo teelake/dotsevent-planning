@@ -1762,6 +1762,49 @@
   }
 }
 
+.services-partner-grid {
+  overflow: visible;
+}
+
+.services-partner-grid__story .section__title {
+  line-height: 1.12;
+}
+
+/* Consistent 2×2 metric rhythm (fourth tile matches system, not a one-off bordered cell) */
+.services-partner__strip.tile-metric-strip {
+  border: 1px solid rgba(1, 1, 1, 0.14);
+}
+
+.services-partner__strip > .tile-metric:nth-child(4) {
+  background: #fffefb;
+}
+
+.services-partner__strip > .tile-metric:nth-child(4) .tile-metric__value {
+  color: var(--color-brand-black);
+}
+
+.services-partner__strip > .tile-metric:nth-child(4) .tile-metric__label {
+  color: rgba(1, 1, 1, 0.45);
+}
+
+.services-partner__strip > .tile-metric:nth-child(3) {
+  border-bottom: 1px solid rgba(255, 253, 245, 0.09);
+}
+
+@media (min-width: 640px) {
+  .services-partner__strip > .tile-metric:nth-child(2) {
+    border-right: 1px solid rgba(1, 1, 1, 0.08);
+  }
+
+  .services-partner__strip > .tile-metric:nth-child(1) {
+    border-right: 1px solid rgba(1, 1, 1, 0.08);
+  }
+
+  .services-partner__strip > .tile-metric:nth-child(3) {
+    border-right: 1px solid rgba(255, 253, 245, 0.07);
+  }
+}
+
 .services-modern__faq--distinct {
   position: relative;
   overflow: hidden;
