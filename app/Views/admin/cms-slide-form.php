@@ -133,7 +133,7 @@ $mobPreview = $mobPath !== '' ? app_url(ltrim($mobPath, '/')) : '';
                         <span class="slide-form-card__icon" aria-hidden="true">▣</span>
                         <div>
                             <h3 class="slide-form-card__title">Imagery</h3>
-                            <p class="slide-form-card__hint">Wide landscape works best. Files go to <code>/public/uploads/</code>.</p>
+                            <p class="slide-form-card__hint">Wide landscape works best. Carousel uploads are stored under <code>/public/uploads/slides/</code>.</p>
                         </div>
                     </div>
                     <div class="form-row">
@@ -228,6 +228,7 @@ $mobPreview = $mobPath !== '' ? app_url(ltrim($mobPath, '/')) : '';
       var fd = new FormData();
       fd.append('file', input.files[0]);
       fd.append('_csrf', csrf);
+      fd.append('upload_subdir', 'slides');
       var res = await fetch(uploadUrl, { method: 'POST', body: fd, credentials: 'same-origin' });
       var data = await res.json().catch(function () { return null; });
       if (!data || !data.ok || !data.path) {

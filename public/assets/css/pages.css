@@ -22,7 +22,8 @@
   inset: 0;
   display: flex;
   align-items: flex-end;
-  padding-bottom: 5.5rem;
+  /* Lift headline block above strict bottom-third (carousel dots + thumb zone stay clear) */
+  padding-bottom: clamp(7rem, 12vh, 11rem);
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.75s var(--ease-out-soft) 0.05s, visibility 0.75s;
@@ -77,6 +78,13 @@
   background: var(--color-scrim);
 }
 
+/* Stronger legibility behind hero copy without flattening the whole photo */
+.hero--slider .hero__scrim {
+  background:
+    linear-gradient(to top, rgba(1, 1, 1, 0.38) 0%, transparent min(68%, 480px)),
+    var(--color-scrim);
+}
+
 .hero__scrim::after {
   content: "";
   position: absolute;
@@ -94,8 +102,7 @@
   max-width: var(--max-w-wide);
   width: 100%;
   margin: 0 auto;
-  padding: 0 var(--shell-pad-x) 2rem;
-  padding-top: 2rem;
+  padding: 1.35rem var(--shell-pad-x) 1.35rem;
 }
 
 @media (min-width: 641px) {
@@ -329,7 +336,7 @@
   }
 
   .hero__slide {
-    padding-bottom: 6rem;
+    padding-bottom: clamp(6.75rem, 18vw, 9rem);
     align-items: center;
   }
 
@@ -356,7 +363,8 @@
   }
 
   .hero__content {
-    padding-bottom: 5rem;
+    padding-bottom: 4.25rem;
+    padding-top: 1rem;
   }
 }
 

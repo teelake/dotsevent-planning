@@ -590,7 +590,18 @@ final class AdminController extends Controller
             exit;
         }
         $ext = $allowed[$mime];
-        $uploadDir = dirname(__DIR__, 2) . '/public/uploads';
+        $uploadSubdir = trim((string) ($_POST['upload_subdir'] ?? ''));
+        $relativeUploadDir = 'uploads';
+        if ($uploadSubdir !== '') {
+            if ($uploadSubdir !== 'slides') {
+                http_response_code(400);
+                header('Content-Type: application/json');
+                echo json_encode(['ok' => false, 'error' => 'Invalid upload target']);
+                exit;
+            }
+            $relativeUploadDir = 'uploads/slides';
+        }
+        $uploadDir = dirname(__DIR__, 2) . '/public/' . $relativeUploadDir;
         if (!is_dir($uploadDir)) {
             @mkdir($uploadDir, 0775, true);
         }
@@ -602,7 +613,7 @@ final class AdminController extends Controller
             echo json_encode(['ok' => false, 'error' => 'Could not save file']);
             exit;
         }
-        $publicPath = 'uploads/' . $name;
+        $publicPath = $relativeUploadDir . '/' . $name;
         $id = (new CmsMediaRepository())->create($publicPath, $mime, $size, $orig);
         header('Content-Type: application/json');
         echo json_encode([

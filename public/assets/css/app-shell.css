@@ -241,7 +241,7 @@
 }
 
 .page-home .hero--console .hero__content {
-  padding-top: calc(var(--app-topbar-h) + 1.75rem);
+  padding-top: calc(var(--app-topbar-h) + 1.25rem);
 }
 
 /* App shell: full-width content (primary nav is in the header) */
