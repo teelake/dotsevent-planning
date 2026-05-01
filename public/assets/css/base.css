@@ -355,19 +355,29 @@ img {
     transform 0.55s var(--ease-out);
 }
 
-.reveal-stagger.is-inview > * {
+/* Nested .reveal-stagger: JS only toggles is-inview on [data-reveal] ancestors */
+.reveal-stagger.is-inview > *,
+[data-reveal].is-inview .reveal-stagger > * {
   opacity: 1;
   transform: translate3d(0, 0, 0);
 }
 
-.reveal-stagger.is-inview > *:nth-child(1) { transition-delay: calc(var(--stagger) * 0); }
-.reveal-stagger.is-inview > *:nth-child(2) { transition-delay: calc(var(--stagger) * 1); }
-.reveal-stagger.is-inview > *:nth-child(3) { transition-delay: calc(var(--stagger) * 2); }
-.reveal-stagger.is-inview > *:nth-child(4) { transition-delay: calc(var(--stagger) * 3); }
-.reveal-stagger.is-inview > *:nth-child(5) { transition-delay: calc(var(--stagger) * 4); }
-.reveal-stagger.is-inview > *:nth-child(6) { transition-delay: calc(var(--stagger) * 5); }
-.reveal-stagger.is-inview > *:nth-child(7) { transition-delay: calc(var(--stagger) * 6); }
-.reveal-stagger.is-inview > *:nth-child(8) { transition-delay: calc(var(--stagger) * 7); }
+.reveal-stagger.is-inview > *:nth-child(1),
+[data-reveal].is-inview .reveal-stagger > *:nth-child(1) { transition-delay: calc(var(--stagger) * 0); }
+.reveal-stagger.is-inview > *:nth-child(2),
+[data-reveal].is-inview .reveal-stagger > *:nth-child(2) { transition-delay: calc(var(--stagger) * 1); }
+.reveal-stagger.is-inview > *:nth-child(3),
+[data-reveal].is-inview .reveal-stagger > *:nth-child(3) { transition-delay: calc(var(--stagger) * 2); }
+.reveal-stagger.is-inview > *:nth-child(4),
+[data-reveal].is-inview .reveal-stagger > *:nth-child(4) { transition-delay: calc(var(--stagger) * 3); }
+.reveal-stagger.is-inview > *:nth-child(5),
+[data-reveal].is-inview .reveal-stagger > *:nth-child(5) { transition-delay: calc(var(--stagger) * 4); }
+.reveal-stagger.is-inview > *:nth-child(6),
+[data-reveal].is-inview .reveal-stagger > *:nth-child(6) { transition-delay: calc(var(--stagger) * 5); }
+.reveal-stagger.is-inview > *:nth-child(7),
+[data-reveal].is-inview .reveal-stagger > *:nth-child(7) { transition-delay: calc(var(--stagger) * 6); }
+.reveal-stagger.is-inview > *:nth-child(8),
+[data-reveal].is-inview .reveal-stagger > *:nth-child(8) { transition-delay: calc(var(--stagger) * 7); }
 
 @media (prefers-reduced-motion: reduce) {
   [data-reveal]:not(.reveal-stagger) {
