@@ -304,6 +304,12 @@
   border-bottom: 1px solid rgba(245, 192, 19, 0.15);
 }
 
+/* Inner pages: extra headroom below fixed topbar & safe line-box for large H1 */
+.app-page-hero.app-page-hero--inner {
+  padding-top: clamp(2.35rem, 5vw, 4rem);
+  padding-bottom: clamp(2rem, 4vw, 3.35rem);
+}
+
 .app-page-hero__crumb {
   font-size: 0.78rem;
   letter-spacing: 0.06em;
@@ -330,7 +336,12 @@
   margin: calc(var(--grid, 8px) * 1.75) 0 0;
   font-weight: 600;
   font-size: clamp(2rem, 3.8vw, 3rem);
+  line-height: 1.1;
   color: #fffdf7;
+}
+
+.app-page-hero.app-page-hero--inner .app-page-hero__title {
+  margin-top: calc(var(--grid, 8px) * 2);
 }
 
 .app-page-hero--photo {
