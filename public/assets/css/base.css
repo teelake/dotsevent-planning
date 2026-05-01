@@ -204,6 +204,10 @@ img {
   max-width: var(--max-w-wide);
 }
 
+.shell--fluid {
+  max-width: none;
+}
+
 .text-link {
   font-weight: 600;
   color: var(--color-ink);

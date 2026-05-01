@@ -267,6 +267,11 @@
     padding-right: 0;
   }
 
+  .app-shell:not(.app-shell--home) .shell.shell--fluid {
+    padding-left: var(--shell-pad-x);
+    padding-right: var(--shell-pad-x);
+  }
+
   .app-shell--home .hero--slider.hero--console {
     width: 100%;
   }
