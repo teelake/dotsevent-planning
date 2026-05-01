@@ -18,31 +18,42 @@ $loc = is_array($b['location'] ?? null) ? $b['location'] : [];
 $nw = is_array($b['newsletter_cta'] ?? null) ? $b['newsletter_cta'] : [];
 $trust = is_array($b['trust'] ?? null) ? $b['trust'] : [];
 $float = is_array($b['floating_widget'] ?? null) ? $b['floating_widget'] : [];
+
+$introLeadHtml = isset($intro['lead_html']) && is_string($intro['lead_html']) ? trim($intro['lead_html']) : '';
+$introLeadPlain = $introLeadHtml === '' ? '' : trim(preg_replace('/\s+/u', ' ', strip_tags($introLeadHtml)));
+$showIntroLead = $introLeadPlain !== '' && mb_strlen($introLeadPlain) >= 2;
 ?>
 
 <?php if (($intro['enabled'] ?? true) !== false && trim((string) ($intro['title'] ?? '')) !== ''): ?>
 <section data-reveal>
     <h2 class="section__title"><?= e((string) $intro['title']) ?></h2>
-    <?php if (!empty($intro['lead_html'])): ?><div class="prose"><?= (string) $intro['lead_html'] ?></div><?php endif; ?>
+    <?php if ($showIntroLead): ?><div class="prose"><?= $introLeadHtml ?></div><?php endif; ?>
 </section>
 <?php endif; ?>
 
 <?php if (($channels['enabled'] ?? true) !== false): ?>
 <?php $items = is_array($channels['items'] ?? null) ? $channels['items'] : []; ?>
-<section data-reveal style="margin-top:1rem;">
-    <div class="contact-channels-grid" style="display:grid;gap:1rem;grid-template-columns:1fr;">
-        <?php foreach ($items as $it): if (!is_array($it)) continue; $type = (string) ($it['type'] ?? ''); ?>
-        <article class="app-panel">
-            <h3 style="margin:0 0 .4rem;"><?= e((string) ($it['label'] ?? '')) ?></h3>
+<section class="contact-channels" data-reveal>
+    <div class="contact-channels-grid">
+        <?php foreach ($items as $it): if (!is_array($it)) continue; $type = (string) ($it['type'] ?? '');
+            $cardMod = match ($type) {
+                'email' => 'contact-channel-card--email',
+                'office' => 'contact-channel-card--office',
+                'phone' => 'contact-channel-card--phone',
+                default => 'contact-channel-card--neutral',
+            };
+        ?>
+        <article class="contact-channel-card <?= e($cardMod) ?>">
+            <h3 class="contact-channel-card__title"><?= e((string) ($it['label'] ?? '')) ?></h3>
             <?php if ($type === 'email' && $contactEmail !== ''): ?>
-                <p style="margin:.2rem 0;"><a href="mailto:<?= e($contactEmail) ?>"><?= e($contactEmail) ?></a></p>
+                <p class="contact-channel-card__primary"><a href="mailto:<?= e($contactEmail) ?>"><?= e($contactEmail) ?></a></p>
             <?php elseif ($type === 'phone' && $phoneDisplay !== ''): ?>
-                <p style="margin:.2rem 0;"><a href="tel:<?= e(preg_replace('/\s+/', '', $phoneTel)) ?>"><?= e($phoneDisplay) ?></a></p>
+                <p class="contact-channel-card__primary"><a href="tel:<?= e(preg_replace('/\s+/', '', $phoneTel)) ?>"><?= e($phoneDisplay) ?></a></p>
             <?php elseif ($type === 'office'): ?>
-                <p style="margin:.2rem 0;"><?= e(trim($addr1 . ($addr2 !== '' ? ', ' . $addr2 : ''))) ?></p>
+                <p class="contact-channel-card__primary"><?= e(trim($addr1 . ($addr2 !== '' ? ', ' . $addr2 : ''))) ?></p>
             <?php endif; ?>
             <?php if (trim((string) ($it['availability_line'] ?? '')) !== ''): ?>
-                <p style="margin:.2rem 0;color:var(--color-ink-muted);"><?= e((string) $it['availability_line']) ?></p>
+                <p class="contact-channel-card__meta"><?= e((string) $it['availability_line']) ?></p>
             <?php endif; ?>
         </article>
         <?php endforeach; ?>

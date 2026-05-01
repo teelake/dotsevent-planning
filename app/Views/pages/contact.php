@@ -11,11 +11,18 @@ $page_title = (string) ($cms['doc_title'] ?? 'Contact us');
 $crumb_current = $page_title;
 $hero_kicker = trim((string) ($hero['kicker'] ?? ''));
 $show_breadcrumbs = !isset($hero['show_breadcrumbs']) || $hero['show_breadcrumbs'] !== false;
+
+$contactBodyHtml = (string) ($cms['body_html'] ?? '');
+$contactBodyPlain = trim(preg_replace('/\s+/u', ' ', strip_tags($contactBodyHtml)));
+$showContactCmsBody = !empty($cms['has_custom_body'])
+    && $contactBodyPlain !== ''
+    && mb_strlen($contactBodyPlain) >= 2;
+
 include dirname(__DIR__) . '/partials/page-hero.php';
 ?>
 <div class="app-shell">
     <div class="app-shell__main">
-        <?php if (!empty($cms['has_custom_body'])): ?>
+        <?php if ($showContactCmsBody): ?>
         <div class="shell shell--wide page-pad prose cms-page-body" data-reveal>
         <?= $cms['body_html'] ?>
         </div>
