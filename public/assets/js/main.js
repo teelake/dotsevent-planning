@@ -204,6 +204,11 @@
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       markRevealInview();
     } else if ("IntersectionObserver" in window) {
+      function revealAlreadyVisible(el) {
+        var r = el.getBoundingClientRect();
+        var vh = window.innerHeight || document.documentElement.clientHeight || 0;
+        return r.bottom > 40 && r.top < vh - 40;
+      }
       var revealIo = new IntersectionObserver(
         function (entries) {
           entries.forEach(function (entry) {
@@ -216,7 +221,11 @@
         { root: null, rootMargin: "0px 0px -6% 0px", threshold: 0.06 }
       );
       revealNodes.forEach(function (el) {
-        revealIo.observe(el);
+        if (revealAlreadyVisible(el)) {
+          el.classList.add("is-inview");
+        } else {
+          revealIo.observe(el);
+        }
       });
     } else {
       markRevealInview();
