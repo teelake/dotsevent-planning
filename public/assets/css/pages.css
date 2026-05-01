@@ -1784,10 +1784,6 @@
   color: rgba(1, 1, 1, 0.45);
 }
 
-.services-partner__strip > .tile-metric:nth-child(3) {
-  border-bottom: 1px solid rgba(255, 253, 245, 0.09);
-}
-
 @media (min-width: 640px) {
   .services-partner__strip > .tile-metric:nth-child(2) {
     border-right: 1px solid rgba(1, 1, 1, 0.08);
