@@ -1052,39 +1052,26 @@
   letter-spacing: 0.01em;
 }
 
-/* Capability bento — asymmetric 2×2 rhythm */
+/* Home services teaser — same rhythm as Services catalogue (1 / 2 / 3 cols). */
 .home-cluster-bento {
   display: grid;
   gap: 1rem;
   margin-top: 1rem;
+  grid-template-columns: 1fr;
+  align-items: start;
 }
 
-@media (min-width: 760px) {
+@media (min-width: 640px) {
   .home-cluster-bento {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    grid-auto-rows: minmax(132px, auto);
-    gap: 1rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.1rem;
   }
+}
 
-  .home-cluster-bento > .home-cluster-card:nth-child(1) {
-    grid-column: span 3;
-    grid-row: span 2;
-    min-height: 220px;
-  }
-
-  .home-cluster-bento > .home-cluster-card:nth-child(2) {
-    grid-column: span 3;
-    min-height: 120px;
-  }
-
-  .home-cluster-bento > .home-cluster-card:nth-child(3) {
-    grid-column: span 3;
-    min-height: 120px;
-  }
-
-  .home-cluster-bento > .home-cluster-card:nth-child(4) {
-    grid-column: span 6;
-    min-height: 110px;
+@media (min-width: 1024px) {
+  .home-cluster-bento {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.2rem;
   }
 }
 
@@ -1097,6 +1084,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.45rem;
+  min-width: 0;
   transition: transform 0.22s var(--ease-out-soft, ease-out), border-color 0.22s ease, box-shadow 0.22s ease;
 }
 
@@ -1139,7 +1127,7 @@
   font-size: 0.95rem;
   line-height: 1.55;
   color: var(--color-ink-muted);
-  flex: 1;
+  max-width: 62ch;
 }
 
 /* Operating model — timeline + highlight */
