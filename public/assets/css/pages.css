@@ -1631,35 +1631,25 @@
 
 /* ── Services page (structured `services_blocks`) ── */
 
+/* Services catalogue: fluid columns, row height follows content (no forced full-width hero card). */
 .services-dossiers {
   display: grid;
   gap: 1rem;
   margin-top: 1.5rem;
+  grid-template-columns: 1fr;
+  align-items: start;
 }
 
-@media (min-width: 760px) {
+@media (min-width: 640px) {
   .services-dossiers {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1.15rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17.5rem), 1fr));
+    gap: 1.1rem;
   }
 }
 
-@media (min-width: 1100px) {
+@media (min-width: 900px) {
   .services-dossiers {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .services-dossier:nth-child(1) {
-    grid-column: span 3;
-    display: grid;
-    grid-template-columns: auto minmax(0, 2fr);
-    gap: 1.25rem 1.5rem;
-    align-items: start;
-    padding: 1.45rem 1.45rem;
-  }
-
-  .services-dossier:nth-child(1) .services-dossier__index {
-    font-size: 2.25rem;
+    gap: 1.2rem;
   }
 }
 
@@ -1669,6 +1659,10 @@
   border-radius: var(--radius-md);
   border: 1px solid var(--color-line);
   background: linear-gradient(168deg, #fffefb 0%, #f9f7f4 96%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
 }
 
 .services-dossier--accent {
@@ -1706,7 +1700,7 @@
 }
 
 .services-dossier__title {
-  margin: 0.35rem 0 0.5rem;
+  margin: 0;
   font-family: var(--font-display);
   font-size: 1.12rem;
   font-weight: 600;
@@ -1716,6 +1710,7 @@
   margin: 0;
   font-size: 0.95rem;
   line-height: 1.62;
+  max-width: 62ch;
 }
 
 .services-dossier__body p {
