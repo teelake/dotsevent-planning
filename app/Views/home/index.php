@@ -395,28 +395,32 @@ $newsletterBk = is_array($home_blocks['newsletter'] ?? null) ? $home_blocks['new
                     ?>
                     <article class="home-package-card<?= $featured ? ' home-package-card--featured' : '' ?>">
                         <?php if ($featured): ?>
-                        <p class="home-package-card__ribbon">Featured</p>
+                        <p class="home-package-card__ribbon"><span class="home-package-card__ribbon-text">Featured</span></p>
                         <?php endif; ?>
-                        <?php if ($pname !== ''): ?>
-                        <h3 class="home-package-card__name"><?= e($pname) ?></h3>
-                        <?php endif; ?>
-                        <?php if ($pprice !== ''): ?>
-                        <p class="home-package-card__price"><?= e($pprice) ?></p>
-                        <?php endif; ?>
-                        <?php if ($pfeat !== []): ?>
-                        <ul class="home-package-card__features">
-                            <?php foreach ($pfeat as $line): ?>
-                            <?php if (is_string($line) && trim($line) !== ''): ?>
-                            <li><?= e(trim($line)) ?></li>
+                        <div class="home-package-card__inner">
+                            <header class="home-package-card__header">
+                                <?php if ($pname !== ''): ?>
+                                <h3 class="home-package-card__name"><?= e($pname) ?></h3>
+                                <?php endif; ?>
+                                <?php if ($pprice !== ''): ?>
+                                <p class="home-package-card__price"><?= e($pprice) ?></p>
+                                <?php endif; ?>
+                            </header>
+                            <?php if ($pfeat !== []): ?>
+                            <ul class="home-package-card__features">
+                                <?php foreach ($pfeat as $line): ?>
+                                <?php if (is_string($line) && trim($line) !== ''): ?>
+                                <li><?= e(trim($line)) ?></li>
+                                <?php endif; ?>
+                                <?php endforeach; ?>
+                            </ul>
                             <?php endif; ?>
-                            <?php endforeach; ?>
-                        </ul>
-                        <?php endif; ?>
-                        <?php if ($pCta !== '' && $pHref !== ''): ?>
-                        <div class="home-package-card__foot">
-                            <a class="<?= $featured ? 'btn btn--primary' : 'btn btn--secondary' ?>" href="<?= e($pHref) ?>"><?= e($pCta) ?></a>
+                            <?php if ($pCta !== '' && $pHref !== ''): ?>
+                            <div class="home-package-card__foot">
+                                <a class="<?= $featured ? 'btn btn--primary home-package-card__cta home-package-card__cta--featured' : 'btn btn--secondary home-package-card__cta' ?>" href="<?= e($pHref) ?>"><?= e($pCta) ?></a>
+                            </div>
+                            <?php endif; ?>
                         </div>
-                        <?php endif; ?>
                     </article>
                     <?php endforeach; ?>
                 </div>
