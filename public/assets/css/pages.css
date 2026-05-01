@@ -3,6 +3,17 @@
   --color-ink: #010101;
 }
 
+/**
+ * Full-viewport hero keeps the first band below the fold. Scroll-reveal defaults to
+ * opacity:0 until intersection, which reads as a large blank strip above the confidence block.
+ * Show the first stacked section immediately so the fold flows into editorial bands.
+ */
+.page-home .app-shell__main > section[data-reveal]:first-of-type {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
 .hero--slider {
   position: relative;
   /* Full-viewport first fold (common for marketing); cap height on very tall displays */
