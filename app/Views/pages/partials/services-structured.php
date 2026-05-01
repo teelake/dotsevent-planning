@@ -222,10 +222,12 @@ $nth = isset($nwa['text_html']) && is_string($nwa['text_html']) ? $nwa['text_htm
             <div class="newsletter__text prose"><?= $nth ?></div>
             <?php } ?>
         </div>
-        <form class="newsletter__form newsletter-app__form" method="post" action="<?= e(app_url('newsletter')) ?>" novalidate>
+        <form class="newsletter__form newsletter-app__form" method="post" action="<?= e(app_url('newsletter')) ?>" novalidate data-newsletter-form>
             <?= csrf_field() ?>
+            <input type="hidden" name="_newsletter_return" value="services">
             <label class="visually-hidden" for="services-news-email"><?= e($ph) ?></label>
-            <input id="services-news-email" class="input" type="email" name="email" placeholder="<?= e($ph) ?>" autocomplete="email" required>
+            <input id="services-news-email" class="input" type="email" name="email" placeholder="<?= e($ph) ?>" autocomplete="email" required aria-describedby="services-newsletter-error">
+            <p id="services-newsletter-error" class="newsletter-app__feedback newsletter-app__feedback--error" data-newsletter-error hidden role="alert"></p>
             <button class="btn btn--dark" type="submit"><?= e($btn) ?></button>
         </form>
     </div>

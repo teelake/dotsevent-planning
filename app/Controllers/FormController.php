@@ -40,15 +40,17 @@ final class FormController extends Controller
 
     public function newsletterSubmit(): void
     {
+        $returnUrl = $this->newsletterReturnUrl();
+
         if (!$this->isPost() || !Csrf::validate($_POST['_csrf'] ?? null)) {
             action_log('forms', 'newsletter.rejected', ['reason' => 'method_or_csrf']);
             Flash::set(Flash::ERROR, 'Something went wrong. Please try again.');
-            $this->redirect('/');
+            $this->redirectAbsolute($returnUrl);
         }
         $email = trim((string) ($_POST['email'] ?? ''));
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             Flash::set(Flash::ERROR, 'Please enter a valid email.');
-            $this->redirect('/');
+            $this->redirectAbsolute($returnUrl);
         }
         $repo = new LeadRepository();
         if ($repo->create('newsletter', $email, null, null, null, null)) {
@@ -58,7 +60,39 @@ final class FormController extends Controller
             action_log('forms', 'lead.persist_failed', ['type' => 'newsletter']);
             Flash::set(Flash::ERROR, 'Could not subscribe right now. Please try again later.');
         }
-        $this->redirect('/');
+        $this->redirectAbsolute($returnUrl);
+    }
+
+    /**
+     * Same-origin path only (slug allowlist + optional fragment to the newsletter band).
+     */
+    private function newsletterReturnUrl(): string
+    {
+        $slug = strtolower(trim((string) ($_POST['_newsletter_return'] ?? '')));
+        $allowed = ['services', 'contact', 'about', 'portfolio'];
+        $fragments = [
+            'services' => 'services-nw-heading',
+            'contact' => 'contact-news-title',
+            'about' => 'about-nw-heading',
+            'portfolio' => 'portfolio-news-title',
+        ];
+        if ($slug === 'home') {
+            return app_url('') . '#home-newsletter-heading';
+        }
+        if ($slug === '') {
+            return app_url('');
+        }
+        if (!in_array($slug, $allowed, true)) {
+            return app_url('');
+        }
+
+        return app_url($slug) . '#' . $fragments[$slug];
+    }
+
+    private function redirectAbsolute(string $url): void
+    {
+        header('Location: ' . $url, true, 302);
+        exit;
     }
 
     public function bookYourEventSubmit(): void

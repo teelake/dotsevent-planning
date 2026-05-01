@@ -255,10 +255,12 @@ $nhtml = isset($nw['text_html']) && is_string($nw['text_html']) ? $nw['text_html
             <div class="newsletter__text prose"><?= $nhtml ?></div>
             <?php } ?>
         </div>
-        <form class="newsletter__form newsletter-app__form" method="post" action="<?= e(app_url('newsletter')) ?>" novalidate>
+        <form class="newsletter__form newsletter-app__form" method="post" action="<?= e(app_url('newsletter')) ?>" novalidate data-newsletter-form>
             <?= csrf_field() ?>
+            <input type="hidden" name="_newsletter_return" value="about">
             <label class="visually-hidden" for="about-newsletter-email"><?= e($ph) ?></label>
-            <input id="about-newsletter-email" class="input" type="email" name="email" placeholder="<?= e($ph) ?>" autocomplete="email" required>
+            <input id="about-newsletter-email" class="input" type="email" name="email" placeholder="<?= e($ph) ?>" autocomplete="email" required aria-describedby="about-newsletter-error">
+            <p id="about-newsletter-error" class="newsletter-app__feedback newsletter-app__feedback--error" data-newsletter-error hidden role="alert"></p>
             <button class="btn btn--dark" type="submit"><?= e($btn) ?></button>
         </form>
     </div>

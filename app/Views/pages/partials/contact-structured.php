@@ -128,10 +128,12 @@ $float = is_array($b['floating_widget'] ?? null) ? $b['floating_widget'] : [];
       <h2 id="contact-news-title" class="newsletter__title"><?= e((string) $nw['title']) ?></h2>
       <?php if (!empty($nw['description_html'])): ?><div class="newsletter__text prose"><?= (string) $nw['description_html'] ?></div><?php endif; ?>
     </div>
-    <form class="newsletter__form newsletter-app__form" method="post" action="<?= e(app_url('newsletter')) ?>" novalidate>
+    <form class="newsletter__form newsletter-app__form" method="post" action="<?= e(app_url('newsletter')) ?>" novalidate data-newsletter-form>
       <?= csrf_field() ?>
+      <input type="hidden" name="_newsletter_return" value="contact">
       <label class="visually-hidden" for="contact-news-email"><?= e((string) ($nw['email_placeholder'] ?? 'Your email')) ?></label>
-      <input id="contact-news-email" class="input" type="email" name="email" placeholder="<?= e((string) ($nw['email_placeholder'] ?? 'Your email')) ?>" autocomplete="email" required>
+      <input id="contact-news-email" class="input" type="email" name="email" placeholder="<?= e((string) ($nw['email_placeholder'] ?? 'Your email')) ?>" autocomplete="email" required aria-describedby="contact-newsletter-error">
+      <p id="contact-newsletter-error" class="newsletter-app__feedback newsletter-app__feedback--error" data-newsletter-error hidden role="alert"></p>
       <button class="btn btn--dark" type="submit"><?= e((string) ($nw['button_label'] ?? 'Submit')) ?></button>
     </form>
   </div>

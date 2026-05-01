@@ -293,4 +293,42 @@
       metricIo.observe(metricStrip);
     }
   }
+
+  document.querySelectorAll("form[data-newsletter-form]").forEach(function (form) {
+    var emailEl = form.querySelector('input[name="email"][type="email"]');
+    var errEl = form.querySelector("[data-newsletter-error]");
+    if (!emailEl || !errEl) {
+      return;
+    }
+    function clearErr() {
+      errEl.textContent = "";
+      errEl.hidden = true;
+      emailEl.removeAttribute("aria-invalid");
+    }
+    function showErr(msg) {
+      errEl.textContent = msg;
+      errEl.hidden = false;
+      emailEl.setAttribute("aria-invalid", "true");
+      try {
+        emailEl.focus({ preventScroll: false });
+      } catch (_) {
+        emailEl.focus();
+      }
+    }
+    emailEl.addEventListener("input", clearErr);
+    form.addEventListener("submit", function (e) {
+      clearErr();
+      var raw = emailEl.value ? String(emailEl.value).trim() : "";
+      if (raw === "") {
+        e.preventDefault();
+        showErr("Please enter your email.");
+        return;
+      }
+      if (typeof emailEl.checkValidity === "function" && !emailEl.checkValidity()) {
+        e.preventDefault();
+        showErr("Please enter a valid email address.");
+        return;
+      }
+    });
+  });
 })();

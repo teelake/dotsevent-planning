@@ -142,10 +142,12 @@ $filters = is_array($controls['filters'] ?? null) ? $controls['filters'] : [];
             <div class="newsletter__text prose"><?= $nw['text_html'] ?></div>
             <?php endif; ?>
         </div>
-        <form class="newsletter__form newsletter-app__form" method="post" action="<?= e(app_url('newsletter')) ?>" novalidate>
+        <form class="newsletter__form newsletter-app__form" method="post" action="<?= e(app_url('newsletter')) ?>" novalidate data-newsletter-form>
             <?= csrf_field() ?>
+            <input type="hidden" name="_newsletter_return" value="portfolio">
             <label class="visually-hidden" for="portfolio-news-email"><?= e((string) ($nw['placeholder'] ?? 'Your email address')) ?></label>
-            <input id="portfolio-news-email" class="input" type="email" name="email" placeholder="<?= e((string) ($nw['placeholder'] ?? 'Your email address')) ?>" autocomplete="email" required>
+            <input id="portfolio-news-email" class="input" type="email" name="email" placeholder="<?= e((string) ($nw['placeholder'] ?? 'Your email address')) ?>" autocomplete="email" required aria-describedby="portfolio-newsletter-error">
+            <p id="portfolio-newsletter-error" class="newsletter-app__feedback newsletter-app__feedback--error" data-newsletter-error hidden role="alert"></p>
             <button class="btn btn--dark" type="submit"><?= e((string) ($nw['button_label'] ?? 'Submit')) ?></button>
         </form>
     </div>
