@@ -105,12 +105,6 @@
         kicker: v("svc-hero-kicker"),
         title: v("svc-hero-title"),
       },
-      intro: {
-        enabled: c("svc-in-en"),
-        eyebrow: v("svc-in-eye"),
-        title: v("svc-in-title"),
-        lead_html: v("svc-in-lead"),
-      },
       offerings: {
         enabled: c("svc-of-en"),
         home_teaser_enabled: c("svc-of-home-teaser-en"),

@@ -1631,16 +1631,6 @@
 
 /* ── Services page (structured `services_blocks`) ── */
 
-.services-modern-prose strong {
-  color: var(--color-ink, #14110d);
-}
-
-.services-modern__lead {
-  margin-top: 1rem;
-  max-width: 62ch;
-  font-size: 1.05rem;
-}
-
 .services-dossiers {
   display: grid;
   gap: 1rem;

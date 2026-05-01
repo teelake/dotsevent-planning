@@ -13,12 +13,6 @@ return [
         'kicker' => '',
         'title' => 'Services',
     ],
-    'intro' => [
-        'enabled' => true,
-        'eyebrow' => 'Our services',
-        'title' => 'Capability across your whole event stack',
-        'lead_html' => '<p>From brief to strike, DOTS plans weddings, private parties, corporate nights, immersive photo experiences, kids celebrations, and end-to-end production—everywhere in New Brunswick with one calm command channel.</p>',
-    ],
     'offerings' => [
         /* Services page: full offerings band */
         'enabled' => true,

@@ -52,6 +52,7 @@ final class ServicesPageBlocks
         }
 
         unset($out['partnership']);
+        unset($out['intro']);
 
         return self::finalize($out);
     }
@@ -184,11 +185,6 @@ final class ServicesPageBlocks
      */
     private static function finalize(array $merged): array
     {
-        $in = &$merged['intro'];
-        if (isset($in['lead_html']) && is_string($in['lead_html'])) {
-            $in['lead_html'] = CmsHtmlSanitizer::sanitize($in['lead_html']);
-        }
-
         if (isset($merged['offerings']['items']) && is_array($merged['offerings']['items'])) {
             foreach ($merged['offerings']['items'] as $i => $item) {
                 if (!is_array($item)) {
@@ -203,6 +199,7 @@ final class ServicesPageBlocks
         }
 
         unset($merged['partnership']);
+        unset($merged['intro']);
 
         $f = &$merged['faq'];
         if (isset($f['lead_html']) && is_string($f['lead_html'])) {

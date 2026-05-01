@@ -11,32 +11,12 @@ $on = static function (?array $sec): bool {
     return ($sec['enabled'] ?? true) !== false;
 };
 
-$intro = is_array($svc['intro'] ?? null) ? $svc['intro'] : [];
 $off = is_array($svc['offerings'] ?? null) ? $svc['offerings'] : [];
 $faq = is_array($svc['faq'] ?? null) ? $svc['faq'] : [];
 $nwa = is_array($svc['newsletter_cta'] ?? null) ? $svc['newsletter_cta'] : [];
 ?>
 
 <div class="services-modern">
-<?php if ($on($intro)): ?>
-<section class="app-band app-band--surface section services-modern__intro" aria-labelledby="services-intro-heading" data-reveal>
-    <div class="shell shell--wide">
-        <?php $ie = trim((string) ($intro['eyebrow'] ?? '')); ?>
-        <?php if ($ie !== ''): ?>
-        <p class="eyebrow"><?= e($ie) ?></p>
-        <?php endif; ?>
-        <?php $it = trim((string) ($intro['title'] ?? '')); ?>
-        <?php if ($it !== ''): ?>
-        <h2 id="services-intro-heading" class="section__title"><?= e($it) ?></h2>
-        <?php endif; ?>
-        <?php $lld = isset($intro['lead_html']) && is_string($intro['lead_html']) ? $intro['lead_html'] : ''; ?>
-        <?php if ($lld !== '') { ?>
-        <div class="services-modern__lead prose services-modern-prose"><?= $lld ?></div>
-        <?php } ?>
-    </div>
-</section>
-<?php endif; ?>
-
 <?php if ($on($off)): ?>
 <section class="app-band section services-modern__offerings" aria-labelledby="services-catalog-heading" data-reveal>
     <div class="shell shell--wide">

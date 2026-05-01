@@ -4,14 +4,12 @@ declare(strict_types=1);
 $b = isset($mergedServicesBlocks) && is_array($mergedServicesBlocks) ? $mergedServicesBlocks : [];
 $ver = isset($b['version']) ? (int) $b['version'] : 1;
 $h = is_array($b['hero'] ?? null) ? $b['hero'] : [];
-$in = is_array($b['intro'] ?? null) ? $b['intro'] : [];
 $of = is_array($b['offerings'] ?? null) ? $b['offerings'] : [];
 $f = is_array($b['faq'] ?? null) ? $b['faq'] : [];
 $nw = is_array($b['newsletter_cta'] ?? null) ? $b['newsletter_cta'] : [];
 
 $hEn = (($h['enabled'] ?? true) !== false);
 $bc = !isset($h['show_breadcrumbs']) || $h['show_breadcrumbs'] !== false;
-$inEn = (($in['enabled'] ?? true) !== false);
 $ofEn = (($of['enabled'] ?? true) !== false);
 $ofHomeTeaser = (($of['home_teaser_enabled'] ?? true) !== false);
 $fEn = (($f['enabled'] ?? true) !== false);
@@ -34,18 +32,6 @@ $faqs = isset($f['items']) && is_array($f['items']) ? $f['items'] : [];
                 <div class="form-row" style="margin:0;"><label for="svc-hero-kicker">Kicker</label><input class="input" id="svc-hero-kicker" type="text" value="<?= e((string) ($h['kicker'] ?? '')) ?>"></div>
                 <div class="form-row" style="margin:0;"><label for="svc-hero-title">H1</label><input class="input" id="svc-hero-title" type="text" value="<?= e((string) ($h['title'] ?? '')) ?>"></div>
             </div>
-        </div>
-    </details>
-
-    <details id="cms-sec-svc-intro" class="home-blocks-editor__details" open>
-        <summary class="home-blocks-editor__summary">Intro</summary>
-        <div class="home-blocks-editor__body">
-            <label class="home-blocks-editor__check"><input type="checkbox" id="svc-in-en" <?= $inEn ? 'checked' : '' ?>><span>Show intro band</span></label>
-            <div class="home-blocks-editor__grid home-blocks-editor__grid--2">
-                <div class="form-row" style="margin:0;"><label for="svc-in-eye">Eyebrow</label><input class="input" id="svc-in-eye" type="text" value="<?= e((string) ($in['eyebrow'] ?? '')) ?>"></div>
-                <div class="form-row" style="margin:0;"><label for="svc-in-title">Title</label><input class="input" id="svc-in-title" type="text" value="<?= e((string) ($in['title'] ?? '')) ?>"></div>
-            </div>
-            <div class="form-row"><label for="svc-in-lead">Lead (HTML)</label><textarea class="input input--textarea" id="svc-in-lead" rows="4"><?= e((string) ($in['lead_html'] ?? '')) ?></textarea></div>
         </div>
     </details>
 
