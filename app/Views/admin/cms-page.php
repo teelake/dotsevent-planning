@@ -75,11 +75,11 @@ $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
 
         <?php if ($slug === 'home') : ?>
             <div class="cms-edit__hint">Slides: <a class="cms-edit__hint-a" href="<?= e(app_url('admin/cms/slides')) ?>">Hero carousel</a>.
-                Homepage services grid uses <a class="cms-edit__hint-a" href="<?= e(app_url('admin/cms/page/services')) ?>">Services → Offerings</a>.</div>
+                Homepage services grid uses <a class="cms-edit__hint-a" href="<?= e(app_url('admin/cms/page/services')) ?>">Services → Services catalogue</a>.</div>
         <?php elseif ($slug === 'about') : ?>
             <div class="cms-edit__hint">Below: modular bands; Body is optional legacy story copy.</div>
         <?php elseif ($slug === 'services') : ?>
-            <div class="cms-edit__hint">Sections drive the Services page; Offerings independently control the Home teaser.</div>
+            <div class="cms-edit__hint">Structured sections control the Services page. Under <strong>Services catalogue</strong> you can add or remove service cards (same list powers the Home teaser when enabled).</div>
         <?php elseif ($slug === 'contact') : ?>
             <div class="cms-edit__hint">Contact layout + CMS settings feed the live page.</div>
         <?php elseif ($slug === 'portfolio') : ?>

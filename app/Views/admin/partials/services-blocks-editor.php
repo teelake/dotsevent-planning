@@ -53,8 +53,9 @@ $faqs = isset($f['items']) && is_array($f['items']) ? $f['items'] : [];
     </details>
 
     <details id="cms-sec-svc-offerings" class="home-blocks-editor__details" open>
-        <summary class="home-blocks-editor__summary">Offerings</summary>
+        <summary class="home-blocks-editor__summary">Services catalogue</summary>
         <div class="home-blocks-editor__body">
+            <p class="text-muted" style="font-size:0.85rem; margin:0 0 0.65rem;">Each row is one service card. Use <strong>Remove</strong> on a row to delete it and <strong>Add service</strong> to create a new one, then save.</p>
             <label class="home-blocks-editor__check"><input type="checkbox" id="svc-of-en" <?= $ofEn ? 'checked' : '' ?>><span>Show catalogue on Services page</span></label>
             <label class="home-blocks-editor__check"><input type="checkbox" id="svc-of-home-teaser-en" <?= $ofHomeTeaser ? 'checked' : '' ?>><span>Show teaser on Home page</span></label>
             <div class="home-blocks-editor__grid home-blocks-editor__grid--2">
@@ -85,7 +86,7 @@ $faqs = isset($f['items']) && is_array($f['items']) ? $f['items'] : [];
                 </div>
                 <?php endforeach; ?>
             </div>
-            <p><button type="button" class="btn btn--secondary" id="svc-add-offer">Add offering</button></p>
+            <p><button type="button" class="btn btn--secondary" id="svc-add-offer">Add service</button></p>
         </div>
     </details>
 

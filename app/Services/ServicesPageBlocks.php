@@ -40,18 +40,19 @@ final class ServicesPageBlocks
         $out = array_replace_recursive($defaults, $s);
 
         if (!empty($s['offerings']) && is_array($s['offerings'])) {
-            if (isset($s['offerings']['items']) && is_array($s['offerings']['items']) && $s['offerings']['items'] !== []) {
-                $out['offerings']['items'] = $s['offerings']['items'];
+            /* array_replace_recursive keeps stale default rows when saved list is shorter or empty */
+            if (array_key_exists('items', $s['offerings']) && is_array($s['offerings']['items'])) {
+                $out['offerings']['items'] = array_values($s['offerings']['items']);
             }
         }
         if (!empty($s['partnership']) && is_array($s['partnership'])) {
-            if (isset($s['partnership']['metrics']) && is_array($s['partnership']['metrics']) && $s['partnership']['metrics'] !== []) {
-                $out['partnership']['metrics'] = $s['partnership']['metrics'];
+            if (array_key_exists('metrics', $s['partnership']) && is_array($s['partnership']['metrics'])) {
+                $out['partnership']['metrics'] = array_values($s['partnership']['metrics']);
             }
         }
         if (!empty($s['faq']) && is_array($s['faq'])) {
-            if (isset($s['faq']['items']) && is_array($s['faq']['items']) && $s['faq']['items'] !== []) {
-                $out['faq']['items'] = $s['faq']['items'];
+            if (array_key_exists('items', $s['faq']) && is_array($s['faq']['items'])) {
+                $out['faq']['items'] = array_values($s['faq']['items']);
             }
         }
 
