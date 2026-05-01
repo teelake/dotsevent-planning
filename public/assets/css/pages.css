@@ -2101,6 +2101,10 @@
   padding-top: calc(var(--space-xl) + 0.35rem);
 }
 
+.services-modern__newsletter .newsletter__text p {
+  margin: 0;
+}
+
 /* ── Rentals page ───────────────────────────────────────────────────── */
 
 /* Category filter strip */
