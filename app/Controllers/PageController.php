@@ -109,6 +109,7 @@ final class PageController extends Controller
         $this->render('pages/contact', [
             'title' => $cms['doc_title'],
             'active_nav' => 'contact',
+            'body_class' => 'page-contact',
             'meta_description' => $cms['meta_description'],
             'cms' => $cms,
         ]);

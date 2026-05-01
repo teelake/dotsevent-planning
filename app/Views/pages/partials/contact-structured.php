@@ -79,7 +79,11 @@ $iconPhone = '<svg class="contact-channel-card__icon-svg" xmlns="http://www.w3.o
 <div class="section__split contact-page__split<?= $locEnabled ? '' : ' contact-page__split--solo' ?>" style="margin-top:1.25rem;" data-reveal>
     <div class="contact-page__form-wrap">
         <?php if (($form['enabled'] ?? true) !== false): ?>
-        <h2 class="section__title contact-form__heading"><?= e((string) ($form['heading'] ?? 'We will reach out to you')) ?></h2>
+        <div class="contact-form-panel">
+            <div class="contact-form-panel__intro">
+                <h2 class="section__title contact-form__heading"><?= e((string) ($form['heading'] ?? 'We will reach out to you')) ?></h2>
+                <p class="contact-form-panel__hint">Tell us what you’re planning—we reply within one business day.</p>
+            </div>
         <?php
             $fields = is_array($form['fields'] ?? null) ? $form['fields'] : [];
             $nameF = is_array($fields['name'] ?? null) ? $fields['name'] : [];
@@ -89,34 +93,50 @@ $iconPhone = '<svg class="contact-channel-card__icon-svg" xmlns="http://www.w3.o
             $messageF = is_array($fields['message'] ?? null) ? $fields['message'] : [];
             $intents = is_array($form['intent_subjects'] ?? null) ? $form['intent_subjects'] : [];
         ?>
-        <form class="contact-form" method="post" action="<?= e(app_url('contact')) ?>">
+        <form class="contact-form contact-form--premium" method="post" action="<?= e(app_url('contact')) ?>">
             <?= csrf_field() ?>
-            <label class="visually-hidden" for="c-name"><?= e((string) ($nameF['label'] ?? 'Name')) ?></label>
-            <input id="c-name" class="input" type="text" name="name" placeholder="<?= e((string) ($nameF['placeholder'] ?? 'Name')) ?>" autocomplete="name" <?= !empty($nameF['required']) ? 'required' : '' ?>>
+            <div class="contact-form__grid contact-form__grid--half">
+                <div class="contact-form__field">
+                    <label class="contact-form__label" for="c-name"><?= e((string) ($nameF['label'] ?? 'Name')) ?></label>
+                    <input id="c-name" class="input contact-form__control" type="text" name="name" placeholder="<?= e((string) ($nameF['placeholder'] ?? 'Name')) ?>" autocomplete="name" <?= !empty($nameF['required']) ? 'required' : '' ?>>
+                </div>
+                <div class="contact-form__field">
+                    <label class="contact-form__label" for="c-email"><?= e((string) ($emailF['label'] ?? 'Email')) ?><?php if (!isset($emailF['required']) || !empty($emailF['required'])): ?><span class="contact-form__req" aria-hidden="true">*</span><?php endif; ?></label>
+                    <input id="c-email" class="input contact-form__control" type="email" name="email" placeholder="<?= e((string) ($emailF['placeholder'] ?? 'Email')) ?>" autocomplete="email" <?= !isset($emailF['required']) || !empty($emailF['required']) ? 'required' : '' ?>>
+                </div>
+            </div>
+            <div class="contact-form__grid contact-form__grid--half">
+                <div class="contact-form__field">
+                    <label class="contact-form__label" for="c-phone"><?= e((string) ($phoneF['label'] ?? 'Phone')) ?></label>
+                    <input id="c-phone" class="input contact-form__control" type="tel" name="phone" placeholder="<?= e((string) ($phoneF['placeholder'] ?? 'Phone')) ?>" autocomplete="tel" <?= !empty($phoneF['required']) ? 'required' : '' ?>>
+                </div>
+                <?php if ($intents !== []): ?>
+                <div class="contact-form__field">
+                    <label class="contact-form__label" for="c-intent">Topic</label>
+                    <select id="c-intent" class="input contact-form__control contact-form__select">
+                        <?php foreach ($intents as $row): if (!is_array($row)) continue; $sub = trim((string) ($row['subject'] ?? '')); ?>
+                        <option value="<?= e($sub) ?>"><?= e((string) ($row['label'] ?? $sub)) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <?php endif; ?>
+            </div>
 
-            <label class="visually-hidden" for="c-email"><?= e((string) ($emailF['label'] ?? 'Email')) ?></label>
-            <input id="c-email" class="input" type="email" name="email" placeholder="<?= e((string) ($emailF['placeholder'] ?? 'Email')) ?>" autocomplete="email" <?= !isset($emailF['required']) || !empty($emailF['required']) ? 'required' : '' ?>>
+            <div class="contact-form__field">
+                <label class="contact-form__label" for="c-subject"><?= e((string) ($subjectF['label'] ?? 'Subject')) ?></label>
+                <input id="c-subject" class="input contact-form__control" type="text" name="subject" placeholder="<?= e((string) ($subjectF['placeholder'] ?? 'Subject')) ?>" <?= !empty($subjectF['required']) ? 'required' : '' ?>>
+            </div>
 
-            <label class="visually-hidden" for="c-phone"><?= e((string) ($phoneF['label'] ?? 'Phone')) ?></label>
-            <input id="c-phone" class="input" type="tel" name="phone" placeholder="<?= e((string) ($phoneF['placeholder'] ?? 'Phone')) ?>" autocomplete="tel" <?= !empty($phoneF['required']) ? 'required' : '' ?>>
+            <div class="contact-form__field">
+                <label class="contact-form__label" for="c-msg"><?= e((string) ($messageF['label'] ?? 'Message')) ?><?php if (!isset($messageF['required']) || !empty($messageF['required'])): ?><span class="contact-form__req" aria-hidden="true">*</span><?php endif; ?></label>
+                <textarea id="c-msg" class="input input--textarea contact-form__control" name="message" rows="6" placeholder="<?= e((string) ($messageF['placeholder'] ?? 'Message')) ?>" <?= !isset($messageF['required']) || !empty($messageF['required']) ? 'required' : '' ?>></textarea>
+            </div>
 
-            <?php if ($intents !== []): ?>
-            <label class="visually-hidden" for="c-intent">Intent</label>
-            <select id="c-intent" class="input" style="padding:.65rem 1rem;border-radius:var(--radius-sm);">
-                <?php foreach ($intents as $row): if (!is_array($row)) continue; $sub = trim((string) ($row['subject'] ?? '')); ?>
-                <option value="<?= e($sub) ?>"><?= e((string) ($row['label'] ?? $sub)) ?></option>
-                <?php endforeach; ?>
-            </select>
-            <?php endif; ?>
-
-            <label class="visually-hidden" for="c-subject"><?= e((string) ($subjectF['label'] ?? 'Subject')) ?></label>
-            <input id="c-subject" class="input" type="text" name="subject" placeholder="<?= e((string) ($subjectF['placeholder'] ?? 'Subject')) ?>" <?= !empty($subjectF['required']) ? 'required' : '' ?>>
-
-            <label class="visually-hidden" for="c-msg"><?= e((string) ($messageF['label'] ?? 'Message')) ?></label>
-            <textarea id="c-msg" class="input input--textarea" name="message" placeholder="<?= e((string) ($messageF['placeholder'] ?? 'Message')) ?>" <?= !isset($messageF['required']) || !empty($messageF['required']) ? 'required' : '' ?>></textarea>
-
-            <button class="btn btn--primary contact-form__submit" type="submit"><?= e((string) ($form['submit_label'] ?? 'Send')) ?></button>
+            <div class="contact-form__actions">
+                <button class="btn btn--primary contact-form__submit" type="submit"><?= e((string) ($form['submit_label'] ?? 'Send')) ?></button>
+            </div>
         </form>
+        </div>
         <?php if ($intents !== []): ?>
         <script>
         (function () {
@@ -147,8 +167,8 @@ $iconPhone = '<svg class="contact-channel-card__icon-svg" xmlns="http://www.w3.o
 </div>
 
 <?php if (($nw['enabled'] ?? true) !== false && trim((string) ($nw['title'] ?? '')) !== ''): ?>
-<section class="app-band app-band--newsletter" aria-labelledby="contact-news-title" data-reveal>
-  <div class="shell shell--wide newsletter-app">
+<section class="app-band app-band--newsletter contact-page__newsletter services-modern__band--fluid" aria-labelledby="contact-news-title" data-reveal>
+  <div class="shell shell--fluid newsletter-app">
     <div>
       <h2 id="contact-news-title" class="newsletter__title"><?= e((string) $nw['title']) ?></h2>
       <?php if (!empty($nw['description_html'])): ?><div class="newsletter__text prose"><?= (string) $nw['description_html'] ?></div><?php endif; ?>
@@ -167,7 +187,7 @@ $iconPhone = '<svg class="contact-channel-card__icon-svg" xmlns="http://www.w3.o
 <?php endif; ?>
 
 <?php if (($trust['enabled'] ?? true) !== false): ?>
-<section class="shell shell--wide" data-reveal style="padding:1rem 0 0;">
+<section class="contact-page__trust" data-reveal>
   <?php if (trim((string) ($trust['microcopy'] ?? '')) !== ''): ?><p style="margin:0 0 .6rem;color:var(--color-ink-muted);"><?= e((string) $trust['microcopy']) ?></p><?php endif; ?>
   <div style="display:flex;gap:.4rem;flex-wrap:wrap;" aria-hidden="true">
     <?php for ($i = 0; $i < (int) ($trust['star_count'] ?? 5); $i++): ?><span style="width:12px;height:12px;background:#f5c013;border-radius:50%;display:inline-block;"></span><?php endfor; ?>

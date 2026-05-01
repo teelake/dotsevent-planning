@@ -824,6 +824,116 @@
   box-sizing: border-box;
 }
 
+/* Contact: fluid newsletter band + tuck footer under strip */
+body.page-contact main .shell.contact-page.page-pad:has(.contact-page__newsletter) {
+  padding-bottom: 0;
+}
+
+body.page-contact .contact-page__trust {
+  margin-top: var(--space-md);
+  padding: 0 0 var(--space-sm);
+}
+
+.page-contact .contact-page__newsletter .newsletter-app .newsletter__form {
+  max-width: min(26rem, 100%);
+}
+
+/* Premium contact form */
+.contact-form-panel {
+  position: relative;
+  padding: clamp(1.35rem, 3vw, 2rem);
+  border-radius: clamp(18px, 2.5vw, 26px);
+  border: 1px solid rgba(1, 1, 1, 0.08);
+  background:
+    radial-gradient(120% 85% at 0% 0%, rgba(245, 192, 19, 0.08), transparent 58%),
+    linear-gradient(165deg, #fffefb 0%, #faf7f2 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.88),
+    0 16px 44px rgba(25, 17, 4, 0.065);
+}
+
+.contact-form-panel__intro {
+  margin-bottom: clamp(1rem, 2vw, 1.35rem);
+}
+
+.contact-form-panel__hint {
+  margin: 0.4rem 0 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--color-ink-muted);
+  max-width: 42ch;
+}
+
+.contact-form.contact-form--premium {
+  gap: 1rem;
+}
+
+.contact-form__label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink-soft);
+  margin-bottom: 0.4rem;
+}
+
+.contact-form__req {
+  color: #9a3412;
+  margin-left: 0.15rem;
+}
+
+.contact-form__grid--half {
+  display: grid;
+  gap: 1rem 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .contact-form__grid--half {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .contact-form__grid--half:not(:has(.contact-form__field:nth-child(2))) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.contact-form__control {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.contact-form__select {
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%2357524e' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.95rem center;
+  padding-right: 2.85rem;
+}
+
+.contact-form__actions {
+  margin-top: 0.25rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(1, 1, 1, 0.07);
+}
+
+.contact-form-panel .contact-form__heading {
+  margin-bottom: 0;
+}
+
+.contact-form-panel .contact-form__submit {
+  min-width: min(100%, 11rem);
+  padding-inline: 1.85rem;
+}
+
+@media (min-width: 640px) {
+  .contact-form-panel .contact-form__submit {
+    min-width: 12.5rem;
+  }
+}
+
 .contact-channels {
   margin-top: 1rem;
 }
