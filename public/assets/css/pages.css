@@ -1115,6 +1115,19 @@
   border-style: dashed;
 }
 
+.home-cluster-card__index {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: rgba(1, 1, 1, 0.18);
+  line-height: 1;
+}
+
+.home-cluster-card--accent .home-cluster-card__index {
+  color: rgba(245, 192, 19, 0.5);
+}
+
 .home-cluster-card__title {
   margin: 0;
   font-family: var(--font-display);

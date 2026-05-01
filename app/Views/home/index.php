@@ -261,7 +261,7 @@ $newsletterBk = is_array($home_blocks['newsletter'] ?? null) ? $home_blocks['new
                 </div>
                 <?php if ($cItems !== []): ?>
                 <div class="home-cluster-bento reveal-stagger">
-                    <?php foreach ($cItems as $ci): ?>
+                    <?php foreach ($cItems as $cix => $ci): ?>
                     <?php
                     if (!is_array($ci)) {
                         continue;
@@ -275,8 +275,10 @@ $newsletterBk = is_array($home_blocks['newsletter'] ?? null) ? $home_blocks['new
                     if (!empty($ci['muted'])) {
                         $mods[] = 'home-cluster-card--muted';
                     }
+                    $idxPad = str_pad((string) ((int) $cix + 1), 2, '0', STR_PAD_LEFT);
                     ?>
                     <article class="<?= e(implode(' ', $mods)) ?>">
+                        <span class="home-cluster-card__index" aria-hidden="true"><?= e($idxPad) ?></span>
                         <?php if ($ct !== ''): ?>
                         <h3 class="home-cluster-card__title"><?= e($ct) ?></h3>
                         <?php endif; ?>
