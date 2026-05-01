@@ -16,7 +16,6 @@ $channels = is_array($b['channels'] ?? null) ? $b['channels'] : [];
 $form = is_array($b['contact_form'] ?? null) ? $b['contact_form'] : [];
 $loc = is_array($b['location'] ?? null) ? $b['location'] : [];
 $nw = is_array($b['newsletter_cta'] ?? null) ? $b['newsletter_cta'] : [];
-$trust = is_array($b['trust'] ?? null) ? $b['trust'] : [];
 $float = is_array($b['floating_widget'] ?? null) ? $b['floating_widget'] : [];
 
 $introLeadHtml = isset($intro['lead_html']) && is_string($intro['lead_html']) ? trim($intro['lead_html']) : '';
@@ -185,14 +184,3 @@ $iconPhone = '<svg class="contact-channel-card__icon-svg" xmlns="http://www.w3.o
   </div>
 </section>
 <?php endif; ?>
-
-<?php if (($trust['enabled'] ?? true) !== false): ?>
-<section class="contact-page__trust" data-reveal>
-  <?php if (trim((string) ($trust['microcopy'] ?? '')) !== ''): ?><p style="margin:0 0 .6rem;color:var(--color-ink-muted);"><?= e((string) $trust['microcopy']) ?></p><?php endif; ?>
-  <div style="display:flex;gap:.4rem;flex-wrap:wrap;" aria-hidden="true">
-    <?php for ($i = 0; $i < (int) ($trust['star_count'] ?? 5); $i++): ?><span style="width:12px;height:12px;background:#f5c013;border-radius:50%;display:inline-block;"></span><?php endfor; ?>
-  </div>
-</section>
-<?php endif; ?>
-
-

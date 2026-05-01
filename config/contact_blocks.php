@@ -56,7 +56,7 @@ return [
         'privacy_note_html' => '',
     ],
     'trust' => [
-        'enabled' => true,
+        'enabled' => false,
         'star_count' => 5,
         'microcopy' => '',
     ],

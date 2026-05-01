@@ -829,12 +829,16 @@ body.page-contact main .shell.contact-page.page-pad:has(.contact-page__newslette
   padding-bottom: 0;
 }
 
-body.page-contact .contact-page__trust {
-  margin-top: var(--space-md);
-  padding: 0 0 var(--space-sm);
+.page-contact .contact-page__newsletter .newsletter-app .newsletter__form {
+  max-width: min(26rem, 100%);
 }
 
-.page-contact .contact-page__newsletter .newsletter-app .newsletter__form {
+/* Portfolio: fluid newsletter + flush footer */
+body.page-portfolio main .shell.shell--wide.page-pad:has(.portfolio-page__newsletter) {
+  padding-bottom: 0;
+}
+
+.page-portfolio .portfolio-page__newsletter .newsletter-app .newsletter__form {
   max-width: min(26rem, 100%);
 }
 

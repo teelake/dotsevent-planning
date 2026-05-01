@@ -75,6 +75,7 @@ final class PageController extends Controller
         $this->render('pages/portfolio', [
             'title' => $cms['doc_title'],
             'active_nav' => 'portfolio',
+            'body_class' => 'page-portfolio',
             'meta_description' => $cms['meta_description'],
             'cms' => $cms,
         ]);

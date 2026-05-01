@@ -10,12 +10,6 @@
     var el = document.getElementById(id);
     return el ? !!el.checked : false;
   }
-  function n(id, fallback) {
-    var el = document.getElementById(id);
-    if (!el) return fallback;
-    var val = parseInt(String(el.value || fallback), 10);
-    return isNaN(val) ? fallback : val;
-  }
 
   window.dotseContactBlocksBind = function () {};
 
@@ -42,11 +36,6 @@
         title: v("ct-nw-title"),
         button_label: v("ct-nw-btn"),
         description_html: v("ct-nw-desc"),
-      },
-      trust: {
-        enabled: true,
-        star_count: n("ct-trust-stars", 5),
-        microcopy: v("ct-trust-copy"),
       },
     };
   };
