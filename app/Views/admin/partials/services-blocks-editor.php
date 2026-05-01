@@ -65,7 +65,7 @@ $faqs = isset($f['items']) && is_array($f['items']) ? $f['items'] : [];
                             <label class="home-blocks-editor__check"><input type="checkbox" class="js-svc-off-muted" <?= !empty($it['muted']) ? 'checked' : '' ?>><span>Muted</span></label>
                         </div>
                     </div>
-                    <button type="button" class="btn btn--ghost svc-row-remove">Remove</button>
+                    <button type="button" class="btn btn--ghost hb-row-remove svc-row-remove">Remove</button>
                 </div>
                 <?php endforeach; ?>
             </div>
@@ -91,7 +91,7 @@ $faqs = isset($f['items']) && is_array($f['items']) ? $f['items'] : [];
                 <div class="hb-repeat-row svc-repeat-row js-svc-faq-row">
                     <div class="form-row"><label>Question</label><input type="text" class="input js-scf-q" value="<?= e((string) ($q['question'] ?? '')) ?>"></div>
                     <div class="form-row"><label>Answer HTML</label><textarea class="input input--textarea js-scf-a" rows="3"><?= e((string) ($q['answer_html'] ?? '')) ?></textarea></div>
-                    <button type="button" class="btn btn--ghost svc-row-remove">Remove</button>
+                    <button type="button" class="btn btn--ghost hb-row-remove svc-row-remove">Remove</button>
                 </div>
                 <?php endforeach; ?>
             </div>
@@ -124,7 +124,7 @@ $faqs = isset($f['items']) && is_array($f['items']) ? $f['items'] : [];
                 <label class="home-blocks-editor__check"><input type="checkbox" class="js-svc-off-muted"><span>Muted</span></label>
             </div>
         </div>
-        <button type="button" class="btn btn--ghost svc-row-remove">Remove</button>
+        <button type="button" class="btn btn--ghost hb-row-remove svc-row-remove">Remove</button>
     </div>
 </template>
 
@@ -132,6 +132,6 @@ $faqs = isset($f['items']) && is_array($f['items']) ? $f['items'] : [];
     <div class="hb-repeat-row svc-repeat-row js-svc-faq-row">
         <div class="form-row"><label>Question</label><input type="text" class="input js-scf-q" value=""></div>
         <div class="form-row"><label>Answer HTML</label><textarea class="input input--textarea js-scf-a" rows="3"></textarea></div>
-        <button type="button" class="btn btn--ghost svc-row-remove">Remove</button>
+        <button type="button" class="btn btn--ghost hb-row-remove svc-row-remove">Remove</button>
     </div>
 </template>

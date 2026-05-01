@@ -1688,6 +1688,35 @@ body.admin-sidebar-open .admin-backdrop {
   outline-offset: 2px;
 }
 
+/* .btn--ghost is for dark surfaces (light text). On white repeat cards it wins over
+   .hb-row-remove (higher specificity) and the label disappears. */
+.home-blocks-editor .hb-repeat-row .btn.btn--ghost {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  color: #991b1b;
+  backdrop-filter: none;
+  box-shadow: none;
+  font-weight: 700;
+  font-size: 0.86rem;
+  justify-content: flex-start;
+  padding: 0.25rem 0.15rem;
+  min-height: 2rem;
+}
+
+.home-blocks-editor .hb-repeat-row .btn.btn--ghost:hover {
+  color: #7f1d1d;
+  text-decoration: underline;
+  background: rgba(153, 27, 27, 0.06);
+}
+
+.home-blocks-editor .hb-repeat-row .btn.btn--ghost:focus-visible {
+  color: #7f1d1d;
+  outline: 3px solid rgba(153, 27, 27, 0.2);
+  outline-offset: 2px;
+}
+
 .hb-cluster-block {
   border-style: solid;
 }
