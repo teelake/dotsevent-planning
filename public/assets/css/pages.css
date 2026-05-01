@@ -160,7 +160,8 @@
 
 .hero__title {
   font-family: var(--font-display);
-  font-size: clamp(2.35rem, 4.8vw, 3.5rem);
+  /* Display scale: strong on large viewports; clamp min avoids overflow on narrow phones */
+  font-size: clamp(2.5rem, 5.25vw, 3.95rem);
   font-weight: 600;
   line-height: 1.06;
   letter-spacing: -0.03em;
