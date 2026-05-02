@@ -20,9 +20,7 @@ include dirname(__DIR__) . '/partials/page-hero.php';
         <?= $cms['body_html'] ?>
         </div>
         <?php endif; ?>
-        <div class="shell shell--wide page-pad" data-reveal>
-            <?php include __DIR__ . '/partials/portfolio-structured.php'; ?>
-        </div>
+        <?php include __DIR__ . '/partials/portfolio-structured.php'; ?>
     </div>
 </div>
 

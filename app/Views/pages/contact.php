@@ -27,9 +27,7 @@ include dirname(__DIR__) . '/partials/page-hero.php';
         <?= $cms['body_html'] ?>
         </div>
         <?php endif; ?>
-        <div class="shell shell--wide page-pad contact-page" data-reveal>
-            <?php include __DIR__ . '/partials/contact-structured.php'; ?>
-        </div>
+        <?php include __DIR__ . '/partials/contact-structured.php'; ?>
     </div>
 </div>
 

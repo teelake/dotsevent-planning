@@ -20,7 +20,7 @@ $nw = is_array($ab['newsletter_cta'] ?? null) ? $ab['newsletter_cta'] : [];
 
 <div class="about-modern">
 <?php if ($h($approach)): ?>
-<section class="app-band section about-modern__approach about-modern__approach--paper about-modern__band--fluid" aria-labelledby="about-approach-heading" data-reveal>
+<section class="app-band section about-modern__approach about-modern__approach--paper" aria-labelledby="about-approach-heading" data-reveal>
     <div class="shell shell--wide">
         <?php $ae = trim((string) ($approach['eyebrow'] ?? '')); ?>
         <?php if ($ae !== ''): ?>
@@ -74,7 +74,7 @@ $nw = is_array($ab['newsletter_cta'] ?? null) ? $ab['newsletter_cta'] : [];
 <?php endif; ?>
 
 <?php if ($h($values)): ?>
-<section class="app-band app-band--surface section about-modern__values about-modern__band--fluid" aria-labelledby="about-values-heading" data-reveal>
+<section class="app-band app-band--surface section about-modern__values" aria-labelledby="about-values-heading" data-reveal>
     <div class="shell shell--wide">
         <?php $ve = trim((string) ($values['eyebrow'] ?? '')); ?>
         <?php if ($ve !== ''): ?>
@@ -126,7 +126,7 @@ $nw = is_array($ab['newsletter_cta'] ?? null) ? $ab['newsletter_cta'] : [];
 <?php endif; ?>
 
 <?php if ($h($team)): ?>
-<section class="app-band section about-modern__team about-modern__team--warm about-modern__band--fluid" aria-labelledby="about-team-heading" data-reveal>
+<section class="app-band section about-modern__team about-modern__team--warm" aria-labelledby="about-team-heading" data-reveal>
     <div class="shell shell--wide">
         <?php $te = trim((string) ($team['eyebrow'] ?? '')); ?>
         <?php if ($te !== ''): ?>
@@ -188,7 +188,7 @@ $nw = is_array($ab['newsletter_cta'] ?? null) ? $ab['newsletter_cta'] : [];
     $ph = trim((string) ($nw['placeholder'] ?? 'Your email'));
 $nhtml = isset($nw['text_html']) && is_string($nw['text_html']) ? $nw['text_html'] : '';
 ?>
-<section class="app-band app-band--newsletter about-modern__newsletter services-modern__band--fluid" aria-labelledby="about-nw-heading" data-reveal>
+<section class="app-band app-band--newsletter about-modern__newsletter" aria-labelledby="about-nw-heading" data-reveal>
     <div class="shell shell--wide newsletter-app">
         <div>
             <?php if ($ntl !== ''): ?>

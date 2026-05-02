@@ -255,21 +255,23 @@
 }
 
 @media (min-width: 1100px) {
+  /*
+   * Inner pages: outer shell spans the viewport so `.app-band` backgrounds read full-width.
+   * Content stays inset via `.shell.shell--wide` / `.shell.shell--fluid` horizontal padding + max-width.
+   */
   .app-shell:not(.app-shell--home) {
-    max-width: 1320px;
+    max-width: none;
+    width: 100%;
     margin: 0 auto;
-    padding-left: var(--shell-pad-x);
-    padding-right: var(--shell-pad-x);
-  }
-
-  .app-shell:not(.app-shell--home) .shell {
     padding-left: 0;
     padding-right: 0;
   }
 
+  .app-shell:not(.app-shell--home) .shell.shell--wide,
   .app-shell:not(.app-shell--home) .shell.shell--fluid {
     padding-left: var(--shell-pad-x);
     padding-right: var(--shell-pad-x);
+    box-sizing: border-box;
   }
 
   .app-shell--home .hero--slider.hero--console {

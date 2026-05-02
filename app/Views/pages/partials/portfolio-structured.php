@@ -20,6 +20,7 @@ $galleryItems = is_array($gallery['items'] ?? null) ? $gallery['items'] : [];
 $filters = is_array($controls['filters'] ?? null) ? $controls['filters'] : [];
 ?>
 
+<div class="shell shell--wide page-pad portfolio-page" data-reveal>
 <?php if ($introOn): ?>
 <section data-reveal>
     <?php if (trim((string) ($intro['eyebrow'] ?? '')) !== ''): ?>
@@ -133,9 +134,11 @@ $filters = is_array($controls['filters'] ?? null) ? $controls['filters'] : [];
 </section>
 <?php endif; ?>
 
+</div>
+
 <?php if ($nwOn && trim((string) ($nw['title'] ?? '')) !== ''): ?>
-<section class="app-band app-band--newsletter portfolio-page__newsletter services-modern__band--fluid" aria-labelledby="portfolio-news-title" data-reveal>
-    <div class="shell shell--fluid newsletter-app">
+<section class="app-band app-band--newsletter portfolio-page__newsletter" aria-labelledby="portfolio-news-title" data-reveal>
+    <div class="shell shell--wide newsletter-app">
         <div>
             <h2 id="portfolio-news-title" class="newsletter__title"><?= e((string) $nw['title']) ?></h2>
             <?php if (!empty($nw['text_html']) && is_string($nw['text_html'])): ?>

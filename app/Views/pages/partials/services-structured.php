@@ -73,8 +73,8 @@ $nwa = is_array($svc['newsletter_cta'] ?? null) ? $svc['newsletter_cta'] : [];
 <?php endif; ?>
 
 <?php if ($on($faq)): ?>
-<section class="app-band section services-modern__faq services-modern__faq--distinct services-modern__band--fluid" aria-labelledby="services-faq-heading" data-reveal>
-    <div class="shell shell--fluid">
+<section class="app-band section services-modern__faq services-modern__faq--distinct" aria-labelledby="services-faq-heading" data-reveal>
+    <div class="shell shell--wide">
         <header class="services-faq-panel__intro">
             <?php $fe = trim((string) ($faq['eyebrow'] ?? '')); ?>
             <?php if ($fe !== ''): ?>
@@ -132,8 +132,8 @@ $nwa = is_array($svc['newsletter_cta'] ?? null) ? $svc['newsletter_cta'] : [];
     $ph = trim((string) ($nwa['placeholder'] ?? 'Your email'));
 $nth = isset($nwa['text_html']) && is_string($nwa['text_html']) ? $nwa['text_html'] : '';
 ?>
-<section class="app-band app-band--newsletter services-modern__newsletter services-modern__band--fluid" aria-labelledby="services-nw-heading" data-reveal>
-    <div class="shell shell--fluid newsletter-app">
+<section class="app-band app-band--newsletter services-modern__newsletter" aria-labelledby="services-nw-heading" data-reveal>
+    <div class="shell shell--wide newsletter-app">
         <div>
             <?php if ($ntl !== ''): ?>
             <h2 id="services-nw-heading" class="newsletter__title"><?= e($ntl) ?></h2>

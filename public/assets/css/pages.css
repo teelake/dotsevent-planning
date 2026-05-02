@@ -826,8 +826,8 @@
   box-sizing: border-box;
 }
 
-/* Contact: fluid newsletter band + tuck footer under strip */
-body.page-contact main .shell.contact-page.page-pad:has(.contact-page__newsletter) {
+/* Contact / Portfolio / About: tuck footer under full-width newsletter strip */
+body.page-contact main .app-shell:has(.contact-page__newsletter) {
   padding-bottom: 0;
 }
 
@@ -835,8 +835,7 @@ body.page-contact main .shell.contact-page.page-pad:has(.contact-page__newslette
   max-width: min(26rem, 100%);
 }
 
-/* Portfolio: fluid newsletter + flush footer */
-body.page-portfolio main .shell.shell--wide.page-pad:has(.portfolio-page__newsletter) {
+body.page-portfolio main .app-shell:has(.portfolio-page__newsletter) {
   padding-bottom: 0;
 }
 
@@ -844,7 +843,7 @@ body.page-portfolio main .shell.shell--wide.page-pad:has(.portfolio-page__newsle
   max-width: min(26rem, 100%);
 }
 
-body.page-about .app-shell:has(.about-modern__newsletter.services-modern__band--fluid) {
+body.page-about .app-shell:has(.about-modern__newsletter) {
   padding-bottom: 0;
 }
 
@@ -1907,18 +1906,7 @@ body.page-about .app-shell:has(.about-modern__newsletter.services-modern__band--
   border-top: 1px solid rgba(1, 1, 1, 0.045);
 }
 
-/* Full-bleed band backgrounds + constrained content column (inner pages zero `.shell` horizontal pad @1100px+) */
-@media (min-width: 1100px) {
-  .app-shell:not(.app-shell--home) .about-modern__band--fluid > .shell.shell--wide,
-  .app-shell:not(.app-shell--home) .about-modern__newsletter.services-modern__band--fluid > .shell.shell--wide {
-    padding-left: var(--shell-pad-x);
-    padding-right: var(--shell-pad-x);
-    box-sizing: border-box;
-  }
-}
-
-/* Newsletter sits outside `.about-modern`; inner `.shell` pads content inside full-bleed bands */
-.page-about .about-modern__newsletter.services-modern__band--fluid .newsletter-app .newsletter__form {
+.page-about .about-modern__newsletter .newsletter-app .newsletter__form {
   max-width: min(26rem, 100%);
 }
 
@@ -2362,23 +2350,11 @@ body.page-about .app-shell:has(.about-modern__newsletter.services-modern__band--
   font-size: 0.9rem;
 }
 
-/* Services FAQ / newsletter + About structured bands: escape centered `.app-shell` — true viewport width */
-.services-modern__band--fluid,
-.about-modern__band--fluid {
-  width: 100vw;
-  max-width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
-  padding-left: env(safe-area-inset-left, 0);
-  padding-right: env(safe-area-inset-right, 0);
-  box-sizing: border-box;
-}
-
-.services-modern__faq.services-modern__band--fluid .services-faq-panel__intro {
+.services-modern__faq.services-modern__faq--distinct .services-faq-panel__intro {
   max-width: min(70rem, 100%);
 }
 
-.services-modern__faq.services-modern__band--fluid .services-faq-panel {
+.services-modern__faq.services-modern__faq--distinct .services-faq-panel {
   max-width: none;
 }
 

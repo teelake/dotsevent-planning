@@ -31,6 +31,7 @@ $iconOffice = '<svg class="contact-channel-card__icon-svg" xmlns="http://www.w3.
 $iconPhone = '<svg class="contact-channel-card__icon-svg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>';
 ?>
 
+<div class="shell shell--wide page-pad contact-page" data-reveal>
 <?php if (($intro['enabled'] ?? true) !== false && trim((string) ($intro['title'] ?? '')) !== ''): ?>
 <section data-reveal>
     <h2 class="section__title"><?= e((string) $intro['title']) ?></h2>
@@ -204,9 +205,11 @@ $iconPhone = '<svg class="contact-channel-card__icon-svg" xmlns="http://www.w3.o
     <?php endif; ?>
 </div>
 
+</div>
+
 <?php if (($nw['enabled'] ?? true) !== false && trim((string) ($nw['title'] ?? '')) !== ''): ?>
-<section class="app-band app-band--newsletter contact-page__newsletter services-modern__band--fluid" aria-labelledby="contact-news-title" data-reveal>
-  <div class="shell shell--fluid newsletter-app">
+<section class="app-band app-band--newsletter contact-page__newsletter" aria-labelledby="contact-news-title" data-reveal>
+  <div class="shell shell--wide newsletter-app">
     <div>
       <h2 id="contact-news-title" class="newsletter__title"><?= e((string) $nw['title']) ?></h2>
       <?php if (!empty($nw['description_html'])): ?><div class="newsletter__text prose"><?= (string) $nw['description_html'] ?></div><?php endif; ?>
