@@ -77,9 +77,6 @@ $socialIcons = [
 
         <div class="app-footer__col app-footer__col--visit">
             <h2 class="app-footer__heading">Visit</h2>
-            <ul class="app-footer__links" role="list">
-                <li><a href="<?= e(app_url('contact')) ?>">Contact</a></li>
-            </ul>
             <div class="app-footer__map-embed">
                 <iframe class="app-footer__map-frame" title="Map: <?= e($siteName) ?> area" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="<?= e($mapEmbed) ?>"></iframe>
             </div>
