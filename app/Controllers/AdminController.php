@@ -513,6 +513,10 @@ final class AdminController extends Controller
         }
         unset($incoming['_csrf']);
 
+        if ($slug === 'about' && isset($incoming['blocks']) && is_array($incoming['blocks'])) {
+            $incoming['blocks'] = \App\Services\AboutPageBlocks::normalizeIncomingPathsForStorage($incoming['blocks']);
+        }
+
         if ($slug === 'services') {
             $svcBlocks = $incoming['blocks'] ?? null;
             if (!is_array($svcBlocks) || $svcBlocks === []) {

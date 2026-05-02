@@ -60,6 +60,49 @@ function app_url(string $path = ''): string
     return $p === '' ? $base . '/' : $base . '/' . $p;
 }
 
+/**
+ * Strip repeated subdirectory prefix from paths under /public (fixes double /new/new/… when saving CMS paths).
+ */
+function normalize_public_relative_path(string $path): string
+{
+    $p = ltrim($path, '/');
+    $base = app_url_base();
+    $baseTrim = ltrim($base, '/');
+    while ($baseTrim !== '' && str_starts_with($p, $baseTrim . '/')) {
+        $p = substr($p, strlen($baseTrim) + 1);
+    }
+
+    return $p;
+}
+
+/**
+ * Prefer storing uploads/* or assets/* paths in CMS JSON; collapse site URLs that already include the base path.
+ *
+ * @return string Relative path (uploads/..., assets/...) or unchanged external absolute URL.
+ */
+function canonical_upload_reference_for_storage(string $raw): string
+{
+    $s = trim($raw);
+    if ($s === '') {
+        return '';
+    }
+    if (preg_match('#^https?://#i', $s)) {
+        $path = parse_url($s, PHP_URL_PATH);
+        if (! is_string($path) || $path === '') {
+            return $s;
+        }
+        $pathTrim = ltrim($path, '/');
+        $norm = normalize_public_relative_path($pathTrim);
+        if (str_starts_with($norm, 'uploads/') || str_starts_with($norm, 'assets/')) {
+            return $norm;
+        }
+
+        return $s;
+    }
+
+    return normalize_public_relative_path(ltrim($s, '/'));
+}
+
 /** @return list<string> Slugs accepted by the book-your-event form. */
 function book_form_package_slugs(): array
 {
@@ -188,7 +231,7 @@ function public_file_url(string $pathOrUrl): string
         return $p;
     }
 
-    return app_url(ltrim($p, '/'));
+    return app_url(normalize_public_relative_path(ltrim($p, '/')));
 }
 
 function e(?string $s): string

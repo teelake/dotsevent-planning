@@ -67,6 +67,38 @@ final class AboutPageBlocks
     }
 
     /**
+     * Collapse duplicated subdirectory prefixes and full URLs into stable paths for JSON storage.
+     *
+     * @param array<string, mixed> $blocks
+     *
+     * @return array<string, mixed>
+     */
+    public static function normalizeIncomingPathsForStorage(array $blocks): array
+    {
+        $b = $blocks;
+        if (isset($b['approach']['images']) && is_array($b['approach']['images'])) {
+            foreach ($b['approach']['images'] as $i => $img) {
+                if (! is_array($img)) {
+                    continue;
+                }
+                $src = isset($img['src']) ? (string) $img['src'] : '';
+                $b['approach']['images'][$i]['src'] = canonical_upload_reference_for_storage($src);
+            }
+        }
+        if (isset($b['team']['members']) && is_array($b['team']['members'])) {
+            foreach ($b['team']['members'] as $i => $mem) {
+                if (! is_array($mem)) {
+                    continue;
+                }
+                $ph = isset($mem['photo']) ? (string) $mem['photo'] : '';
+                $b['team']['members'][$i]['photo'] = canonical_upload_reference_for_storage($ph);
+            }
+        }
+
+        return $b;
+    }
+
+    /**
      * @param array<string, mixed> $merged
      *
      * @return array<string, mixed>
@@ -114,7 +146,7 @@ final class AboutPageBlocks
                     continue;
                 }
                 $src = trim((string) ($img['src'] ?? ''));
-                $merged['approach']['images'][$j]['src'] = $src !== '' ? self::finalizeUrl($src) : '';
+                $merged['approach']['images'][$j]['src'] = $src !== '' ? canonical_upload_reference_for_storage($src) : '';
                 $merged['approach']['images'][$j]['alt'] = isset($img['alt']) ? trim((string) $img['alt']) : '';
             }
         }
@@ -143,7 +175,7 @@ final class AboutPageBlocks
                     continue;
                 }
                 $ph = trim((string) ($mem['photo'] ?? ''));
-                $merged['team']['members'][$mi]['photo'] = $ph !== '' ? self::finalizeUrl($ph) : '';
+                $merged['team']['members'][$mi]['photo'] = $ph !== '' ? canonical_upload_reference_for_storage($ph) : '';
                 $merged['team']['members'][$mi]['name'] = isset($mem['name']) ? trim((string) $mem['name']) : '';
                 $merged['team']['members'][$mi]['role'] = isset($mem['role']) ? trim((string) $mem['role']) : '';
                 $bio = isset($mem['bio_html']) && is_string($mem['bio_html']) ? CmsHtmlSanitizer::sanitize($mem['bio_html']) : '';
@@ -187,18 +219,5 @@ final class AboutPageBlocks
         $suf = isset($metric['suffix']) ? (string) $metric['suffix'] : '+';
 
         return $t >= 0 ? ((string) $t . ($suf === '°' ? '°' : $suf)) : '—';
-    }
-
-    private static function finalizeUrl(string $src): string
-    {
-        $src = trim($src);
-        if ($src === '') {
-            return '';
-        }
-        if (preg_match('#^https?://#i', $src)) {
-            return $src;
-        }
-
-        return public_file_url(ltrim($src, '/'));
     }
 }

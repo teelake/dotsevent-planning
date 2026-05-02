@@ -136,7 +136,7 @@ $nw = is_array($ab['newsletter_cta'] ?? null) ? $ab['newsletter_cta'] : [];
                     $modClass[] = ($ii % 2 === 0) ? 'about-modern-stack__frame--rise' : 'about-modern-stack__frame--quiet';
                     ?>
                 <figure class="<?= e(implode(' ', $modClass)) ?>">
-                    <img class="about-modern-stack__img" src="<?= e($src) ?>" alt="<?= e($alt) ?>" loading="lazy" decoding="async" width="800" height="520">
+                    <img class="about-modern-stack__img" src="<?= e(public_file_url($src)) ?>" alt="<?= e($alt) ?>" loading="lazy" decoding="async" width="800" height="520">
                 </figure>
                 <?php endforeach; ?>
             </div>
@@ -230,7 +230,7 @@ $nw = is_array($ab['newsletter_cta'] ?? null) ? $ab['newsletter_cta'] : [];
             <article class="about-team-card">
                 <div class="about-team-card__photo"<?= $photo === '' ? ' data-placeholder' : '' ?>>
                     <?php if ($photo !== ''): ?>
-                    <img src="<?= e($photo) ?>" alt="<?= e($nm !== '' ? $nm : 'Team member') ?>" width="320" height="400" loading="lazy" decoding="async">
+                    <img src="<?= e(public_file_url($photo)) ?>" alt="<?= e($nm !== '' ? $nm : 'Team member') ?>" width="320" height="400" loading="lazy" decoding="async">
                     <?php endif; ?>
                 </div>
                 <div class="about-team-card__body">
