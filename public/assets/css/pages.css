@@ -1893,9 +1893,6 @@ body.page-about .app-shell:has(.about-modern__newsletter.services-modern__band--
 }
 
 /* ── About page (structured `about_blocks`) — reinterpreted layouts ── */
-.page-about .about-modern {
-  overflow-x: clip;
-}
 
 /* Alternating chapter backgrounds: Approach (warm paper) → Values (`app-band--surface`) → Team (muted warmth) */
 .page-about .about-modern__approach.about-modern__approach--paper {
@@ -1910,7 +1907,7 @@ body.page-about .app-shell:has(.about-modern__newsletter.services-modern__band--
   border-top: 1px solid rgba(1, 1, 1, 0.045);
 }
 
-/* Newsletter sits outside `.about-modern` so fluid band isn’t clipped */
+/* Newsletter sits outside `.about-modern`; inner `.shell` pads content inside full-bleed bands */
 .page-about .about-modern__newsletter.services-modern__band--fluid .newsletter-app .newsletter__form {
   max-width: min(26rem, 100%);
 }
@@ -2355,8 +2352,9 @@ body.page-about .app-shell:has(.about-modern__newsletter.services-modern__band--
   font-size: 0.9rem;
 }
 
-/* Services: FAQ + newsletter escape centered `.app-shell` — fluid edge-to-edge bands */
-.services-modern__band--fluid {
+/* Services FAQ / newsletter + About structured bands: escape centered `.app-shell` — true viewport width */
+.services-modern__band--fluid,
+.about-modern__band--fluid {
   width: 100vw;
   max-width: 100vw;
   margin-left: calc(50% - 50vw);
