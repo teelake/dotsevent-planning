@@ -21,7 +21,7 @@ $nw = is_array($ab['newsletter_cta'] ?? null) ? $ab['newsletter_cta'] : [];
 <div class="about-modern">
 <?php if ($h($approach)): ?>
 <section class="app-band section about-modern__approach about-modern__approach--paper" aria-labelledby="about-approach-heading" data-reveal>
-    <div class="shell shell--wide">
+    <div class="shell shell--fluid">
         <?php $ae = trim((string) ($approach['eyebrow'] ?? '')); ?>
         <?php if ($ae !== ''): ?>
         <p class="eyebrow"><?= e($ae) ?></p>
@@ -75,7 +75,7 @@ $nw = is_array($ab['newsletter_cta'] ?? null) ? $ab['newsletter_cta'] : [];
 
 <?php if ($h($values)): ?>
 <section class="app-band app-band--surface section about-modern__values" aria-labelledby="about-values-heading" data-reveal>
-    <div class="shell shell--wide">
+    <div class="shell shell--fluid">
         <?php $ve = trim((string) ($values['eyebrow'] ?? '')); ?>
         <?php if ($ve !== ''): ?>
         <p class="eyebrow"><?= e($ve) ?></p>
@@ -127,7 +127,7 @@ $nw = is_array($ab['newsletter_cta'] ?? null) ? $ab['newsletter_cta'] : [];
 
 <?php if ($h($team)): ?>
 <section class="app-band section about-modern__team about-modern__team--warm" aria-labelledby="about-team-heading" data-reveal>
-    <div class="shell shell--wide">
+    <div class="shell shell--fluid">
         <?php $te = trim((string) ($team['eyebrow'] ?? '')); ?>
         <?php if ($te !== ''): ?>
         <p class="eyebrow"><?= e($te) ?></p>
