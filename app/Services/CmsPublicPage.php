@@ -145,7 +145,7 @@ final class CmsPublicPage
 
         $html = isset($data['html']) && is_string($data['html']) ? $data['html'] : '';
         $san = CmsHtmlSanitizer::sanitize($html);
-        if ($san !== '') {
+        if ($san !== '' && cms_html_has_visible_text($san)) {
             $out['intro_html'] = $san;
         }
 

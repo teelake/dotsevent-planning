@@ -15,6 +15,9 @@ $home_services_teaser = isset($home_services_teaser) && is_array($home_services_
     'items' => [],
 ];
 $home_intro_html = trim((string) ($home_intro_html ?? ''));
+if ($home_intro_html !== '' && !cms_html_has_visible_text($home_intro_html)) {
+    $home_intro_html = '';
+}
 
 $hEnabled = static function (?array $section): bool {
     if ($section === null) {

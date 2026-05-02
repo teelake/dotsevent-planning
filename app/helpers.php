@@ -416,6 +416,21 @@ function cms_public_page(string $slug, string $defaultTitle, string $defaultMeta
 }
 
 /**
+ * Whether sanitized/HTML fragment contains readable text (not only blanks / nbsp / empty Quill nodes).
+ */
+function cms_html_has_visible_text(string $html, int $minUtf8Length = 2): bool
+{
+    $plain = trim(html_entity_decode(strip_tags($html), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+    $plain = preg_replace('/[\x{00A0}\x{200B}-\x{200D}\x{FEFF}]/u', '', $plain);
+    if ($plain === null || $plain === '') {
+        return false;
+    }
+    $plain = trim(preg_replace('/\s+/u', ' ', $plain) ?? '');
+
+    return $plain !== '' && mb_strlen($plain) >= $minUtf8Length;
+}
+
+/**
  * Home hero + intro from CMS (optional slides JSON + HTML intro).
  *
  * @param list<array<string, string>> $defaultSlides
