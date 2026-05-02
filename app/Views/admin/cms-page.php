@@ -724,7 +724,7 @@ $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
   }
 
   document.getElementById('cms-page-form').addEventListener('submit', function (ev) {
-    var payload = { html: initQuill().root.innerHTML };
+    var payload = { html: pageSlug === 'about' ? '' : initQuill().root.innerHTML };
     if (metaEl) {
       payload.meta_description = metaEl.value.trim();
     }

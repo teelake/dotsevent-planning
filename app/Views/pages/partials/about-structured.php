@@ -126,7 +126,7 @@ $nw = is_array($ab['newsletter_cta'] ?? null) ? $ab['newsletter_cta'] : [];
 <?php endif; ?>
 
 <?php if ($h($team)): ?>
-<section class="app-band section about-modern__team" aria-labelledby="about-team-heading" data-reveal>
+<section class="app-band section about-modern__team about-modern__team--warm" aria-labelledby="about-team-heading" data-reveal>
     <div class="shell shell--wide">
         <?php $te = trim((string) ($team['eyebrow'] ?? '')); ?>
         <?php if ($te !== ''): ?>

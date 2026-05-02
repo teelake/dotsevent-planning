@@ -23,6 +23,8 @@ final class CmsPublicPage
      *   portfolio_blocks?: array<string, mixed>,
      *   rentals_blocks?: array<string, mixed>
      * }
+     *
+     * The About route never exposes rich-text body (`has_custom_body` / `body_html`); use structured blocks only.
      */
     public static function page(string $slug, string $defaultTitle, string $defaultMeta): array
     {

@@ -1897,6 +1897,19 @@ body.page-about .app-shell:has(.about-modern__newsletter.services-modern__band--
   overflow-x: clip;
 }
 
+/* Alternating chapter backgrounds: Approach (warm paper) → Values (`app-band--surface`) → Team (muted warmth) */
+.page-about .about-modern__approach.about-modern__approach--paper {
+  background: #fffefb;
+  border-bottom: 1px solid rgba(1, 1, 1, 0.055);
+}
+
+.page-about .about-modern__team.about-modern__team--warm {
+  background:
+    radial-gradient(72% 48% at 100% 0%, rgba(245, 192, 19, 0.075), transparent 58%),
+    linear-gradient(180deg, #f8f7f4 0%, #f0eee8 100%);
+  border-top: 1px solid rgba(1, 1, 1, 0.045);
+}
+
 /* Newsletter sits outside `.about-modern` so fluid band isn’t clipped */
 .page-about .about-modern__newsletter.services-modern__band--fluid .newsletter-app .newsletter__form {
   max-width: min(26rem, 100%);
