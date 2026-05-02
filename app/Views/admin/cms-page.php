@@ -48,6 +48,8 @@ $cmsHasStructuredBlocks = ($slug === 'home' && $mergedBlocks !== null)
     || ($slug === 'portfolio' && $mergedPortfolioBlocks !== null)
     || ($slug === 'rentals' && $mergedRentalsBlocks !== null);
 
+$cmsHasRichTextBody = $slug !== 'about';
+
 $cmsPageSlugLabel = $slug !== '' ? $slug : 'page';
 $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
 ?>
@@ -77,7 +79,7 @@ $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
             <div class="cms-edit__hint">Slides: <a class="cms-edit__hint-a" href="<?= e(app_url('admin/cms/slides')) ?>">Hero carousel</a>.
                 Homepage services grid uses <a class="cms-edit__hint-a" href="<?= e(app_url('admin/cms/page/services')) ?>">Services → Services catalogue</a>.</div>
         <?php elseif ($slug === 'about') : ?>
-            <div class="cms-edit__hint">Below: modular bands; Body is optional legacy story copy.</div>
+            <div class="cms-edit__hint">Use structured sections only — hero and modular bands drive the live About page.</div>
         <?php elseif ($slug === 'services') : ?>
             <div class="cms-edit__hint">Structured sections control the Services page. Under <strong>Services catalogue</strong> you can add or remove service cards (same list powers the Home teaser when enabled).</div>
         <?php elseif ($slug === 'contact') : ?>
@@ -104,8 +106,10 @@ $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
                                 <button type="button" role="tab" class="cms-edit-tabs__tab" id="cms-tab-blocks"
                                     aria-selected="false" aria-controls="cms-panel-blocks" tabindex="-1">Structured sections</button>
                             <?php endif; ?>
+                            <?php if ($cmsHasRichTextBody) : ?>
                             <button type="button" role="tab" class="cms-edit-tabs__tab" id="cms-tab-body"
                                 aria-selected="false" aria-controls="cms-panel-body" tabindex="-1">Rich text body</button>
+                            <?php endif; ?>
                         </div>
                     </div>
 
@@ -161,6 +165,7 @@ $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
                         </div>
                     <?php endif; ?>
 
+                    <?php if ($cmsHasRichTextBody) : ?>
                     <div id="cms-panel-body" role="tabpanel" class="cms-edit-tabs__panel" aria-labelledby="cms-tab-body" hidden>
                         <section id="cms-section-body" class="cms-edit-panel cms-edit-panel--stretch">
                             <div class="cms-edit-panel__head">
@@ -174,6 +179,7 @@ $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
                             </div>
                         </section>
                     </div>
+                    <?php endif; ?>
                 </div>
 
                 <footer id="cms-section-save" class="cms-edit-savebar">
@@ -459,7 +465,7 @@ $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
   }
 
   populateBlocksAnchors();
-  initCmsTabs(initQuill);
+  initCmsTabs(pageSlug === 'about' ? function () {} : initQuill);
 
   function hbAppendTemplate(tplId, containerId) {
     const tpl = document.getElementById(tplId);

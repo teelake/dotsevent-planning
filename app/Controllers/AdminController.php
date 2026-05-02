@@ -539,6 +539,10 @@ final class AdminController extends Controller
         }
         $merged = array_merge($old, $incoming);
 
+        if ($slug === 'about') {
+            $merged['html'] = '';
+        }
+
         /*
          * Prevent duplicate Services block trees at the JSON root (legacy merges + relational rows).
          * Only `blocks.*` should carry structured sections — root copies hide catalogue rows from readers.

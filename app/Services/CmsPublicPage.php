@@ -62,6 +62,8 @@ final class CmsPublicPage
         }
 
         if ($slug === 'about') {
+            $out['has_custom_body'] = false;
+            $out['body_html'] = '';
             $storedAbout = $data !== null ? self::blocksFromContentData($data) : null;
             $out['about_blocks'] = AboutPageBlocks::merged($storedAbout);
         }

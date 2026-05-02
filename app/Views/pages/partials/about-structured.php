@@ -20,7 +20,7 @@ $nw = is_array($ab['newsletter_cta'] ?? null) ? $ab['newsletter_cta'] : [];
 
 <div class="about-modern">
 <?php if ($h($approach)): ?>
-<section class="app-band section about-modern__approach" aria-labelledby="about-approach-heading" data-reveal>
+<section class="app-band section about-modern__approach about-modern__approach--paper" aria-labelledby="about-approach-heading" data-reveal>
     <div class="shell shell--wide">
         <?php $ae = trim((string) ($approach['eyebrow'] ?? '')); ?>
         <?php if ($ae !== ''): ?>
