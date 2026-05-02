@@ -169,12 +169,30 @@ $members = isset($team['members']) && is_array($team['members']) ? $team['member
                 <div class="form-row" style="margin:0;"><label for="ab-val-title">Title</label><input class="input" id="ab-val-title" type="text" value="<?= e((string) ($vals['title'] ?? '')) ?>"></div>
             </div>
             <div id="ab-values" class="hb-repeat-list">
-                <?php foreach ($valueItems as $vi): ?>
+                <?php foreach ($valueItems as $abvIdx => $vi): ?>
                 <?php if (!is_array($vi)) {
                     continue;
                 } ?>
+                <?php
+                    $abvTone = trim((string) ($vi['banner_tone'] ?? ''));
+                    if ($abvTone !== '1' && $abvTone !== '2' && $abvTone !== '3' && $abvTone !== '4') {
+                        $abvTone = '';
+                    }
+                ?>
                 <div class="hb-repeat-row ab-repeat-row js-ab-val-row">
-                    <div class="form-row"><label>Value title</label><input type="text" class="input js-abv-title" value="<?= e((string) ($vi['title'] ?? '')) ?>"></div>
+                    <div class="home-blocks-editor__grid home-blocks-editor__grid--2">
+                        <div class="form-row" style="margin:0;"><label>Value title</label><input type="text" class="input js-abv-title" value="<?= e((string) ($vi['title'] ?? '')) ?>"></div>
+                        <div class="form-row" style="margin:0;">
+                            <label for="abv-banner-tone-<?= (int) $abvIdx ?>">Banner color</label>
+                            <select id="abv-banner-tone-<?= (int) $abvIdx ?>" class="input js-abv-banner-tone" aria-label="Banner color preset">
+                                <option value="" <?= $abvTone === '' ? 'selected' : '' ?>>Auto (rotate)</option>
+                                <option value="1" <?= $abvTone === '1' ? 'selected' : '' ?>>Blue</option>
+                                <option value="2" <?= $abvTone === '2' ? 'selected' : '' ?>>Orange</option>
+                                <option value="3" <?= $abvTone === '3' ? 'selected' : '' ?>>Green</option>
+                                <option value="4" <?= $abvTone === '4' ? 'selected' : '' ?>>Champagne</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-row"><label>Subtitle / tagline</label><input type="text" class="input js-abv-subtitle" value="<?= e((string) ($vi['subtitle'] ?? '')) ?>" placeholder="Short line under the title"></div>
                     <div class="form-row"><label>Summary (HTML)</label><textarea class="input input--textarea js-abv-sum" rows="3"><?= e((string) ($vi['summary_html'] ?? '')) ?></textarea></div>
                     <button type="button" class="btn btn--ghost ab-row-remove">Remove</button>
@@ -295,7 +313,19 @@ $members = isset($team['members']) && is_array($team['members']) ? $team['member
 
 <template id="ab-tpl-value">
     <div class="hb-repeat-row ab-repeat-row js-ab-val-row">
-        <div class="form-row"><label>Value title</label><input type="text" class="input js-abv-title" value=""></div>
+        <div class="home-blocks-editor__grid home-blocks-editor__grid--2">
+            <div class="form-row" style="margin:0;"><label>Value title</label><input type="text" class="input js-abv-title" value=""></div>
+            <div class="form-row" style="margin:0;">
+                <label>Banner color</label>
+                <select class="input js-abv-banner-tone" aria-label="Banner color preset">
+                    <option value="" selected>Auto (rotate)</option>
+                    <option value="1">Blue</option>
+                    <option value="2">Orange</option>
+                    <option value="3">Green</option>
+                    <option value="4">Champagne</option>
+                </select>
+            </div>
+        </div>
         <div class="form-row"><label>Subtitle / tagline</label><input type="text" class="input js-abv-subtitle" value="" placeholder="Short line under the title"></div>
         <div class="form-row"><label>Summary (HTML)</label><textarea class="input input--textarea js-abv-sum" rows="3"></textarea></div>
         <button type="button" class="btn btn--ghost ab-row-remove">Remove</button>

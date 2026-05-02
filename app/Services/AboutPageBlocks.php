@@ -129,6 +129,7 @@ final class AboutPageBlocks
                 $merged['values']['items'][$k]['summary_html'] = $sum;
                 $merged['values']['items'][$k]['title'] = isset($vi['title']) ? trim((string) $vi['title']) : '';
                 $merged['values']['items'][$k]['subtitle'] = isset($vi['subtitle']) ? trim((string) $vi['subtitle']) : '';
+                $merged['values']['items'][$k]['banner_tone'] = self::normalizeValueBannerTone($vi['banner_tone'] ?? '');
             }
         }
 
@@ -156,6 +157,22 @@ final class AboutPageBlocks
         }
 
         return $merged;
+    }
+
+    /**
+     * Preset banner backgrounds for core values: '' = auto-rotate, 1–4 = fixed preset.
+     */
+    private static function normalizeValueBannerTone(mixed $raw): string
+    {
+        $s = strtolower(trim((string) $raw));
+        if ($s === '' || $s === 'auto') {
+            return '';
+        }
+        if ($s === '1' || $s === '2' || $s === '3' || $s === '4') {
+            return $s;
+        }
+
+        return '';
     }
 
     /**

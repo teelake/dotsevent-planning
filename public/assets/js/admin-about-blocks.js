@@ -252,6 +252,7 @@
           title: row.querySelector(".js-abv-title") ? row.querySelector(".js-abv-title").value.trim() : "",
           subtitle: row.querySelector(".js-abv-subtitle") ? row.querySelector(".js-abv-subtitle").value.trim() : "",
           summary_html: row.querySelector(".js-abv-sum") ? row.querySelector(".js-abv-sum").value.trim() : "",
+          banner_tone: row.querySelector(".js-abv-banner-tone") ? String(row.querySelector(".js-abv-banner-tone").value || "").trim() : "",
         });
       });
       return out;

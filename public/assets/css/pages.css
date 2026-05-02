@@ -2080,6 +2080,15 @@ body.page-about .app-shell:has(.about-modern__newsletter.services-modern__band--
   color: #fff;
 }
 
+.about-value-cap--tone-4 .about-value-cap__banner {
+  background: linear-gradient(168deg, #faf6ee 0%, #ebe4d7 48%, #dfd5c6 100%);
+  color: var(--color-ink);
+}
+
+.about-value-cap--tone-4 .about-value-cap__subtitle {
+  color: var(--color-ink-muted);
+}
+
 .about-value-cap--split .about-value-cap__title {
   margin: 0;
   font-family: var(--font-display);

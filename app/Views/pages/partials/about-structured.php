@@ -169,7 +169,12 @@ $nw = is_array($ab['newsletter_cta'] ?? null) ? $ab['newsletter_cta'] : [];
                 $tit = trim((string) ($it['title'] ?? ''));
                 $sub = trim((string) ($it['subtitle'] ?? ''));
                 $sum = isset($it['summary_html']) && is_string($it['summary_html']) ? $it['summary_html'] : '';
-                $tone = ((int) $vi % 3) + 1;
+                $bt = trim((string) ($it['banner_tone'] ?? ''));
+                if ($bt === '1' || $bt === '2' || $bt === '3' || $bt === '4') {
+                    $tone = (int) $bt;
+                } else {
+                    $tone = ((int) $vi % 4) + 1;
+                }
                 ?>
             <article class="about-value-cap about-value-cap--split about-value-cap--tone-<?= (int) $tone ?>">
                 <?php if ($tit !== '' || $sub !== ''): ?>
