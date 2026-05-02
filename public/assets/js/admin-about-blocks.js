@@ -29,7 +29,130 @@
     return el ? el.checked : false;
   }
 
-  window.dotseAboutBlocksBind = function dotseAboutBlocksBind() {
+  function bindAboutMediaUploads(root, opts) {
+    var uploadUrl = opts.uploadUrl || "";
+    var csrf = opts.csrf || "";
+    var publicBase = String(opts.publicBase || "").replace(/\/?$/, "");
+
+    function absUrl(path) {
+      var p = String(path || "").trim().replace(/^\/+/, "");
+      if (!p || !publicBase) {
+        return "";
+      }
+      return publicBase + "/" + p;
+    }
+
+    function syncMediaPreview(row) {
+      if (!publicBase || !row) {
+        return;
+      }
+      var zone = row.querySelector("[data-ab-media-upload]");
+      var pathInput = row.querySelector(".js-abi-src, .js-abm-photo");
+      if (!zone || !pathInput) {
+        return;
+      }
+      var img = zone.querySelector(".js-ab-upload-preview");
+      var ph = zone.querySelector(".js-ab-upload-ph");
+      if (!img || !ph) {
+        return;
+      }
+      var path = pathInput.value.trim();
+      if (!path) {
+        img.removeAttribute("src");
+        img.hidden = true;
+        ph.hidden = false;
+        return;
+      }
+      img.src = absUrl(path);
+      img.hidden = false;
+      ph.hidden = true;
+    }
+
+    function syncAllMediaPreviews() {
+      root.querySelectorAll(".js-ab-img-row, .js-ab-mem-row").forEach(syncMediaPreview);
+    }
+
+    syncAllMediaPreviews();
+
+    root.addEventListener("input", function (ev) {
+      var t = ev.target;
+      if (!t.matches(".js-abi-src, .js-abm-photo")) {
+        return;
+      }
+      var row = t.closest(".js-ab-img-row, .js-ab-mem-row");
+      syncMediaPreview(row);
+    });
+
+    root.addEventListener("click", function (ev) {
+      var pick = ev.target.closest("[data-ab-media-upload] .slide-dropzone__pick");
+      if (!pick || !root.contains(pick)) {
+        return;
+      }
+      ev.preventDefault();
+      var zone = pick.closest("[data-ab-media-upload]");
+      var finput = zone ? zone.querySelector(".slide-dropzone__input") : null;
+      if (finput) {
+        finput.click();
+      }
+    });
+
+    root.addEventListener("change", function (ev) {
+      var input = ev.target;
+      if (!input.classList || !input.classList.contains("slide-dropzone__input")) {
+        return;
+      }
+      var zone = input.closest("[data-ab-media-upload]");
+      if (!zone || !root.contains(zone)) {
+        return;
+      }
+      if (!uploadUrl || !csrf) {
+        alert("Upload is not configured.");
+        input.value = "";
+        return;
+      }
+      var row = zone.closest(".js-ab-img-row, .js-ab-mem-row");
+      var pathInput = row ? row.querySelector(".js-abi-src, .js-abm-photo") : null;
+      var img = zone.querySelector(".js-ab-upload-preview");
+      var ph = zone.querySelector(".js-ab-upload-ph");
+      if (!input.files || !input.files[0] || !pathInput || !img || !ph) {
+        input.value = "";
+        return;
+      }
+
+      var subdir = zone.getAttribute("data-upload-subdir") || "about";
+      var file = input.files[0];
+
+      (async function () {
+        try {
+          var fd = new FormData();
+          fd.append("file", file);
+          fd.append("_csrf", csrf);
+          fd.append("upload_subdir", subdir);
+          var res = await fetch(uploadUrl, { method: "POST", body: fd, credentials: "same-origin" });
+          var data = await res.json().catch(function () {
+            return null;
+          });
+          if (!data || !data.ok || !data.path) {
+            alert((data && data.error) ? data.error : "Upload failed");
+            return;
+          }
+          pathInput.value = data.path;
+          img.src = data.url || absUrl(data.path);
+          img.hidden = false;
+          ph.hidden = true;
+        } catch (e) {
+          alert("Upload failed");
+        } finally {
+          input.value = "";
+        }
+      })();
+    });
+
+    return syncAllMediaPreviews;
+  }
+
+  window.dotseAboutBlocksBind = function dotseAboutBlocksBind(opts) {
+    opts = opts || {};
     var root = document.getElementById("about-blocks-editor");
     if (!root) {
       return;
@@ -55,11 +178,16 @@
       ["ab-add-member", "ab-tpl-member", "ab-members"],
     ];
 
+    var syncAllMediaPreviews = bindAboutMediaUploads(root, opts);
+
     map.forEach(function (x) {
       var b = document.getElementById(x[0]);
       if (b) {
         b.addEventListener("click", function () {
           append(x[1], x[2]);
+          if ((x[2] === "ab-img-rows" || x[2] === "ab-members") && typeof syncAllMediaPreviews === "function") {
+            syncAllMediaPreviews();
+          }
         });
       }
     });

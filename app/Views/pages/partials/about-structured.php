@@ -238,6 +238,8 @@ $nw = is_array($ab['newsletter_cta'] ?? null) ? $ab['newsletter_cta'] : [];
 </section>
 <?php endif; ?>
 
+</div>
+
 <?php if ($h($nw)): ?>
 <?php
     $ntl = trim((string) ($nw['title'] ?? ''));
@@ -267,4 +269,3 @@ $nhtml = isset($nw['text_html']) && is_string($nw['text_html']) ? $nw['text_html
     </div>
 </section>
 <?php endif; ?>
-</div>

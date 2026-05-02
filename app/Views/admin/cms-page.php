@@ -264,7 +264,11 @@ $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
   }
 
   if (pageSlug === 'about' && typeof window.dotseAboutBlocksBind === 'function') {
-    window.dotseAboutBlocksBind();
+    window.dotseAboutBlocksBind({
+      uploadUrl: <?= json_encode(app_url('admin/media/upload'), JSON_THROW_ON_ERROR) ?>,
+      csrf: <?= json_encode(\App\Core\Csrf::token(), JSON_THROW_ON_ERROR) ?>,
+      publicBase: <?= json_encode(rtrim(app_url(''), '/'), JSON_THROW_ON_ERROR) ?>,
+    });
   }
   if (pageSlug === 'services' && typeof window.dotseServicesBlocksBind === 'function') {
     window.dotseServicesBlocksBind();

@@ -844,6 +844,10 @@ body.page-portfolio main .shell.shell--wide.page-pad:has(.portfolio-page__newsle
   max-width: min(26rem, 100%);
 }
 
+body.page-about .app-shell:has(.about-modern__newsletter.services-modern__band--fluid) {
+  padding-bottom: 0;
+}
+
 /* Premium contact form */
 .contact-form-panel {
   position: relative;
@@ -1727,37 +1731,37 @@ body.page-portfolio main .shell.shell--wide.page-pad:has(.portfolio-page__newsle
   gap: 0.62rem;
 }
 
-.home-package-card__features li {
-  position: relative;
+/* Package features: soft circular ticks — avoids heavy squares clipping adjacent text */
+.home-package-card__features:not(.home-package-card__features--rich) > li,
+.home-package-card__features--rich.prose ul > li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.62rem;
   margin: 0;
-  padding-left: 1.72rem;
+  padding-left: 0;
   list-style: none;
 }
 
-.home-package-card__features li::before {
+.home-package-card__features:not(.home-package-card__features--rich) > li::before,
+.home-package-card__features--rich.prose ul > li::before {
   content: "";
-  position: absolute;
-  left: 0;
-  top: 0.4em;
-  width: 1.08rem;
-  height: 1.08rem;
-  border-radius: 0.32rem;
-  background:
-    linear-gradient(145deg, color-mix(in srgb, var(--color-brand-gold) 88%, #fff 12%), var(--color-gold-mid));
-  box-shadow: 0 1px 3px rgba(1, 1, 1, 0.12);
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  margin-top: 0.26em;
+  border-radius: 999px;
+  box-sizing: border-box;
+  border: 1px solid color-mix(in srgb, var(--color-brand-gold) 38%, transparent);
+  background-color: color-mix(in srgb, var(--color-brand-gold) 14%, transparent);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='%237a6310' stroke-width='1.85' stroke-linecap='round' stroke-linejoin='round' d='M2.5 6.2 5 8.7 9.5 3.3'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 0.52rem auto;
 }
 
-.home-package-card__features li::after {
-  content: "";
-  position: absolute;
-  left: 0.3rem;
-  top: calc(0.4em + 0.38rem);
-  width: 0.26rem;
-  height: 0.48rem;
-  border: solid var(--surface-noir);
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
-  opacity: 0.82;
+.home-package-card__features:not(.home-package-card__features--rich) > li::after,
+.home-package-card__features--rich.prose ul > li::after {
+  display: none;
 }
 
 .home-package-card__features--rich.prose {
@@ -1785,7 +1789,6 @@ body.page-portfolio main .shell.shell--wide.page-pad:has(.portfolio-page__newsle
 
 .home-package-card__features--rich.prose li {
   margin: 0;
-  padding-left: 1.72rem;
 }
 
 .home-package-card__features--rich.prose p {
@@ -1892,6 +1895,11 @@ body.page-portfolio main .shell.shell--wide.page-pad:has(.portfolio-page__newsle
 /* ── About page (structured `about_blocks`) — reinterpreted layouts ── */
 .page-about .about-modern {
   overflow-x: clip;
+}
+
+/* Newsletter sits outside `.about-modern` so fluid band isn’t clipped */
+.page-about .about-modern__newsletter.services-modern__band--fluid .newsletter-app .newsletter__form {
+  max-width: min(26rem, 100%);
 }
 
 .about-modern-story {

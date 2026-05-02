@@ -613,15 +613,19 @@ final class AdminController extends Controller
         }
         $ext = $allowed[$mime];
         $uploadSubdir = trim((string) ($_POST['upload_subdir'] ?? ''));
+        $subdirDirs = [
+            'slides' => 'uploads/slides',
+            'about' => 'uploads/about',
+        ];
         $relativeUploadDir = 'uploads';
         if ($uploadSubdir !== '') {
-            if ($uploadSubdir !== 'slides') {
+            if (!isset($subdirDirs[$uploadSubdir])) {
                 http_response_code(400);
                 header('Content-Type: application/json');
                 echo json_encode(['ok' => false, 'error' => 'Invalid upload target']);
                 exit;
             }
-            $relativeUploadDir = 'uploads/slides';
+            $relativeUploadDir = $subdirDirs[$uploadSubdir];
         }
         $uploadDir = dirname(__DIR__, 2) . '/public/' . $relativeUploadDir;
         if (!is_dir($uploadDir)) {

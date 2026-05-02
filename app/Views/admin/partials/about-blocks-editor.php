@@ -123,15 +123,30 @@ $members = isset($team['members']) && is_array($team['members']) ? $team['member
                 <label for="ab-ap-lead">Lead copy (HTML)</label>
                 <textarea class="input input--textarea" id="ab-ap-lead" rows="6"><?= e((string) ($ap['lead_html'] ?? '')) ?></textarea>
             </div>
-            <p class="text-muted" style="font-size:0.85rem;margin:0">Stack images — paths under <code>/public</code>, e.g. <code>uploads/photo.jpg</code></p>
+            <p class="text-muted" style="font-size:0.85rem;margin:0">Upload per slot (stored under <code>uploads/about/</code>) or paste a path.</p>
             <div id="ab-img-rows" class="hb-repeat-list">
                 <?php foreach ($imgs as $im): ?>
                 <?php if (!is_array($im)) {
                     continue;
                 } ?>
+                <?php
+                    $abiSrc = trim((string) ($im['src'] ?? ''));
+                    $abiPv = $abiSrc !== '' ? app_url(ltrim($abiSrc, '/')) : '';
+                ?>
                 <div class="hb-repeat-row ab-repeat-row js-ab-img-row">
                     <div class="home-blocks-editor__grid home-blocks-editor__grid--2">
-                        <div class="form-row" style="margin:0;"><label>Image path</label><input type="text" class="input js-abi-src" value="<?= e((string) ($im['src'] ?? '')) ?>"></div>
+                        <div class="form-row" style="margin:0;">
+                            <label>Image path</label>
+                            <input type="text" class="input js-abi-src" value="<?= e((string) ($im['src'] ?? '')) ?>" placeholder="uploads/about/photo.jpg" autocomplete="off">
+                            <div class="slide-dropzone slide-dropzone--compact ab-about-media-upload" data-ab-media-upload data-upload-subdir="about">
+                                <input type="file" class="slide-dropzone__input" accept="image/*" aria-label="Upload approach image">
+                                <div class="slide-dropzone__ui">
+                                    <img<?= $abiPv !== '' ? ' src="' . e($abiPv) . '"' : '' ?> alt="" class="slide-dropzone__preview js-ab-upload-preview"<?= $abiPv === '' ? ' hidden' : '' ?>>
+                                    <span class="slide-dropzone__placeholder js-ab-upload-ph"<?= $abiPv !== '' ? ' hidden' : '' ?>>JPG, PNG, or WEBP</span>
+                                </div>
+                                <button type="button" class="btn btn--secondary slide-dropzone__pick">Pick file</button>
+                            </div>
+                        </div>
                         <div class="form-row" style="margin:0;"><label>Alt text</label><input type="text" class="input js-abi-alt" value="<?= e((string) ($im['alt'] ?? '')) ?>"></div>
                     </div>
                     <button type="button" class="btn btn--ghost ab-row-remove">Remove image</button>
@@ -189,12 +204,27 @@ $members = isset($team['members']) && is_array($team['members']) ? $team['member
                 <?php if (!is_array($mem)) {
                     continue;
                 } ?>
+                <?php
+                    $photoPath = trim((string) ($mem['photo'] ?? ''));
+                    $photoPv = $photoPath !== '' ? app_url(ltrim($photoPath, '/')) : '';
+                ?>
                 <div class="hb-repeat-row ab-repeat-row js-ab-mem-row">
                     <div class="home-blocks-editor__grid home-blocks-editor__grid--2">
                         <div class="form-row" style="margin:0;"><label>Name</label><input type="text" class="input js-abm-name" value="<?= e((string) ($mem['name'] ?? '')) ?>"></div>
                         <div class="form-row" style="margin:0;"><label>Role</label><input type="text" class="input js-abm-role" value="<?= e((string) ($mem['role'] ?? '')) ?>"></div>
                     </div>
-                    <div class="form-row"><label>Photo path</label><input type="text" class="input js-abm-photo" value="<?= e((string) ($mem['photo'] ?? '')) ?>"></div>
+                    <div class="form-row">
+                        <label>Photo path</label>
+                        <input type="text" class="input js-abm-photo" value="<?= e((string) ($mem['photo'] ?? '')) ?>" placeholder="uploads/about/team.jpg" autocomplete="off">
+                        <div class="slide-dropzone slide-dropzone--compact ab-about-media-upload" data-ab-media-upload data-upload-subdir="about">
+                            <input type="file" class="slide-dropzone__input" accept="image/*" aria-label="Upload team photo">
+                            <div class="slide-dropzone__ui">
+                                <img<?= $photoPv !== '' ? ' src="' . e($photoPv) . '"' : '' ?> alt="" class="slide-dropzone__preview js-ab-upload-preview"<?= $photoPv === '' ? ' hidden' : '' ?>>
+                                <span class="slide-dropzone__placeholder js-ab-upload-ph"<?= $photoPv !== '' ? ' hidden' : '' ?>>Portrait · JPG, PNG, WEBP</span>
+                            </div>
+                            <button type="button" class="btn btn--secondary slide-dropzone__pick">Pick file</button>
+                        </div>
+                    </div>
                     <div class="form-row"><label>Bio (HTML)</label><textarea class="input input--textarea js-abm-bio" rows="2"><?= e((string) ($mem['bio_html'] ?? '')) ?></textarea></div>
                     <button type="button" class="btn btn--ghost ab-row-remove">Remove</button>
                 </div>
@@ -244,7 +274,18 @@ $members = isset($team['members']) && is_array($team['members']) ? $team['member
 <template id="ab-tpl-img">
     <div class="hb-repeat-row ab-repeat-row js-ab-img-row">
         <div class="home-blocks-editor__grid home-blocks-editor__grid--2">
-            <div class="form-row" style="margin:0;"><label>Image path</label><input type="text" class="input js-abi-src" value=""></div>
+            <div class="form-row" style="margin:0;">
+                <label>Image path</label>
+                <input type="text" class="input js-abi-src" value="" placeholder="uploads/about/photo.jpg" autocomplete="off">
+                <div class="slide-dropzone slide-dropzone--compact ab-about-media-upload" data-ab-media-upload data-upload-subdir="about">
+                    <input type="file" class="slide-dropzone__input" accept="image/*" aria-label="Upload approach image">
+                    <div class="slide-dropzone__ui">
+                        <img src="" alt="" class="slide-dropzone__preview js-ab-upload-preview" hidden>
+                        <span class="slide-dropzone__placeholder js-ab-upload-ph">JPG, PNG, or WEBP</span>
+                    </div>
+                    <button type="button" class="btn btn--secondary slide-dropzone__pick">Pick file</button>
+                </div>
+            </div>
             <div class="form-row" style="margin:0;"><label>Alt text</label><input type="text" class="input js-abi-alt" value=""></div>
         </div>
         <button type="button" class="btn btn--ghost ab-row-remove">Remove image</button>
@@ -265,7 +306,18 @@ $members = isset($team['members']) && is_array($team['members']) ? $team['member
             <div class="form-row" style="margin:0;"><label>Name</label><input type="text" class="input js-abm-name" value=""></div>
             <div class="form-row" style="margin:0;"><label>Role</label><input type="text" class="input js-abm-role" value=""></div>
         </div>
-        <div class="form-row"><label>Photo path</label><input type="text" class="input js-abm-photo" value=""></div>
+        <div class="form-row">
+            <label>Photo path</label>
+            <input type="text" class="input js-abm-photo" value="" placeholder="uploads/about/team.jpg" autocomplete="off">
+            <div class="slide-dropzone slide-dropzone--compact ab-about-media-upload" data-ab-media-upload data-upload-subdir="about">
+                <input type="file" class="slide-dropzone__input" accept="image/*" aria-label="Upload team photo">
+                <div class="slide-dropzone__ui">
+                    <img src="" alt="" class="slide-dropzone__preview js-ab-upload-preview" hidden>
+                    <span class="slide-dropzone__placeholder js-ab-upload-ph">Portrait · JPG, PNG, WEBP</span>
+                </div>
+                <button type="button" class="btn btn--secondary slide-dropzone__pick">Pick file</button>
+            </div>
+        </div>
         <div class="form-row"><label>Bio (HTML)</label><textarea class="input input--textarea js-abm-bio" rows="2"></textarea></div>
         <button type="button" class="btn btn--ghost ab-row-remove">Remove</button>
     </div>

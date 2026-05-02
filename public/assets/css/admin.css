@@ -1041,6 +1041,14 @@ body.admin-sidebar-open .admin-backdrop {
   padding: 0.75rem;
 }
 
+.ab-about-media-upload {
+  margin-top: 0.45rem;
+}
+
+.home-blocks-editor .ab-about-media-upload.slide-dropzone--compact .slide-dropzone__ui {
+  min-height: 3.25rem;
+}
+
 .slide-dropzone__input {
   position: absolute;
   width: 0.1px;
