@@ -2112,6 +2112,10 @@ body.admin-sidebar-open .admin-backdrop {
   min-height: 14rem;
 }
 
+.cms-edit-quill--about-lead .ql-container.ql-snow {
+  min-height: 10rem;
+}
+
 .hb-pkg-feats-editor-wrap .hb-pkg-feats-quill {
   margin-top: 0.35rem;
 }

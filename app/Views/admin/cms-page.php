@@ -209,7 +209,41 @@ $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
   } catch (e) {
     data = {};
   }
+  const cmsMediaUploadUrl = <?= json_encode(app_url('admin/media/upload'), JSON_THROW_ON_ERROR) ?>;
+  const cmsMediaCsrf = <?= json_encode(\App\Core\Csrf::token(), JSON_THROW_ON_ERROR) ?>;
+
+  function cmsQuillImageHandler(quillGetter) {
+    return function () {
+      const input = document.createElement('input');
+      input.setAttribute('type', 'file');
+      input.setAttribute('accept', 'image/*');
+      input.click();
+      input.onchange = async function () {
+        const q = quillGetter();
+        if (!q) return;
+        const file = input.files && input.files[0];
+        if (!file) return;
+        const fd = new FormData();
+        fd.append('file', file);
+        fd.append('_csrf', cmsMediaCsrf);
+        const res = await fetch(cmsMediaUploadUrl, {
+          method: 'POST',
+          body: fd,
+          credentials: 'same-origin',
+        });
+        const out = await res.json().catch(function () { return null; });
+        if (!out || !out.ok || !out.url) {
+          alert((out && out.error) ? out.error : 'Upload failed');
+          return;
+        }
+        const range = q.getSelection(true);
+        q.insertEmbed(range.index, 'image', out.url);
+      };
+    };
+  }
+
   let quill = null;
+  let quillAboutLead = null;
   function initQuill() {
     if (quill !== null) {
       return quill;
@@ -226,32 +260,7 @@ $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
             ['clean'],
           ],
           handlers: {
-            image: function () {
-              const input = document.createElement('input');
-              input.setAttribute('type', 'file');
-              input.setAttribute('accept', 'image/*');
-              input.click();
-              input.onchange = async function () {
-                const q = initQuill();
-                const file = input.files && input.files[0];
-                if (!file) return;
-                const fd = new FormData();
-                fd.append('file', file);
-                fd.append('_csrf', <?= json_encode(\App\Core\Csrf::token(), JSON_THROW_ON_ERROR) ?>);
-                const res = await fetch(<?= json_encode(app_url('admin/media/upload'), JSON_THROW_ON_ERROR) ?>, {
-                  method: 'POST',
-                  body: fd,
-                  credentials: 'same-origin',
-                });
-                const out = await res.json().catch(function () { return null; });
-                if (!out || !out.ok || !out.url) {
-                  alert((out && out.error) ? out.error : 'Upload failed');
-                  return;
-                }
-                const range = q.getSelection(true);
-                q.insertEmbed(range.index, 'image', out.url);
-              };
-            },
+            image: cmsQuillImageHandler(function () { return initQuill(); }),
           },
         },
       },
@@ -261,6 +270,56 @@ $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
       quill.root.innerHTML = htmlSeed;
     }
     return quill;
+  }
+
+  function syncAboutApproachLeadQuill() {
+    if (quillAboutLead === null) return;
+    var ta = document.getElementById('ab-ap-lead');
+    if (ta) ta.value = quillAboutLead.root.innerHTML;
+  }
+
+  function initAboutApproachLeadQuill() {
+    if (pageSlug !== 'about' || quillAboutLead !== null) {
+      return quillAboutLead;
+    }
+    var panel = document.getElementById('cms-panel-blocks');
+    if (panel && panel.hasAttribute('hidden')) {
+      return null;
+    }
+    var apDetails = document.getElementById('cms-sec-ab-approach');
+    if (!apDetails || !apDetails.open) {
+      return null;
+    }
+    var el = document.getElementById('ab-ap-lead-editor');
+    if (!el || typeof Quill === 'undefined') {
+      return null;
+    }
+    quillAboutLead = new Quill('#ab-ap-lead-editor', {
+      theme: 'snow',
+      modules: {
+        toolbar: {
+          container: [
+            [{ header: [1, 2, 3, false] }],
+            ['bold', 'italic', 'underline', 'strike'],
+            [{ list: 'ordered' }, { list: 'bullet' }],
+            ['blockquote', 'link', 'image', 'video'],
+            ['clean'],
+          ],
+          handlers: {
+            image: cmsQuillImageHandler(function () { return quillAboutLead; }),
+          },
+        },
+      },
+    });
+    var ta = document.getElementById('ab-ap-lead');
+    if (ta && ta.value) {
+      quillAboutLead.root.innerHTML = ta.value;
+    }
+    quillAboutLead.on('text-change', function () {
+      if (ta) ta.value = quillAboutLead.root.innerHTML;
+    });
+    if (ta) ta.value = quillAboutLead.root.innerHTML;
+    return quillAboutLead;
   }
 
   if (pageSlug === 'about' && typeof window.dotseAboutBlocksBind === 'function') {
@@ -357,6 +416,9 @@ $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
       }
       if (tabs[i].id === 'cms-tab-blocks') {
         hbMountAllPkgFeatEditors();
+        if (pageSlug === 'about') {
+          initAboutApproachLeadQuill();
+        }
       }
     }
 
@@ -592,6 +654,17 @@ $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
     };
   }
 
+  if (pageSlug === 'about') {
+    var apDetailsLead = document.getElementById('cms-sec-ab-approach');
+    if (apDetailsLead) {
+      apDetailsLead.addEventListener('toggle', function () {
+        if (apDetailsLead.open) {
+          initAboutApproachLeadQuill();
+        }
+      });
+    }
+  }
+
   if (hbRoot) {
     hbRoot.addEventListener('click', function (ev) {
       var target = ev.target;
@@ -652,6 +725,9 @@ $cmsViewSiteUrl = $slug === 'home' ? app_url('') : app_url($slug);
     if (pageSlug === 'home' && hbRoot) {
       hbSyncPkgFeatEditorsToHidden();
       payload.blocks = collectHomeBlocks();
+    }
+    if (pageSlug === 'about') {
+      syncAboutApproachLeadQuill();
     }
     if (pageSlug === 'about' && typeof window.dotseAboutBlocksCollect === 'function') {
       payload.blocks = window.dotseAboutBlocksCollect();

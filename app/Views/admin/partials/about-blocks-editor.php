@@ -65,9 +65,10 @@ $members = isset($team['members']) && is_array($team['members']) ? $team['member
                     <input class="input" id="ab-ap-title" type="text" value="<?= e((string) ($ap['title'] ?? '')) ?>">
                 </div>
             </div>
-            <div class="form-row">
-                <label for="ab-ap-lead">Lead copy (HTML)</label>
-                <textarea class="input input--textarea" id="ab-ap-lead" rows="6"><?= e((string) ($ap['lead_html'] ?? '')) ?></textarea>
+            <div class="form-row form-row--flush">
+                <label id="ab-ap-lead-label">Lead copy</label>
+                <textarea id="ab-ap-lead" class="visually-hidden" aria-hidden="true" tabindex="-1" autocomplete="off"><?= e((string) ($ap['lead_html'] ?? '')) ?></textarea>
+                <div id="ab-ap-lead-editor" class="cms-edit-quill cms-edit-quill--about-lead" aria-labelledby="ab-ap-lead-label"></div>
             </div>
             <p class="text-muted" style="font-size:0.85rem;margin:0">Upload per slot (stored under <code>uploads/about/</code>) or paste a path.</p>
             <div id="ab-img-rows" class="hb-repeat-list">
