@@ -4,7 +4,6 @@ declare(strict_types=1);
 $b = isset($mergedAboutBlocks) && is_array($mergedAboutBlocks) ? $mergedAboutBlocks : [];
 $ver = isset($b['version']) ? (int) $b['version'] : 1;
 $hero = is_array($b['hero'] ?? null) ? $b['hero'] : [];
-$story = is_array($b['story'] ?? null) ? $b['story'] : [];
 $ap = is_array($b['approach'] ?? null) ? $b['approach'] : [];
 $vals = is_array($b['values'] ?? null) ? $b['values'] : [];
 $team = is_array($b['team'] ?? null) ? $b['team'] : [];
@@ -12,14 +11,11 @@ $nw = is_array($b['newsletter_cta'] ?? null) ? $b['newsletter_cta'] : [];
 
 $hEn = (($hero['enabled'] ?? true) !== false);
 $bc = !isset($hero['show_breadcrumbs']) || ($hero['show_breadcrumbs'] !== false);
-$stEn = (($story['enabled'] ?? true) !== false);
 $apEn = (($ap['enabled'] ?? true) !== false);
 $vEn = (($vals['enabled'] ?? true) !== false);
 $tEn = (($team['enabled'] ?? true) !== false);
 $nEn = (($nw['enabled'] ?? true) !== false);
 
-$chapters = isset($story['chapters']) && is_array($story['chapters']) ? $story['chapters'] : [];
-$metrics = isset($story['metrics']) && is_array($story['metrics']) ? $story['metrics'] : [];
 $imgs = isset($ap['images']) && is_array($ap['images']) ? $ap['images'] : [];
 $valueItems = isset($vals['items']) && is_array($vals['items']) ? $vals['items'] : [];
 $members = isset($team['members']) && is_array($team['members']) ? $team['members'] : [];
@@ -52,57 +48,7 @@ $members = isset($team['members']) && is_array($team['members']) ? $team['member
         </div>
     </details>
 
-    <details id="cms-sec-ab-story" class="home-blocks-editor__details" open>
-        <summary class="home-blocks-editor__summary">Story &amp; figures</summary>
-        <div class="home-blocks-editor__body">
-            <label class="home-blocks-editor__check">
-                <input type="checkbox" id="ab-story-en" <?= $stEn ? 'checked' : '' ?>>
-                <span>Show section</span>
-            </label>
-            <div class="form-row">
-                <label for="ab-story-eye">Section eyebrow</label>
-                <input class="input" id="ab-story-eye" type="text" value="<?= e((string) ($story['eyebrow'] ?? '')) ?>">
-            </div>
-            <div class="form-row">
-                <label for="ab-story-quote">Pull quote</label>
-                <textarea class="input input--textarea" id="ab-story-quote" rows="2"><?= e((string) ($story['pull_quote'] ?? '')) ?></textarea>
-            </div>
-            <p class="text-muted" style="font-size:0.85rem;margin:0.5rem 0 0.25rem;">Chapters (HTML snippets allowed)</p>
-            <div id="ab-story-chapters" class="hb-repeat-list">
-                <?php foreach ($chapters as $ch): ?>
-                <?php if (!is_array($ch)) {
-                    continue;
-                } ?>
-                <div class="hb-repeat-row ab-repeat-row js-ab-ch-row">
-                    <div class="form-row"><label>Heading</label><input type="text" class="input js-ab-ch-head" value="<?= e((string) ($ch['heading'] ?? '')) ?>"></div>
-                    <div class="form-row"><label>Body HTML</label><textarea class="input input--textarea js-ab-ch-body" rows="4"><?= e((string) ($ch['body_html'] ?? '')) ?></textarea></div>
-                    <button type="button" class="btn btn--ghost ab-row-remove">Remove chapter</button>
-                </div>
-                <?php endforeach; ?>
-            </div>
-            <p><button type="button" class="btn btn--secondary" id="ab-add-chapter">Add chapter</button></p>
-            <p class="text-muted" style="font-size:0.85rem;margin:0.75rem 0 0.35rem;">Metrics</p>
-            <div id="ab-metrics" class="hb-repeat-list">
-                <?php foreach ($metrics as $m): ?>
-                <?php if (!is_array($m)) {
-                    continue;
-                } ?>
-                <div class="hb-repeat-row ab-repeat-row js-ab-metric-row">
-                    <div class="home-blocks-editor__grid home-blocks-editor__grid--4">
-                        <div class="form-row" style="margin:0;"><label>Label</label><input type="text" class="input js-abm-label" value="<?= e((string) ($m['label'] ?? '')) ?>"></div>
-                        <div class="form-row" style="margin:0;"><label>Display</label><input type="text" class="input js-abm-display" value="<?= e((string) ($m['display'] ?? '')) ?>"></div>
-                        <div class="form-row" style="margin:0;"><label>Target</label><input type="text" class="input js-abm-target" inputmode="numeric" value="<?= isset($m['target']) ? (string) (int) $m['target'] : '' ?>"></div>
-                        <div class="form-row" style="margin:0;"><label>Suffix</label><input type="text" class="input js-abm-suffix" value="<?= e((string) ($m['suffix'] ?? '+')) ?>"></div>
-                    </div>
-                    <button type="button" class="btn btn--ghost ab-row-remove">Remove</button>
-                </div>
-                <?php endforeach; ?>
-            </div>
-            <p><button type="button" class="btn btn--secondary" id="ab-add-metric">Add metric</button></p>
-        </div>
-    </details>
-
-    <details id="cms-sec-ab-approach" class="home-blocks-editor__details">
+    <details id="cms-sec-ab-approach" class="home-blocks-editor__details" open>
         <summary class="home-blocks-editor__summary">Approach</summary>
         <div class="home-blocks-editor__body">
             <label class="home-blocks-editor__check">
@@ -269,26 +215,6 @@ $members = isset($team['members']) && is_array($team['members']) ? $team['member
         </div>
     </details>
 </div>
-
-<template id="ab-tpl-chapter">
-    <div class="hb-repeat-row ab-repeat-row js-ab-ch-row">
-        <div class="form-row"><label>Heading</label><input type="text" class="input js-ab-ch-head" value=""></div>
-        <div class="form-row"><label>Body HTML</label><textarea class="input input--textarea js-ab-ch-body" rows="4"></textarea></div>
-        <button type="button" class="btn btn--ghost ab-row-remove">Remove chapter</button>
-    </div>
-</template>
-
-<template id="ab-tpl-metric">
-    <div class="hb-repeat-row ab-repeat-row js-ab-metric-row">
-        <div class="home-blocks-editor__grid home-blocks-editor__grid--4">
-            <div class="form-row" style="margin:0;"><label>Label</label><input type="text" class="input js-abm-label" value=""></div>
-            <div class="form-row" style="margin:0;"><label>Display</label><input type="text" class="input js-abm-display" value=""></div>
-            <div class="form-row" style="margin:0;"><label>Target</label><input type="text" class="input js-abm-target" inputmode="numeric" value=""></div>
-            <div class="form-row" style="margin:0;"><label>Suffix</label><input type="text" class="input js-abm-suffix" value="+"></div>
-        </div>
-        <button type="button" class="btn btn--ghost ab-row-remove">Remove</button>
-    </div>
-</template>
 
 <template id="ab-tpl-img">
     <div class="hb-repeat-row ab-repeat-row js-ab-img-row">

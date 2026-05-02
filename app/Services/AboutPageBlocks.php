@@ -39,14 +39,8 @@ final class AboutPageBlocks
         $s = $stored;
         $out = array_replace_recursive($defaults, $s);
 
-        if (!empty($s['story']) && is_array($s['story'])) {
-            if (isset($s['story']['chapters']) && is_array($s['story']['chapters']) && $s['story']['chapters'] !== []) {
-                $out['story']['chapters'] = $s['story']['chapters'];
-            }
-            if (isset($s['story']['metrics']) && is_array($s['story']['metrics']) && $s['story']['metrics'] !== []) {
-                $out['story']['metrics'] = $s['story']['metrics'];
-            }
-        }
+        unset($out['story']);
+
         if (!empty($s['approach']) && is_array($s['approach'])) {
             if (isset($s['approach']['images']) && is_array($s['approach']['images'])) {
                 $out['approach']['images'] = $s['approach']['images'];
@@ -105,36 +99,7 @@ final class AboutPageBlocks
      */
     private static function finalize(array $merged): array
     {
-        if (isset($merged['story']['chapters']) && is_array($merged['story']['chapters'])) {
-            foreach ($merged['story']['chapters'] as $i => $ch) {
-                if (!is_array($ch)) {
-                    continue;
-                }
-                $h = isset($ch['heading']) ? trim((string) $ch['heading']) : '';
-                $merged['story']['chapters'][$i]['heading'] = $h;
-                $body = isset($ch['body_html']) && is_string($ch['body_html']) ? CmsHtmlSanitizer::sanitize($ch['body_html']) : '';
-                $merged['story']['chapters'][$i]['body_html'] = $body;
-            }
-        }
-
-        $pq = isset($merged['story']['pull_quote']) ? trim((string) $merged['story']['pull_quote']) : '';
-        $merged['story']['pull_quote'] = $pq;
-
-        if (isset($merged['story']['metrics']) && is_array($merged['story']['metrics'])) {
-            foreach ($merged['story']['metrics'] as $i => $m) {
-                if (!is_array($m)) {
-                    continue;
-                }
-                $merged['story']['metrics'][$i]['suffix'] = isset($m['suffix']) ? (string) $m['suffix'] : '+';
-                $t = isset($m['target']) ? (int) $m['target'] : null;
-                if ($t !== null && $t >= 0) {
-                    $merged['story']['metrics'][$i]['target'] = $t;
-                }
-                if (!isset($m['display']) || (string) $m['display'] === '') {
-                    $merged['story']['metrics'][$i]['display'] = self::guessMetricDisplay($m);
-                }
-            }
-        }
+        unset($merged['story']);
 
         $ap = &$merged['approach'];
         if (isset($ap['lead_html']) && is_string($ap['lead_html'])) {
@@ -205,19 +170,5 @@ final class AboutPageBlocks
         }
 
         return '';
-    }
-
-    /**
-     * @param mixed $metric
-     */
-    private static function guessMetricDisplay($metric): string
-    {
-        if (!is_array($metric)) {
-            return '—';
-        }
-        $t = isset($metric['target']) ? (int) $metric['target'] : 0;
-        $suf = isset($metric['suffix']) ? (string) $metric['suffix'] : '+';
-
-        return $t >= 0 ? ((string) $t . ($suf === '°' ? '°' : $suf)) : '—';
     }
 }

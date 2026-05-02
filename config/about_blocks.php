@@ -13,27 +13,6 @@ return [
         'kicker' => '',
         'title' => 'About us',
     ],
-    'story' => [
-        'enabled' => true,
-        'eyebrow' => 'Since 2017',
-        'pull_quote' => 'The quiet goal is guests assuming you did it yourselves—because the plan disappeared into the experience.',
-        'chapters' => [
-            [
-                'heading' => 'Where we began',
-                'body_html' => '<p>DOTS Event Planning was founded in 2017 by Tosin Ezekiel after executing a standout customer appreciation week—proof that thoughtful logistics plus warm hosting could reshape how people feel in a room.</p>'
-                    . '<p>What started there grew into fuller production: clearer briefs, calmer rehearsals, signage that reads from the stage, not the apology email afterward.</p>',
-            ],
-            [
-                'heading' => 'Growth & home base',
-                'body_html' => '<p>The work expanded naturally into kids’ parties, weddings, seasonal celebrations, and corporate nights where AV breaks are not acceptable punchlines—and where your brand cues feel polished, not improvised.</p>'
-                    . '<p>DOTS serves Saint John, New Brunswick, and the broader region—built on honest scopes, timelines you can hand to executives, and a team that prefers headsets to drama.</p>',
-            ],
-        ],
-        'metrics' => [
-            ['label' => 'Happy clients', 'display' => '300+', 'target' => 300, 'suffix' => '+'],
-            ['label' => 'Audience reached', 'display' => '3M', 'target' => 3, 'suffix' => 'M'],
-        ],
-    ],
     'approach' => [
         'enabled' => true,
         'eyebrow' => 'More about us',

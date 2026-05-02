@@ -12,7 +12,6 @@ $h = static function (?array $sec): bool {
 };
 
 $hero = is_array($ab['hero'] ?? null) ? $ab['hero'] : [];
-$story = is_array($ab['story'] ?? null) ? $ab['story'] : [];
 $approach = is_array($ab['approach'] ?? null) ? $ab['approach'] : [];
 $values = is_array($ab['values'] ?? null) ? $ab['values'] : [];
 $team = is_array($ab['team'] ?? null) ? $ab['team'] : [];
@@ -20,78 +19,6 @@ $nw = is_array($ab['newsletter_cta'] ?? null) ? $ab['newsletter_cta'] : [];
 ?>
 
 <div class="about-modern">
-<?php if ($h($story)): ?>
-<section class="app-band app-band--surface section about-modern__story" aria-labelledby="about-story-heading" data-reveal>
-    <div class="shell shell--wide about-modern-story">
-        <?php $se = trim((string) ($story['eyebrow'] ?? '')); ?>
-        <?php if ($se !== ''): ?>
-        <p class="about-modern-story__eyebrow eyebrow"><?= e($se) ?></p>
-        <?php endif; ?>
-
-        <div class="about-modern-story__grid">
-            <div class="about-modern-story__chapters prose about-modern-prose">
-                <?php $chapters = isset($story['chapters']) && is_array($story['chapters']) ? $story['chapters'] : []; ?>
-                <?php foreach ($chapters as $i => $ch): ?>
-                    <?php if (!is_array($ch)) {
-                        continue;
-                    } ?>
-                <?php $head = trim((string) ($ch['heading'] ?? '')); ?>
-                <?php $bod = isset($ch['body_html']) && is_string($ch['body_html']) ? $ch['body_html'] : ''; ?>
-                <?php if ($head !== '' || $bod !== ''): ?>
-                <article class="about-modern-chapter<?= $i > 0 ? ' about-modern-chapter--spaced' : '' ?>">
-                    <?php if ($head !== ''): ?>
-                    <h2 class="section__title"<?= $i === 0 ? ' id="about-story-heading"' : '' ?>><?= e($head) ?></h2>
-                    <?php endif; ?>
-                    <?php if ($bod !== '') { ?>
-                    <div class="about-modern-chapter__body"><?= $bod ?></div>
-                    <?php } ?>
-                </article>
-                <?php endif; ?>
-                <?php endforeach; ?>
-            </div>
-            <aside class="about-modern-story__aside">
-                <?php $pq = trim((string) ($story['pull_quote'] ?? '')); ?>
-                <?php if ($pq !== ''): ?>
-                <blockquote class="about-modern-quote">
-                    <p><?= e($pq) ?></p>
-                </blockquote>
-                <?php endif; ?>
-
-                <?php $metrics = isset($story['metrics']) && is_array($story['metrics']) ? $story['metrics'] : []; ?>
-                <?php if ($metrics !== []): ?>
-                <div class="about-modern-metrics tile-metric-strip" data-metric-strip role="list" aria-label="Key figures">
-                    <?php foreach ($metrics as $m): ?>
-                    <?php if (!is_array($m)) {
-                        continue;
-                    } ?>
-                    <?php
-                        $lab = trim((string) ($m['label'] ?? ''));
-                        $disp = trim((string) ($m['display'] ?? ''));
-                        $tgt = isset($m['target']) ? (int) $m['target'] : 0;
-                        $suf = (string) ($m['suffix'] ?? '+');
-                        $anim = $tgt > 0;
-                    ?>
-                    <div class="tile-metric tile-metric--about" role="listitem">
-                        <span class="tile-metric__value">
-                            <?php if ($anim): ?>
-                            <span class="tile-metric__num" data-metric-count data-target="<?= (int) $tgt ?>" data-suffix="<?= e($suf) ?>"><?= e($disp !== '' ? $disp : (string) $tgt . $suf) ?></span>
-                            <?php else: ?>
-                            <span class="tile-metric__num"><?= e($disp !== '' ? $disp : '—') ?></span>
-                            <?php endif; ?>
-                        </span>
-                        <?php if ($lab !== ''): ?>
-                        <span class="tile-metric__label"><?= e($lab) ?></span>
-                        <?php endif; ?>
-                    </div>
-                    <?php endforeach; ?>
-                </div>
-                <?php endif; ?>
-            </aside>
-        </div>
-    </div>
-</section>
-<?php endif; ?>
-
 <?php if ($h($approach)): ?>
 <section class="app-band section about-modern__approach" aria-labelledby="about-approach-heading" data-reveal>
     <div class="shell shell--wide">

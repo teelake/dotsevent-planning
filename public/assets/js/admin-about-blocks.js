@@ -171,8 +171,6 @@
     });
 
     var map = [
-      ["ab-add-chapter", "ab-tpl-chapter", "ab-story-chapters"],
-      ["ab-add-metric", "ab-tpl-metric", "ab-metrics"],
       ["ab-add-img", "ab-tpl-img", "ab-img-rows"],
       ["ab-add-value", "ab-tpl-value", "ab-values"],
       ["ab-add-member", "ab-tpl-member", "ab-members"],
@@ -202,37 +200,6 @@
     var v = val;
     var c = ck;
     var ver = parseInt(v("ab-version"), 10);
-
-    function metrics() {
-      var out = [];
-      root.querySelectorAll(".js-ab-metric-row").forEach(function (row) {
-        var label = row.querySelector(".js-abm-label");
-        var display = row.querySelector(".js-abm-display");
-        var target = row.querySelector(".js-abm-target");
-        var suf = row.querySelector(".js-abm-suffix");
-        var tn = parseInt(target && target.value ? target.value : "0", 10);
-        out.push({
-          label: label ? label.value.trim() : "",
-          display: display ? display.value.trim() : "",
-          target: isNaN(tn) ? 0 : tn,
-          suffix: suf && suf.value.trim() ? suf.value.trim() : "+",
-        });
-      });
-      return out;
-    }
-
-    function chapters() {
-      var out = [];
-      root.querySelectorAll(".js-ab-ch-row").forEach(function (row) {
-        var h = row.querySelector(".js-ab-ch-head");
-        var b = row.querySelector(".js-ab-ch-body");
-        out.push({
-          heading: h ? h.value.trim() : "",
-          body_html: b ? b.value.trim() : "",
-        });
-      });
-      return out;
-    }
 
     function images() {
       var out = [];
@@ -278,13 +245,6 @@
         show_breadcrumbs: c("ab-hero-bc"),
         kicker: v("ab-hero-kicker"),
         title: v("ab-hero-title"),
-      },
-      story: {
-        enabled: c("ab-story-en"),
-        eyebrow: v("ab-story-eye"),
-        pull_quote: v("ab-story-quote"),
-        chapters: chapters(),
-        metrics: metrics(),
       },
       approach: {
         enabled: c("ab-ap-en"),
