@@ -1907,6 +1907,16 @@ body.page-about .app-shell:has(.about-modern__newsletter.services-modern__band--
   border-top: 1px solid rgba(1, 1, 1, 0.045);
 }
 
+/* Full-bleed band backgrounds + constrained content column (inner pages zero `.shell` horizontal pad @1100px+) */
+@media (min-width: 1100px) {
+  .app-shell:not(.app-shell--home) .about-modern__band--fluid > .shell.shell--wide,
+  .app-shell:not(.app-shell--home) .about-modern__newsletter.services-modern__band--fluid > .shell.shell--wide {
+    padding-left: var(--shell-pad-x);
+    padding-right: var(--shell-pad-x);
+    box-sizing: border-box;
+  }
+}
+
 /* Newsletter sits outside `.about-modern`; inner `.shell` pads content inside full-bleed bands */
 .page-about .about-modern__newsletter.services-modern__band--fluid .newsletter-app .newsletter__form {
   max-width: min(26rem, 100%);

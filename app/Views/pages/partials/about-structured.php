@@ -21,7 +21,7 @@ $nw = is_array($ab['newsletter_cta'] ?? null) ? $ab['newsletter_cta'] : [];
 <div class="about-modern">
 <?php if ($h($approach)): ?>
 <section class="app-band section about-modern__approach about-modern__approach--paper about-modern__band--fluid" aria-labelledby="about-approach-heading" data-reveal>
-    <div class="shell shell--fluid">
+    <div class="shell shell--wide">
         <?php $ae = trim((string) ($approach['eyebrow'] ?? '')); ?>
         <?php if ($ae !== ''): ?>
         <p class="eyebrow"><?= e($ae) ?></p>
@@ -75,7 +75,7 @@ $nw = is_array($ab['newsletter_cta'] ?? null) ? $ab['newsletter_cta'] : [];
 
 <?php if ($h($values)): ?>
 <section class="app-band app-band--surface section about-modern__values about-modern__band--fluid" aria-labelledby="about-values-heading" data-reveal>
-    <div class="shell shell--fluid">
+    <div class="shell shell--wide">
         <?php $ve = trim((string) ($values['eyebrow'] ?? '')); ?>
         <?php if ($ve !== ''): ?>
         <p class="eyebrow"><?= e($ve) ?></p>
@@ -127,7 +127,7 @@ $nw = is_array($ab['newsletter_cta'] ?? null) ? $ab['newsletter_cta'] : [];
 
 <?php if ($h($team)): ?>
 <section class="app-band section about-modern__team about-modern__team--warm about-modern__band--fluid" aria-labelledby="about-team-heading" data-reveal>
-    <div class="shell shell--fluid">
+    <div class="shell shell--wide">
         <?php $te = trim((string) ($team['eyebrow'] ?? '')); ?>
         <?php if ($te !== ''): ?>
         <p class="eyebrow"><?= e($te) ?></p>
@@ -189,7 +189,7 @@ $nw = is_array($ab['newsletter_cta'] ?? null) ? $ab['newsletter_cta'] : [];
 $nhtml = isset($nw['text_html']) && is_string($nw['text_html']) ? $nw['text_html'] : '';
 ?>
 <section class="app-band app-band--newsletter about-modern__newsletter services-modern__band--fluid" aria-labelledby="about-nw-heading" data-reveal>
-    <div class="shell shell--fluid newsletter-app">
+    <div class="shell shell--wide newsletter-app">
         <div>
             <?php if ($ntl !== ''): ?>
             <h2 id="about-nw-heading" class="newsletter__title"><?= e($ntl) ?></h2>
