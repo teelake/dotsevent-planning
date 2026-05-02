@@ -225,7 +225,7 @@ $nw = is_array($ab['newsletter_cta'] ?? null) ? $ab['newsletter_cta'] : [];
             <article class="about-team-card">
                 <div class="about-team-card__photo"<?= $photo === '' ? ' data-placeholder' : '' ?>>
                     <?php if ($photo !== ''): ?>
-                    <img src="<?= e($photo) ?>" alt="<?= e($nm !== '' ? $nm : 'Team member') ?>" width="560" height="640" loading="lazy" decoding="async">
+                    <img src="<?= e($photo) ?>" alt="<?= e($nm !== '' ? $nm : 'Team member') ?>" width="320" height="400" loading="lazy" decoding="async">
                     <?php endif; ?>
                 </div>
                 <div class="about-team-card__body">
