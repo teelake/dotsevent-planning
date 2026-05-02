@@ -250,6 +250,7 @@
       root.querySelectorAll(".js-ab-val-row").forEach(function (row) {
         out.push({
           title: row.querySelector(".js-abv-title") ? row.querySelector(".js-abv-title").value.trim() : "",
+          subtitle: row.querySelector(".js-abv-subtitle") ? row.querySelector(".js-abv-subtitle").value.trim() : "",
           summary_html: row.querySelector(".js-abv-sum") ? row.querySelector(".js-abv-sum").value.trim() : "",
         });
       });

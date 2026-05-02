@@ -167,14 +167,23 @@ $nw = is_array($ab['newsletter_cta'] ?? null) ? $ab['newsletter_cta'] : [];
             } ?>
             <?php
                 $tit = trim((string) ($it['title'] ?? ''));
+                $sub = trim((string) ($it['subtitle'] ?? ''));
                 $sum = isset($it['summary_html']) && is_string($it['summary_html']) ? $it['summary_html'] : '';
+                $tone = ((int) $vi % 3) + 1;
                 ?>
-            <article class="about-value-cap">
-                <?php if ($tit !== ''): ?>
-                <h3 class="about-value-cap__title"><?= e($tit) ?></h3>
+            <article class="about-value-cap about-value-cap--split about-value-cap--tone-<?= (int) $tone ?>">
+                <?php if ($tit !== '' || $sub !== ''): ?>
+                <header class="about-value-cap__banner">
+                    <?php if ($tit !== ''): ?>
+                    <h3 class="about-value-cap__title"><?= e($tit) ?></h3>
+                    <?php endif; ?>
+                    <?php if ($sub !== ''): ?>
+                    <p class="about-value-cap__subtitle"><?= e($sub) ?></p>
+                    <?php endif; ?>
+                </header>
                 <?php endif; ?>
                 <?php if ($sum !== '') { ?>
-                <div class="about-value-cap__sum prose"><?= $sum ?></div>
+                <div class="about-value-cap__body prose"><?= $sum ?></div>
                 <?php } ?>
             </article>
             <?php endforeach; ?>

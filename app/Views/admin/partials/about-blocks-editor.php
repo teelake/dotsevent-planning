@@ -175,6 +175,7 @@ $members = isset($team['members']) && is_array($team['members']) ? $team['member
                 } ?>
                 <div class="hb-repeat-row ab-repeat-row js-ab-val-row">
                     <div class="form-row"><label>Value title</label><input type="text" class="input js-abv-title" value="<?= e((string) ($vi['title'] ?? '')) ?>"></div>
+                    <div class="form-row"><label>Subtitle / tagline</label><input type="text" class="input js-abv-subtitle" value="<?= e((string) ($vi['subtitle'] ?? '')) ?>" placeholder="Short line under the title"></div>
                     <div class="form-row"><label>Summary (HTML)</label><textarea class="input input--textarea js-abv-sum" rows="3"><?= e((string) ($vi['summary_html'] ?? '')) ?></textarea></div>
                     <button type="button" class="btn btn--ghost ab-row-remove">Remove</button>
                 </div>
@@ -295,6 +296,7 @@ $members = isset($team['members']) && is_array($team['members']) ? $team['member
 <template id="ab-tpl-value">
     <div class="hb-repeat-row ab-repeat-row js-ab-val-row">
         <div class="form-row"><label>Value title</label><input type="text" class="input js-abv-title" value=""></div>
+        <div class="form-row"><label>Subtitle / tagline</label><input type="text" class="input js-abv-subtitle" value="" placeholder="Short line under the title"></div>
         <div class="form-row"><label>Summary (HTML)</label><textarea class="input input--textarea js-abv-sum" rows="3"></textarea></div>
         <button type="button" class="btn btn--ghost ab-row-remove">Remove</button>
     </div>

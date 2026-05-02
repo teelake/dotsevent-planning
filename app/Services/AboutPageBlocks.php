@@ -128,6 +128,7 @@ final class AboutPageBlocks
                 $sum = isset($vi['summary_html']) && is_string($vi['summary_html']) ? CmsHtmlSanitizer::sanitize($vi['summary_html']) : '';
                 $merged['values']['items'][$k]['summary_html'] = $sum;
                 $merged['values']['items'][$k]['title'] = isset($vi['title']) ? trim((string) $vi['title']) : '';
+                $merged['values']['items'][$k]['subtitle'] = isset($vi['subtitle']) ? trim((string) $vi['subtitle']) : '';
             }
         }
 

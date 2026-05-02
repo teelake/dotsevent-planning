@@ -51,11 +51,11 @@ return [
         'eyebrow' => 'Why choose us?',
         'title' => 'Our core values',
         'items' => [
-            ['title' => 'Client-centric approach', 'summary_html' => '<p>Genuine listening before concepts—briefs anchored in measurable outcomes.</p>'],
-            ['title' => 'Creativity & innovation', 'summary_html' => '<p>Fresh formats that still respect production constraints and brand guardrails.</p>'],
-            ['title' => 'Attention to detail', 'summary_html' => '<p>Micro-moments: signage readability, ADA-friendly paths, backstage calm.</p>'],
-            ['title' => 'Professionalism', 'summary_html' => '<p>Clear roles, headsets on, escalation paths ready before microphones hum.</p>'],
-            ['title' => 'Integrity & transparency', 'summary_html' => '<p>Numbers and trade-offs surfaced early—you approve before invoices surprise.</p>'],
+            ['title' => 'Client-centric approach', 'subtitle' => 'Briefs anchored in outcomes.', 'summary_html' => '<p>Genuine listening before concepts—briefs anchored in measurable outcomes.</p>'],
+            ['title' => 'Creativity & innovation', 'subtitle' => 'Fresh ideas within guardrails.', 'summary_html' => '<p>Fresh formats that still respect production constraints and brand guardrails.</p>'],
+            ['title' => 'Attention to detail', 'subtitle' => 'Calm backstage, clear signage.', 'summary_html' => '<p>Micro-moments: signage readability, ADA-friendly paths, backstage calm.</p>'],
+            ['title' => 'Professionalism', 'subtitle' => 'Roles clear before showtime.', 'summary_html' => '<p>Clear roles, headsets on, escalation paths ready before microphones hum.</p>'],
+            ['title' => 'Integrity & transparency', 'subtitle' => 'No surprise invoices.', 'summary_html' => '<p>Numbers and trade-offs surfaced early—you approve before invoices surprise.</p>'],
         ],
     ],
     'team' => [

@@ -2020,63 +2020,108 @@ body.page-about .app-shell:has(.about-modern__newsletter.services-modern__band--
   object-fit: cover;
 }
 
+/* Core values: split banner + white body (reference layout; no decorative icons) */
 .about-values-mosaic {
   display: grid;
-  gap: 1rem;
-  margin-top: 1.35rem;
+  gap: clamp(1rem, 2.5vw, 1.35rem);
+  margin-top: clamp(1.25rem, 3vw, 1.85rem);
+  grid-template-columns: minmax(0, 1fr);
 }
 
-@media (min-width: 720px) {
+@media (min-width: 640px) {
   .about-values-mosaic {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
-  .about-value-cap:nth-child(1) {
-    grid-column: 1 / -1;
-    padding: 1.5rem 1.35rem;
-    border-color: rgba(245, 192, 19, 0.28);
-    background:
-      radial-gradient(100% 80% at 0% 0%, rgba(245, 192, 19, 0.12), transparent 55%),
-      linear-gradient(175deg, #141210 0%, #090807 95%);
-    color: rgba(246, 240, 224, 0.96);
-  }
-
-  .about-value-cap:nth-child(1) .about-value-cap__sum {
-    color: rgba(232, 222, 200, 0.88);
-  }
-
-  .about-value-cap:nth-child(1) .about-value-cap__title {
-    color: #fffdfb;
-  }
 }
 
-@media (min-width: 1000px) {
+@media (min-width: 1024px) {
   .about-values-mosaic {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-
-  .about-value-cap:nth-child(1) {
-    grid-column: span 3;
-    min-height: 0;
-  }
 }
 
-.about-value-cap {
+.about-value-cap--split {
   margin: 0;
-  padding: 1.2rem 1.15rem 1.35rem;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-line);
-  background: linear-gradient(170deg, #fffefb 0%, #fcf9f5 92%);
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(1, 1, 1, 0.06);
+  background: #fff;
+  box-shadow:
+    0 4px 14px rgba(25, 17, 4, 0.06),
+    0 18px 42px rgba(25, 17, 4, 0.05);
 }
 
-.about-value-cap__sum {
-  margin-top: 0.55rem;
+.about-value-cap__banner {
+  flex-shrink: 0;
+  padding: clamp(1.35rem, 3vw, 1.85rem) clamp(1rem, 2.5vw, 1.5rem);
+  min-height: clamp(9.5rem, 22vw, 11.25rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.45rem;
 }
 
-.about-value-cap__sum p {
+.about-value-cap--tone-1 .about-value-cap__banner {
+  background: linear-gradient(168deg, #4178c9 0%, #2e5599 52%, #254878 100%);
+  color: #fff;
+}
+
+.about-value-cap--tone-2 .about-value-cap__banner {
+  background: linear-gradient(168deg, #f0683a 0%, #d94328 52%, #b83222 100%);
+  color: #fff;
+}
+
+.about-value-cap--tone-3 .about-value-cap__banner {
+  background: linear-gradient(168deg, #3aa366 0%, #287d4d 52%, #1f6340 100%);
+  color: #fff;
+}
+
+.about-value-cap--split .about-value-cap__title {
   margin: 0;
-  font-size: 0.95rem;
-  line-height: 1.55;
+  font-family: var(--font-display);
+  font-size: clamp(1.12rem, 1vw + 1rem, 1.35rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: inherit;
+}
+
+.about-value-cap__subtitle {
+  margin: 0;
+  max-width: 26ch;
+  font-size: clamp(0.86rem, 0.35vw + 0.78rem, 0.95rem);
+  font-weight: 400;
+  line-height: 1.45;
+  color: rgba(255, 253, 248, 0.92);
+}
+
+.about-value-cap__body {
+  flex: 1;
+  padding: clamp(1.15rem, 2.8vw, 1.55rem) clamp(1rem, 2.5vw, 1.45rem) clamp(1.35rem, 3vw, 1.65rem);
+  text-align: center;
+  background: #fff;
+}
+
+.about-value-cap--split:not(:has(.about-value-cap__banner)) .about-value-cap__body {
+  border-radius: 12px;
+}
+
+.about-value-cap__body.prose {
+  color: var(--color-ink-muted);
+}
+
+.about-value-cap__body.prose p {
+  margin: 0;
+  font-size: 0.94rem;
+  line-height: 1.62;
+}
+
+.about-value-cap__body.prose p + p {
+  margin-top: 0.65rem;
 }
 
 .about-team-cards {
