@@ -2133,14 +2133,23 @@ body.page-about .app-shell:has(.about-modern__newsletter.services-modern__band--
   margin-top: 0.65rem;
 }
 
-/* Team: compact premium roster — short crop on small screens, horizontal dossier on wide */
+/* Team: row of vertical columns (photo above, copy below) — scales with count */
 .about-team-cards {
   display: grid;
-  gap: clamp(0.65rem, 1.8vw, 0.9rem);
-  margin-top: clamp(1.1rem, 2.8vw, 1.45rem);
-  max-width: min(44rem, 100%);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: clamp(1rem, 2.8vw, 1.5rem);
+  margin-top: clamp(1.15rem, 3vw, 1.65rem);
+  max-width: min(72rem, 100%);
   margin-left: auto;
   margin-right: auto;
+  align-items: stretch;
+}
+
+@media (min-width: 900px) {
+  .about-team-cards {
+    grid-template-columns: repeat(auto-fit, minmax(15.5rem, 1fr));
+    gap: clamp(1.15rem, 2.5vw, 1.75rem);
+  }
 }
 
 .about-team-intro p {
@@ -2155,8 +2164,9 @@ body.page-about .app-shell:has(.about-modern__newsletter.services-modern__band--
   position: relative;
   display: flex;
   flex-direction: column;
+  height: 100%;
   border-radius: 14px;
-  border: 1px solid rgba(1, 1, 1, 0.07);
+  border: 1px solid rgba(245, 192, 19, 0.28);
   overflow: hidden;
   background:
     linear-gradient(145deg, rgba(255, 254, 251, 0.98) 0%, #faf7f1 100%);
@@ -2173,45 +2183,30 @@ body.page-about .app-shell:has(.about-modern__newsletter.services-modern__band--
   content: "";
   position: absolute;
   left: 0;
-  top: 0.85rem;
-  bottom: 0.85rem;
-  width: 3px;
-  border-radius: 0 3px 3px 0;
+  right: 0;
+  top: 0;
+  height: 3px;
+  border-radius: 0 0 3px 3px;
   background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--color-brand-gold) 55%, transparent) 0%,
-    color-mix(in srgb, var(--color-brand-gold) 22%, transparent) 72%,
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--color-brand-gold) 65%, transparent) 38%,
+    color-mix(in srgb, var(--color-brand-gold) 85%, transparent) 50%,
+    color-mix(in srgb, var(--color-brand-gold) 65%, transparent) 62%,
     transparent 100%
   );
-  opacity: 0.85;
+  opacity: 0.95;
   pointer-events: none;
-}
-
-@media (max-width: 719px) {
-  .about-team-card::before {
-    top: 0;
-    bottom: auto;
-    right: 0;
-    left: 0;
-    width: auto;
-    height: 3px;
-    border-radius: 0 0 3px 3px;
-    background: linear-gradient(
-      90deg,
-      transparent 0%,
-      color-mix(in srgb, var(--color-brand-gold) 35%, transparent) 50%,
-      transparent 100%
-    );
-  }
+  z-index: 1;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .about-team-card:hover {
-    border-color: rgba(245, 192, 19, 0.22);
+    border-color: rgba(245, 192, 19, 0.42);
     box-shadow:
       0 1px 0 rgba(255, 255, 255, 0.85) inset,
-      0 4px 16px rgba(25, 17, 4, 0.06),
-      0 20px 48px rgba(25, 17, 4, 0.055);
+      0 6px 20px rgba(25, 17, 4, 0.07),
+      0 22px 52px rgba(25, 17, 4, 0.06);
   }
 }
 
@@ -2224,8 +2219,9 @@ body.page-about .app-shell:has(.about-modern__newsletter.services-modern__band--
 .about-team-card__photo {
   position: relative;
   flex-shrink: 0;
-  aspect-ratio: 5 / 3;
-  max-height: min(11rem, 38vw);
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  max-height: min(18rem, 52vw);
   background:
     radial-gradient(circle at 38% 18%, rgba(245, 192, 19, 0.11), transparent 52%),
     linear-gradient(168deg, #ebe6df 0%, #d9d3ca 100%);
@@ -2238,7 +2234,7 @@ body.page-about .app-shell:has(.about-modern__newsletter.services-modern__band--
   justify-content: center;
   width: 100%;
   height: 100%;
-  min-height: 5.5rem;
+  min-height: 8.5rem;
   font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.12em;
@@ -2250,27 +2246,28 @@ body.page-about .app-shell:has(.about-modern__newsletter.services-modern__band--
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 22%;
+  object-position: center 15%;
   display: block;
 }
 
 .about-team-card__body {
   flex: 1;
   min-width: 0;
-  padding: clamp(0.85rem, 2.2vw, 1.05rem) clamp(1rem, 2.5vw, 1.35rem);
+  padding: clamp(0.95rem, 2.4vw, 1.15rem) clamp(0.85rem, 2vw, 1.1rem) clamp(1.05rem, 2.6vw, 1.35rem);
   display: flex;
   flex-direction: column;
-  gap: 0.32rem;
-  justify-content: center;
+  gap: 0.35rem;
+  align-items: center;
+  text-align: center;
 }
 
 .about-team-card__name {
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(0.98rem, 0.45vw + 0.88rem, 1.06rem);
-  font-weight: 600;
+  font-size: clamp(1.02rem, 0.55vw + 0.88rem, 1.14rem);
+  font-weight: 700;
   letter-spacing: -0.02em;
-  line-height: 1.25;
+  line-height: 1.2;
   color: var(--color-ink);
 }
 
@@ -2285,8 +2282,9 @@ body.page-about .app-shell:has(.about-modern__newsletter.services-modern__band--
 }
 
 .about-team-card__bio.prose {
-  margin-top: 0.28rem;
-  max-width: 50ch;
+  margin-top: 0.35rem;
+  width: 100%;
+  max-width: none;
 }
 
 .about-team-card__bio.prose p {
@@ -2298,38 +2296,6 @@ body.page-about .app-shell:has(.about-modern__newsletter.services-modern__band--
 
 .about-team-card__bio.prose p + p {
   margin-top: 0.45rem;
-}
-
-@media (min-width: 720px) {
-  .about-team-card {
-    flex-direction: row;
-    align-items: stretch;
-  }
-
-  .about-team-card__photo {
-    aspect-ratio: auto;
-    max-height: none;
-    width: clamp(7.75rem, 14vw, 9.25rem);
-    flex: 0 0 clamp(7.75rem, 14vw, 9.25rem);
-    min-height: 7.5rem;
-    align-self: stretch;
-  }
-
-  .about-team-card__photo[data-placeholder]:empty {
-    min-height: 7.5rem;
-  }
-
-  .about-team-card__photo[data-placeholder]:empty::after {
-    min-height: 0;
-  }
-
-  .about-team-card__photo img {
-    position: absolute;
-    inset: 0;
-    height: 100%;
-    width: 100%;
-    object-position: center 18%;
-  }
 }
 
 .about-modern__newsletter .newsletter__text {
