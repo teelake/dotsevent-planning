@@ -2165,6 +2165,9 @@ body.page-about .app-shell:has(.about-modern__newsletter.services-modern__band--
   display: flex;
   flex-direction: column;
   height: 100%;
+  width: 100%;
+  max-width: 20rem;
+  justify-self: center;
   border-radius: 14px;
   border: 1px solid rgba(245, 192, 19, 0.28);
   overflow: hidden;
