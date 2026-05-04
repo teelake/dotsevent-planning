@@ -6,6 +6,10 @@ $services_blocks = isset($cms['services_blocks']) && is_array($cms['services_blo
     ? $cms['services_blocks']
     : \App\Services\ServicesPageBlocks::merged(null);
 
+$servicesBodyHtml = (string) ($cms['body_html'] ?? '');
+$showServicesCmsBody = ! empty($cms['has_custom_body'])
+    && cms_html_has_visible_text($servicesBodyHtml);
+
 $hero = is_array($services_blocks['hero'] ?? null) ? $services_blocks['hero'] : [];
 $page_title = (string) ($cms['doc_title'] ?? 'Services');
 $hEnabled = (($hero['enabled'] ?? true) !== false);
@@ -20,7 +24,7 @@ include dirname(__DIR__) . '/partials/page-hero.php';
 ?>
 <div class="app-shell">
     <div class="app-shell__main">
-        <?php if (!empty($cms['has_custom_body'])): ?>
+        <?php if ($showServicesCmsBody): ?>
         <div class="shell shell--wide page-pad prose cms-page-body" data-reveal>
         <?= $cms['body_html'] ?>
         </div>

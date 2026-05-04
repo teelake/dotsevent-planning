@@ -16,6 +16,14 @@
   transition: none;
 }
 
+/* Services page: bands under `.services-modern` + optional CMS strip — avoid folded “dead air” above first heading (see main.js isServicesStackReveal). */
+.page-services .services-modern > section[data-reveal],
+.page-services .app-shell__main > .cms-page-body[data-reveal] {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
 .hero--slider {
   position: relative;
   /* Full-viewport first fold (common for marketing); cap height on very tall displays */
@@ -2360,11 +2368,11 @@ body.page-about .app-shell:has(.about-modern__newsletter) {
 
 /* Services page: tighten hero → first section spacing; newsletter vertical rhythm */
 .page-services .app-page-hero {
-  margin-bottom: clamp(0.65rem, 1.8vw, 1.25rem);
+  margin-bottom: 0;
 }
 
 .page-services .services-modern > section.section:first-of-type {
-  padding-top: clamp(1rem, 2.8vw, 2rem);
+  padding-top: clamp(0.65rem, 2vw, 1.35rem);
 }
 
 .page-services .services-modern__newsletter.app-band--newsletter {

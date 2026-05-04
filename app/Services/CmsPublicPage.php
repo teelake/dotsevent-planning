@@ -56,7 +56,9 @@ final class CmsPublicPage
 
                 $html = isset($data['html']) && is_string($data['html']) ? $data['html'] : '';
                 $san = CmsHtmlSanitizer::sanitize($html);
-                if ($san !== '') {
+                // Services relies on structured blocks; ignore Quill/HTML that has no readable text so we do not reserve a dead strip under the hero.
+                $servicesBodyOk = ($slug !== 'services' || cms_html_has_visible_text($san));
+                if ($san !== '' && $servicesBodyOk) {
                     $out['has_custom_body'] = true;
                     $out['body_html'] = $san;
                 }

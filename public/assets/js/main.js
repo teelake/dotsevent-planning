@@ -218,6 +218,16 @@
           el.matches(".app-shell__main > section[data-reveal]")
         );
       }
+      /** Services: structured bands sit under `.services-modern` (not direct `main` children); same stale-reveal blind spot as home. */
+      function isServicesStackReveal(el) {
+        return (
+          document.body &&
+          document.body.classList.contains("page-services") &&
+          typeof el.matches === "function" &&
+          (el.matches(".services-modern > section[data-reveal]") ||
+            el.matches(".app-shell__main > .cms-page-body[data-reveal]"))
+        );
+      }
       var revealIo = new IntersectionObserver(
         function (entries) {
           entries.forEach(function (entry) {
@@ -230,7 +240,7 @@
         { root: null, rootMargin: "0px 0px -6% 0px", threshold: 0.06 }
       );
       revealNodes.forEach(function (el) {
-        if (isHomeMainReveal(el) || revealAlreadyVisible(el)) {
+        if (isHomeMainReveal(el) || isServicesStackReveal(el) || revealAlreadyVisible(el)) {
           el.classList.add("is-inview");
         } else {
           revealIo.observe(el);
